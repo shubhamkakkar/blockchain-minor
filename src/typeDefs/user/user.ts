@@ -8,7 +8,7 @@ export default gql`
     extend type Mutation {
         singup( userArgs: TSignupArgs ): ReturnedUser!
     }
-
+    
     input TSignupArgs {
         email: String!
         password: String!
@@ -16,7 +16,7 @@ export default gql`
         lastName: String!
         middleName: String
     }
-      
+          
     type ReturnedUser {
         _id: ID!
         publicKey: String!
@@ -28,3 +28,4 @@ export default gql`
         middleName: String
     }
 `
+
