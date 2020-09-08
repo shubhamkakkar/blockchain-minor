@@ -1,6 +1,6 @@
 import { userQuery } from './query';
 import signUpUser from './mutation/signUpUser'
-import { TSignupArgs } from 'generated/graphql';
+import { TSignupArgs } from '../../generated/graphql';
 
 export default {
     Query: {

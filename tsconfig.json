@@ -9,8 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noEmit": true,
-    "strict": true,
-    "baseUrl": "./src"
+    "strict": true
   },
  "exclude": [
     "node_modules"
