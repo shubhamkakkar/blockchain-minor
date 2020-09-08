@@ -4,14 +4,27 @@ export default gql`
     extend type Query {
         users: [ReturnedUser!],
     }
+
+    extend type Mutation {
+        singup( userArgs: TSignupArgs ): ReturnedUser!
+    }
+
+    input TSignupArgs {
+        email: String!
+        password: String!
+        firstName: String!
+        lastName: String!
+        middleName: String
+    }
       
     type ReturnedUser {
         _id: ID!
-        email: String!
-        firstName: String!
-        lastName: String!
-        middleName: String!
         publicKey: String!
         token: String!
+        email: String!
+        password: String!
+        firstName: String!
+        lastName: String!
+        middleName: String
     }
 `
