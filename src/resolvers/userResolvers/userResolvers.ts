@@ -1,14 +1,12 @@
-import { userQuery } from './query';
-import signUpUser from './mutation/signUpUser'
-import { TSignupArgs } from '../../generated/graphql';
-import loginUser from './mutation/loginUser';
+import { loginUser } from './query';
+import { signUpUser } from './mutation';
+import { TLoginArgs, TSignupArgs } from '../../generated/graphql';
 
 export default {
-    Query: {
-        users: userQuery,
-    },
-    Mutation: {
-        singup: (parent: any, args: TSignupArgs) => signUpUser(args),
-        login: (parent: any, args: any) => loginUser(args)
-    }
+  Query: {
+    login: (parent: any, args: TLoginArgs) => loginUser(args),
+  },
+  Mutation: {
+    singUp: (parent: any, args: TSignupArgs) => signUpUser(args),
+  },
 };

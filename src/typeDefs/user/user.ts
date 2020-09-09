@@ -1,58 +1,54 @@
 import { gql } from 'apollo-server';
 
-const sharePropsSignup = `
-    _id: ID!
-    publicKey: String!
-    token: String!
-    email: String!
-    firstName: String!
-    lastName: String!
-    middleName: String
-`
-
-const shareLoginAnfSignupProps = `
-    email: String!
-    password: String!
-`
-
-
 export default gql`
-    extend type Query {
-        users: [ReturnedUser!],
+    type TSignupArgs {
+        firstName: String!
+        lastName: String!
+        middleName: String
+        email: String!
+        password: String!
     }
 
-    extend type Mutation {
-        singup(
-            ${shareLoginAnfSignupProps}
-            firstName: String!,
-            lastName: String!,
-            middleName: String
-            ): ReturnedUserSignup!
-        
-        login(
-            ${shareLoginAnfSignupProps}
-        ):  ReturnedUser!  
+    type TLoginArgs {
+        email: String!
+        password: String!
     }
-    
-    type TSignupArgs {
-        ${shareLoginAnfSignupProps}
+
+    type ReturnedUser {
+        _id: ID!
+        publicKey: String!
+        token: String!
+        email: String!
         firstName: String!
         lastName: String!
         middleName: String
     }
 
-    type TLoginArgs {
-        ${shareLoginAnfSignupProps}
-    }
-
-    type ReturnedUser {
-      ${sharePropsSignup}
-    }
-
     type ReturnedUserSignup {
-        privateKey: String! 
-       ${sharePropsSignup}
+        _id: ID!
+        publicKey: String!
+        token: String!
+        email: String!
+        firstName: String!
+        lastName: String!
+        middleName: String
+        privateKey: String!
+    }
+    
+    extend type Query {
+        login (
+            email: String!
+            password: String!
+        ):  ReturnedUser!  
     }
 
-`
-
+    extend type Mutation {
+        singUp(
+            email: String!
+            password: String!
+            firstName: String!,
+            lastName: String!,
+            middleName: String
+        ): ReturnedUserSignup!
+    }
+`;

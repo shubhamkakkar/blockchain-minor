@@ -16,11 +16,7 @@ export default function signUpUser(args: TSignupArgs) {
         password,
     } = args;
 
-    contract.isRequired(firstName, "First Name is Required");
-    contract.isRequired(lastName, "LastName is Required");
-    contract.isRequired(email, "Email is Required");
     contract.isEmail(email, "Email is invalid");
-    contract.isRequired(password, "password is Required");
     contract.hasMinLen(password, 6,  "password should be of atleast 6 characters");
 
     if (!contract.isValid()) {

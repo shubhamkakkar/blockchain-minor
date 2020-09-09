@@ -14,7 +14,18 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
     'prettier',
+    'graphql',
   ],
   rules: {
+    'no-unused-vars': 0,
+    'import/extensions': 0,
+    'import/prefer-default-export': 0,
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts'],
+      },
+    },
   },
 };

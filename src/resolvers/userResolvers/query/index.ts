@@ -1,1 +1,1 @@
-export { default as userQuery } from './userQuery'
+export { default as loginUser } from './loginUser';

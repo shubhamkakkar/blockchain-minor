@@ -16,29 +16,28 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
-  users?: Maybe<Array<ReturnedUser>>;
+  login: ReturnedUser;
+};
+
+
+export type QueryLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
-  singup: ReturnedUserSignup;
-  login: ReturnedUser;
+  singUp: ReturnedUserSignup;
 };
 
 
-export type MutationSingupArgs = {
+export type MutationSingUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
-};
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
 };
 
 export type Subscription = {
@@ -48,11 +47,11 @@ export type Subscription = {
 
 export type TSignupArgs = {
   __typename?: 'TSignupArgs';
-  email: Scalars['String'];
-  password: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type TLoginArgs = {
@@ -74,7 +73,6 @@ export type ReturnedUser = {
 
 export type ReturnedUserSignup = {
   __typename?: 'ReturnedUserSignup';
-  privateKey: Scalars['String'];
   _id: Scalars['ID'];
   publicKey: Scalars['String'];
   token: Scalars['String'];
@@ -82,6 +80,7 @@ export type ReturnedUserSignup = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
+  privateKey: Scalars['String'];
 };
 
 export enum CacheControlScope {
@@ -170,8 +169,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   TSignupArgs: ResolverTypeWrapper<TSignupArgs>;
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
@@ -186,8 +185,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {};
   Boolean: Scalars['Boolean'];
-  Mutation: {};
   String: Scalars['String'];
+  Mutation: {};
   Subscription: {};
   TSignupArgs: TSignupArgs;
   TLoginArgs: TLoginArgs;
@@ -199,13 +198,12 @@ export type ResolversParentTypes = {
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  users?: Resolver<Maybe<Array<ResolversTypes['ReturnedUser']>>, ParentType, ContextType>;
+  login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  singup?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingupArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
-  login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -213,11 +211,11 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type TSignupArgsResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSignupArgs'] = ResolversParentTypes['TSignupArgs']> = {
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -239,7 +237,6 @@ export type ReturnedUserResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReturnedUserSignup'] = ResolversParentTypes['ReturnedUserSignup']> = {
-  privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -247,6 +244,7 @@ export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends Re
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
