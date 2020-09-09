@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "nodemon --exec ts-node index.ts",
-    "apollo:generate": "apollo codegen:generate --excludes=node_modules/* --includes=src/**/*.ts --endpoint https://localhost:4000 --target typescript --tagName gql --outputFlat src/generated",
+    "poststart": "yarn codegen",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
@@ -13,11 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.17.0",
-    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
     "http-status-codes": "^2.1.2",
+    "hybrid-crypto-js": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.3",
     "morgan": "^1.10.0",
@@ -29,6 +30,7 @@
     "@graphql-codegen/introspection": "1.17.8",
     "@graphql-codegen/typescript": "1.17.8",
     "@graphql-codegen/typescript-resolvers": "1.17.8",
+    "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.7",
     "@types/dotenv": "^8.2.0",
     "@types/mongoose": "^5.7.36",

@@ -1,5 +1,16 @@
 import { gql } from 'apollo-server';
 
+const SharePropsSignup = `
+_id: ID!
+publicKey: String!
+token: String!
+email: String!
+firstName: String!
+lastName: String!
+middleName: String
+`
+
+
 export default gql`
     extend type Query {
         users: [ReturnedUser!],
@@ -12,7 +23,7 @@ export default gql`
             firstName: String!,
             lastName: String!,
             middleName: String
-            ): ReturnedUser!
+            ): ReturnedUserSignup!
     }
     
     input TSignupArgs {
@@ -24,13 +35,13 @@ export default gql`
     }
           
     type ReturnedUser {
-        _id: ID!
-        publicKey: String!
-        token: String!
-        email: String!
-        firstName: String!
-        lastName: String!
-        middleName: String
+      ${SharePropsSignup}
     }
+
+    type ReturnedUserSignup {
+        privateKey: String! 
+       ${SharePropsSignup}
+    }
+
 `
 
