@@ -1,13 +1,18 @@
 import { gql } from 'apollo-server';
 
-const SharePropsSignup = `
-_id: ID!
-publicKey: String!
-token: String!
-email: String!
-firstName: String!
-lastName: String!
-middleName: String
+const sharePropsSignup = `
+    _id: ID!
+    publicKey: String!
+    token: String!
+    email: String!
+    firstName: String!
+    lastName: String!
+    middleName: String
+`
+
+const shareLoginAnfSignupProps = `
+    email: String!
+    password: String!
 `
 
 
@@ -18,29 +23,35 @@ export default gql`
 
     extend type Mutation {
         singup(
-            email: String!,
-            password: String!,
+            ${shareLoginAnfSignupProps}
             firstName: String!,
             lastName: String!,
             middleName: String
             ): ReturnedUserSignup!
+        
+        login(
+            ${shareLoginAnfSignupProps}
+        ):  ReturnedUser!  
     }
     
-    input TSignupArgs {
-        email: String!
-        password: String!
+    type TSignupArgs {
+        ${shareLoginAnfSignupProps}
         firstName: String!
         lastName: String!
         middleName: String
     }
-          
+
+    type TLoginArgs {
+        ${shareLoginAnfSignupProps}
+    }
+
     type ReturnedUser {
-      ${SharePropsSignup}
+      ${sharePropsSignup}
     }
 
     type ReturnedUserSignup {
         privateKey: String! 
-       ${SharePropsSignup}
+       ${sharePropsSignup}
     }
 
 `
