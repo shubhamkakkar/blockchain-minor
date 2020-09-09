@@ -18,6 +18,7 @@ module.exports = {
   ],
   rules: {
     'no-unused-vars': 0,
+    'no-console': 0,
     'import/extensions': 0,
     'import/prefer-default-export': 0,
   },

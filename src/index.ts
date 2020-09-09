@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server';
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
+import context from './context';
 
 export default function app() {
   const server = new ApolloServer(
@@ -8,6 +9,7 @@ export default function app() {
       cors: true,
       typeDefs,
       resolvers,
+      context,
     },
   );
   server
