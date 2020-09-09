@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -29,6 +31,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
   singUp: ReturnedUserSignup;
+  requestDanglingBlock: TRequestedDanglingBlock;
 };
 
 
@@ -38,6 +41,11 @@ export type MutationSingUpArgs = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationRequestDanglingBlockArgs = {
+  requestBlockData: TRequestDanglingBlock;
 };
 
 export type Subscription = {
@@ -81,6 +89,21 @@ export type ReturnedUserSignup = {
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
   privateKey: Scalars['String'];
+};
+
+
+export type TRequestedDanglingBlock = {
+  __typename?: 'TRequestedDanglingBlock';
+  _id: Scalars['ID'];
+  userId: Scalars['ID'];
+  requestAt: Scalars['DateTime'];
+  message: Scalars['String'];
+};
+
+export type TRequestDanglingBlock = {
+  privateKey?: Maybe<Scalars['String']>;
+  cipherKeyForTheMessage?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
 };
 
 export enum CacheControlScope {
@@ -177,6 +200,9 @@ export type ResolversTypes = {
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
+  TRequestDanglingBlock: TRequestDanglingBlock;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 };
@@ -193,6 +219,9 @@ export type ResolversParentTypes = {
   ReturnedUser: ReturnedUser;
   ID: Scalars['ID'];
   ReturnedUserSignup: ReturnedUserSignup;
+  DateTime: Scalars['DateTime'];
+  TRequestedDanglingBlock: TRequestedDanglingBlock;
+  TRequestDanglingBlock: TRequestDanglingBlock;
   Upload: Scalars['Upload'];
 };
 
@@ -204,6 +233,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
+  requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -248,6 +278,18 @@ export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
+export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['TRequestedDanglingBlock'] = ResolversParentTypes['TRequestedDanglingBlock']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
@@ -260,6 +302,8 @@ export type Resolvers<ContextType = any> = {
   TLoginArgs?: TLoginArgsResolvers<ContextType>;
   ReturnedUser?: ReturnedUserResolvers<ContextType>;
   ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
+  TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 

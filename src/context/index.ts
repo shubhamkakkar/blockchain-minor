@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-const context = ({ req: { headers: { authorization = '' } } }) => {
+const context = (reqWrapper: any) => {
   try {
-    return authorization;
+    return reqWrapper.req.headers;
   } catch (e) {
     console.log('context e', e);
     throw new GraphQLError(

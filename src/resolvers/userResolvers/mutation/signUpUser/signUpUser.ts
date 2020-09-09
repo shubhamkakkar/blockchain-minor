@@ -30,20 +30,20 @@ export default function signUpUser(args: TSignupArgs) {
         return new GraphQLError('user already exists');
       }
 
-      const token = generateToken({ email });
-      const cyrptedPassword = await generatePasswordCrypt(password);
+      const cryptPassword = await generatePasswordCrypt(password);
       const { privateKey, publicKey } = await userProfileKeys();
 
       const newUser = new UserModel({
         firstName,
         lastName,
         middleName,
-        password: cyrptedPassword,
+        password: cryptPassword,
         publicKey,
         email,
       });
-
-      newUser.save();
+      await newUser.save();
+      // eslint-disable-next-line no-underscore-dangle
+      const token = generateToken({ email, userId: newUser.toObject()._id });
 
       return {
         ...newUser.toObject(),

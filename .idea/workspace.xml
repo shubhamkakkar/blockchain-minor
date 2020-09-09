@@ -2,11 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1124d70-197b-4754-bf7d-78fc86fbe4ad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/context/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/RequestBlockModel.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/mutation/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/mutation/requestDanglingBlock/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/mutation/requestDanglingBlock/requestDanglingBlock.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/query/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/resolvers/requestBlockResolvers/requestBlockResolvers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/typeDefs/requestBlock/requestBlock.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphql.schema.json" beforeDir="false" afterPath="$PROJECT_DIR$/graphql.schema.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/graphql.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/graphql.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resolvers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/signUpUser/signUpUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/signUpUser/signUpUser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/query/loginUser/loginUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/query/loginUser/loginUser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/typeDefs/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/typeDefs/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utis/jwt/jwt.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utis/jwt/jwt.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +90,7 @@
       <option name="presentableId" value="Default" />
       <updated>1599646580475</updated>
       <workItem from="1599646583554" duration="3329000" />
-      <workItem from="1599688434382" duration="1973000" />
+      <workItem from="1599688434382" duration="6113000" />
     </task>
     <servers />
   </component>
@@ -111,5 +125,9 @@
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state width="1340" height="466" key="GridCell.Tab.0.right/0.27.1366.741@0.27.1366.741" timestamp="1599650125375" />
+    <state x="346" y="89" key="search.everywhere.popup" timestamp="1599692538835">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="346" y="89" key="search.everywhere.popup/0.27.1366.741@0.27.1366.741" timestamp="1599692538835" />
   </component>
 </project>

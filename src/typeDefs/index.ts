@@ -1,7 +1,6 @@
-
 import { gql } from 'apollo-server';
-
 import userSchema from './user/user';
+import requestBlock from './requestBlock/requestBlock';
 
 const linkSchema = gql`
     type Query {
@@ -15,4 +14,4 @@ const linkSchema = gql`
     }
 `;
 
-export default [linkSchema, userSchema];
+export default [linkSchema, userSchema, requestBlock];
