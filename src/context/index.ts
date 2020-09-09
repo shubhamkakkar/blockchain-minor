@@ -6,7 +6,7 @@ const context = ({ req: { headers: { authorization = '' } } }) => {
   } catch (e) {
     console.log('context e', e);
     throw new GraphQLError(
-      'Authentication token is invalid, please log in',
+      'Authentication token is not present',
     );
   }
 };
