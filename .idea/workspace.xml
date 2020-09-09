@@ -2,29 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1124d70-197b-4754-bf7d-78fc86fbe4ad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/blockchain-minor.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.prettuerrc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/query/loginUser/loginUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphql.schema.json" beforeDir="false" afterPath="$PROJECT_DIR$/graphql.schema.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.prettierrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.prettierrc.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/graphql.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/graphql.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/loginUser/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/query/loginUser/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/loginUser/loginUser.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/signUpUser/signUpUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/mutation/signUpUser/signUpUser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/query/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/query/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/query/userQuery.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resolvers/userResolvers/userResolvers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resolvers/userResolvers/userResolvers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/typeDefs/user/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/typeDefs/user/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +49,23 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RunManager">
+    <configuration name="format" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="format" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.format" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -76,7 +74,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1599646580475</updated>
-      <workItem from="1599646583554" duration="2720000" />
+      <workItem from="1599646583554" duration="3241000" />
     </task>
     <servers />
   </component>
@@ -95,5 +93,21 @@
       <screen x="0" y="27" width="1600" height="873" />
     </state>
     <state x="532" y="211" width="526" height="500" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1600.873@0.27.1600.873" timestamp="1599647276538" />
+    <state width="1340" height="466" key="GridCell.Tab.0.bottom" timestamp="1599649847948">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state width="1340" height="466" key="GridCell.Tab.0.bottom/0.27.1366.741@0.27.1366.741" timestamp="1599649847948" />
+    <state width="1340" height="466" key="GridCell.Tab.0.center" timestamp="1599649847948">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state width="1340" height="466" key="GridCell.Tab.0.center/0.27.1366.741@0.27.1366.741" timestamp="1599649847948" />
+    <state width="1340" height="466" key="GridCell.Tab.0.left" timestamp="1599649847946">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state width="1340" height="466" key="GridCell.Tab.0.left/0.27.1366.741@0.27.1366.741" timestamp="1599649847946" />
+    <state width="1340" height="466" key="GridCell.Tab.0.right" timestamp="1599649847948">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state width="1340" height="466" key="GridCell.Tab.0.right/0.27.1366.741@0.27.1366.741" timestamp="1599649847948" />
   </component>
 </project>

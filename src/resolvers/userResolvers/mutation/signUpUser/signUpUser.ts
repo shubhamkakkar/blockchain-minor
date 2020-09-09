@@ -1,57 +1,55 @@
-import { TSignupArgs } from "../../../../generated/graphql";
-import ValidationContract from "../../../../utis/validator/validator";
-import { GraphQLError } from "graphql";
-import UserModel from "../../../../models/UserModel";
-import { generateToken } from "../../../../utis/jwt/jwt";
-import { generatePasswordCrypt } from "../../../../utis/bcrypt/bcrypt";
-import { userProfileKeys } from "../../../../utis/rsa/rsa";
+import { GraphQLError } from 'graphql';
+import { TSignupArgs } from '../../../../generated/graphql';
+import ValidationContract from '../../../../utis/validator/validator';
+import UserModel from '../../../../models/UserModel';
+import { generateToken } from '../../../../utis/jwt/jwt';
+import { generatePasswordCrypt } from '../../../../utis/bcrypt/bcrypt';
+import { userProfileKeys } from '../../../../utis/rsa/rsa';
 
 export default function signUpUser(args: TSignupArgs) {
-    const contract = new ValidationContract();
-    const {
+  const contract = new ValidationContract();
+  const {
+    firstName,
+    lastName,
+    middleName,
+    email,
+    password,
+  } = args;
+
+  contract.isEmail(email, 'Email is invalid');
+  contract.hasMinLen(password, 6, 'password should be of atleast 6 characters');
+
+  if (!contract.isValid()) {
+    return new GraphQLError(contract.errors() || 'Review Signup information');
+  }
+
+  return UserModel
+    .findOne({ email })
+    .then(async (user: any) => {
+      if (user) {
+        return new GraphQLError('user already exists');
+      }
+
+      const token = generateToken({ email });
+      const cyrptedPassword = await generatePasswordCrypt(password);
+      const { privateKey, publicKey } = await userProfileKeys();
+
+      const newUser = new UserModel({
         firstName,
         lastName,
         middleName,
+        password: cyrptedPassword,
+        publicKey,
         email,
-        password,
-    } = args;
+      });
 
-    contract.isEmail(email, "Email is invalid");
-    contract.hasMinLen(password, 6,  "password should be of atleast 6 characters");
+      newUser.save();
 
-    if (!contract.isValid()) {
-        return new GraphQLError(contract.errors() || "Review Signup information")
-    }
-
-    return UserModel
-        .findOne({ email })
-        .then(async (user: any) => {
-            if (user) {
-                return new GraphQLError("user already exists")
-            }
-
-            const token = generateToken({ email });
-            const cyrptedPassword = await generatePasswordCrypt(password)
-            const { privateKey, publicKey } = await userProfileKeys();
-
-            const newUser = new UserModel({
-                firstName,
-                lastName,
-                middleName,
-                password: cyrptedPassword,
-                publicKey,
-                email,
-            })
-
-            newUser.save()
-
-            return {
-                ...newUser.toObject(),
-                privateKey,
-                token,
-            }
-            
-        })
-        .catch(er => new GraphQLError("signun failed", er))
-
+      return {
+        ...newUser.toObject(),
+        privateKey,
+        token,
+      };
+    })
+    .catch((er) => new GraphQLError('signun failed', er));
 }
