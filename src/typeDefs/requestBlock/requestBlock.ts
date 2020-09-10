@@ -17,6 +17,11 @@ export default gql`
         message: String!
     }
     
+    extend type Query {
+        requestedBlocks: [TRequestedDanglingBlock]!
+        myRequestedBlocks: [TRequestedDanglingBlock]!
+    }
+    
     extend type Mutation {
         requestDanglingBlock(
             requestBlockData: TRequestDanglingBlock!
