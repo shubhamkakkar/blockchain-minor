@@ -13,6 +13,14 @@ const RequestBlockSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  acceptCount: {
+    type: Number,
+    default: 0,
+  },
+  rejectCount: {
+    type: Number,
+    default: 0,
+  },
 },
 { collection: 'RequestBlock' });
 
