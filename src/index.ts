@@ -12,10 +12,10 @@ export default function app() {
       context,
     },
   );
-  server
-    .listen(
-      { port: process.env.PORT || 4000 },
-    )
+
+  server.listen(
+    { port: process.env.PORT || 4000 },
+  )
     .then(({ url }: { url: string }) => console.log(`🚀 Server ready at ${url}`))
     .catch((er) => console.log('ApolloServer Error', er));
 }
