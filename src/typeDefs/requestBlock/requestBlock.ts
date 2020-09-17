@@ -9,12 +9,24 @@ export default gql`
         userId: ID!
         requestAt: Date!
         message: String!
+        acceptCount: Int!
+        denyCount: Int!
+    }
+    
+    type TAcceptDeclineCount {
+        acceptCount: Int!
+        denyCount: Int!
     }
     
     input TRequestDanglingBlock {
         privateKey: String
         cipherKeyForTheMessage: String
         message: String!
+    }
+    
+    input TAcceptDenyParams {
+        blockId: ID!
+        isAccept: Boolean
     }
     
     extend type Query {
@@ -25,6 +37,9 @@ export default gql`
     extend type Mutation {
         requestDanglingBlock(
             requestBlockData: TRequestDanglingBlock!
-        ): TRequestedDanglingBlock!    
+        ): TRequestedDanglingBlock!
+        acceptDeclineBlock(
+            acceptDenyParams: TAcceptDenyParams!
+        ): TAcceptDeclineCount!
     }
 `;

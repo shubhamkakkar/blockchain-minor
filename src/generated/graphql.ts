@@ -19,12 +19,20 @@ export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
   login: ReturnedUser;
+  requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
+  myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
+  acceptDeclineBlock: TAcceptDeclineCount;
 };
 
 
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type QueryAcceptDeclineBlockArgs = {
+  blockId: Scalars['ID'];
 };
 
 export type Mutation = {
@@ -98,6 +106,14 @@ export type TRequestedDanglingBlock = {
   userId: Scalars['ID'];
   requestAt: Scalars['DateTime'];
   message: Scalars['String'];
+  acceptCount: Scalars['Int'];
+  denyCount: Scalars['Int'];
+};
+
+export type TAcceptDeclineCount = {
+  __typename?: 'TAcceptDeclineCount';
+  acceptCount: Scalars['Int'];
+  denyCount: Scalars['Int'];
 };
 
 export type TRequestDanglingBlock = {
@@ -193,15 +209,17 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   TSignupArgs: ResolverTypeWrapper<TSignupArgs>;
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
   TRequestDanglingBlock: TRequestDanglingBlock;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -212,15 +230,17 @@ export type ResolversParentTypes = {
   Query: {};
   Boolean: Scalars['Boolean'];
   String: Scalars['String'];
+  ID: Scalars['ID'];
   Mutation: {};
   Subscription: {};
   TSignupArgs: TSignupArgs;
   TLoginArgs: TLoginArgs;
   ReturnedUser: ReturnedUser;
-  ID: Scalars['ID'];
   ReturnedUserSignup: ReturnedUserSignup;
   DateTime: Scalars['DateTime'];
   TRequestedDanglingBlock: TRequestedDanglingBlock;
+  Int: Scalars['Int'];
+  TAcceptDeclineCount: TAcceptDeclineCount;
   TRequestDanglingBlock: TRequestDanglingBlock;
   Upload: Scalars['Upload'];
 };
@@ -228,6 +248,9 @@ export type ResolversParentTypes = {
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
+  requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
+  myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
+  acceptDeclineBlock?: Resolver<ResolversTypes['TAcceptDeclineCount'], ParentType, ContextType, RequireFields<QueryAcceptDeclineBlockArgs, 'blockId'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -287,6 +310,14 @@ export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType exten
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  denyCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['TAcceptDeclineCount'] = ResolversParentTypes['TAcceptDeclineCount']> = {
+  acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  denyCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -304,6 +335,7 @@ export type Resolvers<ContextType = any> = {
   ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
+  TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 
