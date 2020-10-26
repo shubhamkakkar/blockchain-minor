@@ -1,6 +1,6 @@
 import { acceptDeclineBlock, requestDanglingBlock } from './mutation';
 import { requestedBlocks } from './query';
-import { TRequestDanglingBlock } from '../../generated/graphql';
+import { TRequestDanglingBlock, TAcceptDenyParams } from '../../generated/graphql';
 
 export default {
   Query: {
@@ -12,7 +12,7 @@ export default {
       parent: any, args: { requestBlockData: TRequestDanglingBlock }, context: any,
     ) => requestDanglingBlock(args, context),
     acceptDeclineBlock: (
-      parent: any, args: { blockId: string }, context: any,
+      parent: any, args: {acceptDenyParams: TAcceptDenyParams}, context: any,
     ) => acceptDeclineBlock(args, context),
   },
 };

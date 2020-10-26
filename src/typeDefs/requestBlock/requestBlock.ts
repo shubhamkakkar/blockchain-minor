@@ -14,8 +14,8 @@ export default gql`
     }
     
     type TAcceptDeclineCount {
-        acceptCount: Int!
-        denyCount: Int!
+        acceptCount: Int
+        rejectCount: Int
     }
     
     input TRequestDanglingBlock {
@@ -40,6 +40,6 @@ export default gql`
         ): TRequestedDanglingBlock!
         acceptDeclineBlock(
             acceptDenyParams: TAcceptDenyParams!
-        ): TAcceptDeclineCount!
+        ): TAcceptDeclineCount
     }
 `;

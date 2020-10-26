@@ -21,6 +21,11 @@ const RequestBlockSchema = new Schema({
     type: Number,
     default: 0,
   },
+  votedUsers: {
+    type: [String],
+    default: [],
+    required: true,
+  },
 },
 { collection: 'RequestBlock' });
 
