@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+   node-app:
+    container_name: node_app
+    restart: always
+    image: node:10.17
+    volumes:
+        - ./:/usr/src/node_app:cached
+        - ./node_modules:/usr/src/node_app/node_modules:cached
+    working_dir: /usr/src/node_app
+    command: sh -c "yarn && yarn start"
+    ports:
+      - 4000:4000
