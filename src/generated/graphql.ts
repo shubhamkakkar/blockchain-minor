@@ -34,7 +34,7 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']>;
   singUp: ReturnedUserSignup;
   requestDanglingBlock: TRequestedDanglingBlock;
-  acceptDeclineBlock: TAcceptDeclineCount;
+  acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
 };
 
 
@@ -107,13 +107,13 @@ export type TRequestedDanglingBlock = {
   requestAt: Scalars['DateTime'];
   message: Scalars['String'];
   acceptCount: Scalars['Int'];
-  denyCount: Scalars['Int'];
+  rejectCount: Scalars['Int'];
 };
 
 export type TAcceptDeclineCount = {
   __typename?: 'TAcceptDeclineCount';
-  acceptCount: Scalars['Int'];
-  rejectCount: Scalars['Int'];
+  acceptCount?: Maybe<Scalars['Int']>;
+  rejectCount?: Maybe<Scalars['Int']>;
 };
 
 export type TRequestDanglingBlock = {
@@ -263,7 +263,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
   requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
-  acceptDeclineBlock?: Resolver<ResolversTypes['TAcceptDeclineCount'], ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
+  acceptDeclineBlock?: Resolver<Maybe<ResolversTypes['TAcceptDeclineCount']>, ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -318,13 +318,13 @@ export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType exten
   requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  denyCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rejectCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['TAcceptDeclineCount'] = ResolversParentTypes['TAcceptDeclineCount']> = {
-  acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  rejectCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  acceptCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  rejectCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

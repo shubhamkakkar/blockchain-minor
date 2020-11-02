@@ -10,7 +10,7 @@ export default gql`
         requestAt: Date!
         message: String!
         acceptCount: Int!
-        denyCount: Int!
+        rejectCount: Int!
     }
     
     type TAcceptDeclineCount {

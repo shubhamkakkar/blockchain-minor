@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { GraphQLError } from 'graphql';
 import ValidationContract from '../../../../utis/validator/validator';
 import { TLoginArgs } from '../../../../generated/graphql';
@@ -24,8 +25,10 @@ export default function loginUser(args: TLoginArgs) {
       if (user) {
         // eslint-disable-next-line no-underscore-dangle
         const token = generateToken({ email, userId: user._id });
+        console.log({ user: { ...user } });
         return {
-          ...user,
+          // @ts-ignore
+          ...user._doc,
           token,
         };
       }
