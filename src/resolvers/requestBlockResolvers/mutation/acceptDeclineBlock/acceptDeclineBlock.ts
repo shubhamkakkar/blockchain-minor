@@ -52,7 +52,7 @@ export default function acceptDeclineBlock(
           }
           return block;
         }
-        return new GraphQLError('Either you are the owner of the block, or you have already voted for the block');
+        return new GraphQLError('Either you are the owner of the block, you have already voted for the block, or the block doesn\'t exists');
       })
       .catch((er) => {
         console.log('acceptDeclineBlock failed', er);

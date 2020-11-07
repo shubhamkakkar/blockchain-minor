@@ -32,7 +32,6 @@ export default async function requestDanglingBlock(
     });
 
     await newRequestedBlock.save();
-    console.log({ newRequestedBlock: newRequestedBlock.toObject() });
     return {
       ...newRequestedBlock.toObject(),
     };

@@ -25,7 +25,6 @@ export default function loginUser(args: TLoginArgs) {
       if (user) {
         // eslint-disable-next-line no-underscore-dangle
         const token = generateToken({ email, userId: user._id });
-        console.log({ user: { ...user } });
         return {
           // @ts-ignore
           ...user._doc,
