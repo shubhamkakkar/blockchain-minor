@@ -1,1 +1,1 @@
-export { default } from './userResolvers'
+export { default } from './userResolvers';

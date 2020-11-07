@@ -14,7 +14,7 @@ export default class ValidationContract {
       };
 
       isFixedLen = (value: any, len: number, message: string) => {
-        if (value.length != len) this.error = message;
+        if (value.length !== +len) this.error = message;
       };
 
       isEmail = (value: any, message: string) => {
@@ -38,5 +38,5 @@ export default class ValidationContract {
         this.error = '';
       };
 
-      isValid = () => this.error.length == 0;
+      isValid = () => this.error.length === 0;
 }
