@@ -6,7 +6,7 @@ export default gql`
     scalar Date
     type TRequestedDanglingBlock {
         _id : ID!
-        userId: ID!
+        user: ReturnedUser
         requestAt: Date!
         message: String!
         acceptCount: Int!
