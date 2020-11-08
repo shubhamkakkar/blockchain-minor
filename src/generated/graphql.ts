@@ -141,6 +141,7 @@ export type TPublicLedger = {
   hash: Scalars['String'];
   timeStamp: Scalars['DateTime'];
   nounce: Scalars['Int'];
+  ownerId: Scalars['ID'];
 };
 
 export type TSharedBlockResponse = {
@@ -371,6 +372,7 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
   hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   timeStamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   nounce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

@@ -13,6 +13,7 @@ export default gql`
         hash: String!
         timeStamp: Date!
         nounce: Int!
+        ownerId: ID!
     }
     
     type TSharedBlockResponse {
