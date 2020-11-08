@@ -14,8 +14,8 @@ export default gql`
     }
     
     type TAcceptDeclineCount {
-        acceptCount: Int
-        rejectCount: Int
+        acceptCount: Int!
+        rejectCount: Int!
     }
     
     input TRequestDanglingBlock {

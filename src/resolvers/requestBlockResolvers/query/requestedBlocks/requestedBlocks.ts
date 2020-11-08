@@ -38,6 +38,5 @@ export default async function requestedBlocks(context: any, isUserOnly = false) 
     console.log('requestedBlocks() e', e);
     throw new GraphQLError('requestedBlocks() e');
   }
-
   throw new GraphQLError('Authentication token not present');
 }
