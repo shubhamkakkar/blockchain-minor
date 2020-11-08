@@ -1,4 +1,4 @@
-import publicLedger from "./query";
+import publicLedger from './query';
 
 export default {
   Query: {
