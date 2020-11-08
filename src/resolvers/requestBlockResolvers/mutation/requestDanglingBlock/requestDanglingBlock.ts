@@ -16,7 +16,7 @@ export default async function requestDanglingBlock(
 
     const { userId } = tokenContent;
     const newRequestedBlock = new RequestBlockModel({
-      message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage || ''),
+      message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage),
       userId,
     });
 
