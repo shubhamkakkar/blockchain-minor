@@ -1,7 +1,7 @@
 // @ts-ignore
 import { GraphQLError } from 'graphql';
 import { ReturnedUser, TPublicLedger, TShareBlockArgs } from '../../../../generated/graphql';
-import { verifyToken } from '../../../../utis/jwt/jwt';
+import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
 import BlockModel from '../../../../models/BlockModel';
 import UserModel from '../../../../models/UserModel';
 
@@ -12,16 +12,6 @@ export default async function shareBlock(
   try {
     const tokenContent = verifyToken(context.authorization);
     if (tokenContent) {
-    /*
-   * check if the cipher key is the one used at the time of block creation
-   * if true:
-   *    * check if user exists
-   *        if true: send the block to that user
-   *    for this in frontend we need a dropdown of users,
-   *    thus create a user route which returns all the user
-   *     else: email user invite to the block
-   * else: tell user the cipher ket is wrong
-   * */
       if (shareBlockArgs.recipientUserId === tokenContent.userId) {
         return {
           shareStatus: false,
@@ -34,9 +24,16 @@ export default async function shareBlock(
           const recipientUser = await UserModel.findById(
             shareBlockArgs.recipientUserId,
           ).lean() as ReturnedUser;
-          console.log({ ...recipientUser });
-
           if (recipientUser) {
+            const originalMessage = decryptMessageForRequestedBlock(
+              block.data, shareBlockArgs.cipherTextOfBlock,
+            );
+            /*
+            * create signature using message and public key of receiver
+            * send this signature and message to receiver
+            * receiver will use the signature, with private and message
+            *  to validate the authenticity of the flow
+            * */
             return {
               shareStatus: true,
               message: 'nns',
