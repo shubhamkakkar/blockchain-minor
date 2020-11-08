@@ -1,6 +1,4 @@
-/* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -25,6 +23,7 @@ export type Query = {
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
 };
 
+
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -38,6 +37,7 @@ export type Mutation = {
   acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
 };
 
+
 export type MutationSingUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -46,9 +46,11 @@ export type MutationSingUpArgs = {
   middleName?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationRequestDanglingBlockArgs = {
   requestBlockData: TRequestDanglingBlock;
 };
+
 
 export type MutationAcceptDeclineBlockArgs = {
   acceptDenyParams: TAcceptDenyParams;
@@ -97,10 +99,11 @@ export type ReturnedUserSignup = {
   privateKey: Scalars['String'];
 };
 
+
 export type TRequestedDanglingBlock = {
   __typename?: 'TRequestedDanglingBlock';
   _id: Scalars['ID'];
-  userId: Scalars['ID'];
+  user?: Maybe<ReturnedUser>;
   requestAt: Scalars['DateTime'];
   message: Scalars['String'];
   acceptCount: Scalars['Int'];
@@ -129,7 +132,11 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
@@ -260,7 +267,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, '_', ParentType, ContextType>;
+  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
 };
 
 export type TSignupArgsResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSignupArgs'] = ResolversParentTypes['TSignupArgs']> = {
@@ -307,7 +314,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 
 export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['TRequestedDanglingBlock'] = ResolversParentTypes['TRequestedDanglingBlock']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['ReturnedUser']>, ParentType, ContextType>;
   requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -338,6 +345,7 @@ export type Resolvers<ContextType = any> = {
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
+
 
 /**
  * @deprecated
