@@ -29,9 +29,9 @@ export default function acceptDeclineBlock(
         {
           _id: blockId,
           userId: { $ne: tokenContent.userId },
-          // votedUsers: { $nin: [tokenContent.userId] },
+          votedUsers: { $nin: [tokenContent.userId] },
         },
-        // { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
+        { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
         { new: true },
       )
       .then(async (block: any) => {

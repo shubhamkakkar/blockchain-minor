@@ -2,7 +2,9 @@ import Block, { TBlock } from '../../../../../Blokchain/Block';
 import BlockModel from '../../../../../models/BlockModel';
 import deletedTheBlock from '../deletedTheBlock/deletedTheBlock';
 
-export default async function deletedTheBlockAndMoveToBlockchain(message: string, blockId: string, ownerId: string) {
+export default async function deletedTheBlockAndMoveToBlockchain(
+  message: string, blockId: string, ownerId: string,
+) {
   try {
     const lastElementOfBlockchain = await BlockModel.find().slice('array', -1).lean() as TBlock[];
     let block;
@@ -11,7 +13,6 @@ export default async function deletedTheBlockAndMoveToBlockchain(message: string
     } else {
       block = new Block({ prevHash: '0', data: message });
     }
-
     const blockOfBlockChain = new BlockModel({ ...block, ownerId });
     await blockOfBlockChain.save();
     await deletedTheBlock(blockId);
