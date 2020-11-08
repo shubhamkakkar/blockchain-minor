@@ -7,7 +7,7 @@ export type TBlockConstructor = {
 }
 
 export type TBlock = {
-  timestamp?: number;
+  timeStamp?: number;
   data: any;
   prevHash: string;
   hash: string;
@@ -15,7 +15,7 @@ export type TBlock = {
 }
 
 class Block {
-  timestamp: number;
+  timeStamp: number;
 
   data: any;
 
@@ -28,14 +28,14 @@ class Block {
   constructor({ data, prevHash }: TBlockConstructor) {
     this.data = data;
     this.prevHash = prevHash;
-    this.timestamp = Date.now();
+    this.timeStamp = Date.now();
     this.nounce = 1;
     this.hash = this.calcHash();
   }
 
   calcHash(): string {
     return sha256(
-      this.timestamp + this.data + this.prevHash + this.nounce,
+      this.timeStamp + this.data + this.prevHash + this.nounce,
     );
   }
 
