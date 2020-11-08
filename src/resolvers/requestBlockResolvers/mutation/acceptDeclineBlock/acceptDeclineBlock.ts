@@ -3,11 +3,12 @@ import { verifyToken } from '../../../../utis/jwt/jwt';
 import { TAcceptDenyParams } from '../../../../generated/graphql';
 import RequestBlockModel from '../../../../models/RequestBlockModel';
 import UserModel from '../../../../models/UserModel';
-
 import ValidationContract from '../../../../utis/validator/validator';
+import deletedTheBlockAndMoveToBlockchain from './deletedTheBlockAndMoveToBlockchain';
+import deletedTheBlock from './deletedTheBlock';
 
 export default function acceptDeclineBlock(
-  { acceptDenyParams } : { acceptDenyParams: TAcceptDenyParams}, context: any,
+  { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, context: any,
 ) {
   const tokenContent = verifyToken(context.authorization);
   if (tokenContent) {
@@ -28,9 +29,9 @@ export default function acceptDeclineBlock(
         {
           _id: blockId,
           userId: { $ne: tokenContent.userId },
-          votedUsers: { $nin: [tokenContent.userId] },
+          // votedUsers: { $nin: [tokenContent.userId] },
         },
-        { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
+        // { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
         { new: true },
       )
       .then(async (block: any) => {
@@ -41,14 +42,10 @@ export default function acceptDeclineBlock(
           } = block;
           // find all users length
           const userCount = await UserModel.countDocuments({ _id: { $ne: tokenContent.userId } });
-          const deletedTheBlockAndMoveToBlockchain = async () => {
-            await RequestBlockModel.findByIdAndDelete(blockId);
-            // moveToBlockChain
-          };
           if (acceptCount >= 0.51 * userCount) {
-            await deletedTheBlockAndMoveToBlockchain();
+            await deletedTheBlockAndMoveToBlockchain(block.toObject().message);
           } else if (rejectCount >= 0.51 * userCount) {
-            await deletedTheBlockAndMoveToBlockchain();
+            // await deletedTheBlock(blockId);
           }
           return block;
         }
