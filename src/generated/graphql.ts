@@ -151,7 +151,7 @@ export type TSharedBlockResponse = {
 
 export type TShareBlockArgs = {
   blockId: Scalars['ID'];
-  userId: Scalars['ID'];
+  recipientUserId: Scalars['ID'];
   cipherTextOfBlock: Scalars['String'];
 };
 

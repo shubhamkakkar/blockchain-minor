@@ -2,8 +2,9 @@
 import { GraphQLError } from 'graphql';
 import { TShareBlockArgs } from '../../../../generated/graphql';
 import { verifyToken } from '../../../../utis/jwt/jwt';
+import BlockModel from '../../../../models/BlockModel';
 
-export default function shareBlock(
+export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
   context: any,
 ) {
@@ -19,6 +20,9 @@ export default function shareBlock(
    *     else: email user invite to the block
    * else: tell user the cipher ket is wrong
    * */
+
+    const block = await BlockModel.findById(shareBlockArgs.blockId).lean();
+    console.log({ block });
   }
   throw new GraphQLError('Authentication token not present');
 }

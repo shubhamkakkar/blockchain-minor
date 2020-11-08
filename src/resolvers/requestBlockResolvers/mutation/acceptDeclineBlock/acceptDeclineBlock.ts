@@ -29,9 +29,9 @@ export default function acceptDeclineBlock(
         {
           _id: blockId,
           userId: { $ne: tokenContent.userId },
-          votedUsers: { $nin: [tokenContent.userId] },
+          // votedUsers: { $nin: [tokenContent.userId] },
         },
-        { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
+        // { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
         { new: true },
       )
       .then(async (block: any) => {
@@ -43,7 +43,7 @@ export default function acceptDeclineBlock(
           } = block;
           const userCount = await UserModel.countDocuments({ _id: { $ne: tokenContent.userId } });
           if (acceptCount >= 0.51 * userCount) {
-            await deletedTheBlockAndMoveToBlockchain(message, blockId);
+            await deletedTheBlockAndMoveToBlockchain(message, blockId, tokenContent.userId);
           } else if (rejectCount >= 0.51 * userCount) {
             await deletedTheBlock(blockId);
           }

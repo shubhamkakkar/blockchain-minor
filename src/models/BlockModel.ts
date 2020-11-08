@@ -22,6 +22,10 @@ const BlockModel = new Schema(
       type: Number,
       required: true,
     },
+    ownerId: {
+      type: String,
+      required: true,
+    },
   },
   { collection: 'Blockchain' },
 );

@@ -22,7 +22,7 @@ export default gql`
     
     input TShareBlockArgs {
         blockId: ID!
-        userId: ID!
+        recipientUserId: ID!
         cipherTextOfBlock: String!
     }
 
