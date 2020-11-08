@@ -36,6 +36,7 @@ export type Mutation = {
   singUp: ReturnedUserSignup;
   requestDanglingBlock: TRequestedDanglingBlock;
   acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
+  shareBlock: TSharedBlockResponse;
 };
 
 
@@ -55,6 +56,11 @@ export type MutationRequestDanglingBlockArgs = {
 
 export type MutationAcceptDeclineBlockArgs = {
   acceptDenyParams: TAcceptDenyParams;
+};
+
+
+export type MutationShareBlockArgs = {
+  shareBlockArgs: TShareBlockArgs;
 };
 
 export type Subscription = {
@@ -135,6 +141,18 @@ export type TPublicLedger = {
   hash: Scalars['String'];
   timeStamp: Scalars['DateTime'];
   nounce: Scalars['Int'];
+};
+
+export type TSharedBlockResponse = {
+  __typename?: 'TSharedBlockResponse';
+  shareStatus: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type TShareBlockArgs = {
+  blockId: Scalars['ID'];
+  userId: Scalars['ID'];
+  cipherTextOfBlock: Scalars['String'];
 };
 
 export enum CacheControlScope {
@@ -238,6 +256,8 @@ export type ResolversTypes = {
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   TPublicLedger: ResolverTypeWrapper<TPublicLedger>;
+  TSharedBlockResponse: ResolverTypeWrapper<TSharedBlockResponse>;
+  TShareBlockArgs: TShareBlockArgs;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 };
@@ -261,6 +281,8 @@ export type ResolversParentTypes = {
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   TPublicLedger: TPublicLedger;
+  TSharedBlockResponse: TSharedBlockResponse;
+  TShareBlockArgs: TShareBlockArgs;
   Upload: Scalars['Upload'];
 };
 
@@ -277,6 +299,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
   requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
   acceptDeclineBlock?: Resolver<Maybe<ResolversTypes['TAcceptDeclineCount']>, ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
+  shareBlock?: Resolver<ResolversTypes['TSharedBlockResponse'], ParentType, ContextType, RequireFields<MutationShareBlockArgs, 'shareBlockArgs'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -351,6 +374,12 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type TSharedBlockResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSharedBlockResponse'] = ResolversParentTypes['TSharedBlockResponse']> = {
+  shareStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
@@ -367,6 +396,7 @@ export type Resolvers<ContextType = any> = {
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
   TPublicLedger?: TPublicLedgerResolvers<ContextType>;
+  TSharedBlockResponse?: TSharedBlockResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 

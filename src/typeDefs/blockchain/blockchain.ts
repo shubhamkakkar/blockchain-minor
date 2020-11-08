@@ -14,8 +14,23 @@ export default gql`
         timeStamp: Date!
         nounce: Int!
     }
+    
+    type TSharedBlockResponse {
+        shareStatus: Boolean!
+        message: String!
+    }
+    
+    input TShareBlockArgs {
+        blockId: ID!
+        userId: ID!
+        cipherTextOfBlock: String!
+    }
 
     extend type Query {
         publicLedger: [TPublicLedger]!
+    }
+    
+    extend type Mutation {
+        shareBlock(shareBlockArgs: TShareBlockArgs!): TSharedBlockResponse! 
     }
 `;
