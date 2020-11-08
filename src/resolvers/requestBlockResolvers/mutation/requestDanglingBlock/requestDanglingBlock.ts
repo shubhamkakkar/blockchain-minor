@@ -12,22 +12,11 @@ export default async function requestDanglingBlock(
     const {
       message,
       cipherKeyForTheMessage,
-      privateKey,
     } = requestBlockData;
 
     const { userId } = tokenContent;
-    let SECRET_KEY = '';
-    if (cipherKeyForTheMessage) {
-      SECRET_KEY = cipherKeyForTheMessage;
-    } else if (privateKey) {
-      SECRET_KEY = privateKey;
-    } else {
-      throw new GraphQLError('Either privateKey or cipherKey is required for requesting a dangling block');
-    }
-
-    // todo :  find a strong encryption decryption algo
     const newRequestedBlock = new RequestBlockModel({
-      message: encryptMessageForRequestedBlock(message, SECRET_KEY),
+      message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage || ''),
       userId,
     });
 

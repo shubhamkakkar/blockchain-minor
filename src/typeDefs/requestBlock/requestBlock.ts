@@ -19,8 +19,7 @@ export default gql`
     }
     
     input TRequestDanglingBlock {
-        privateKey: String
-        cipherKeyForTheMessage: String
+        cipherKeyForTheMessage: String!
         message: String!
     }
     
