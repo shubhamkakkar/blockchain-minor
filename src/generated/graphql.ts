@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -24,7 +25,6 @@ export type Query = {
   publicLedger: Array<Maybe<TPublicLedger>>;
 };
 
-
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -39,7 +39,6 @@ export type Mutation = {
   shareBlock: TSharedBlockResponse;
 };
 
-
 export type MutationSingUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -48,16 +47,13 @@ export type MutationSingUpArgs = {
   middleName?: Maybe<Scalars['String']>;
 };
 
-
 export type MutationRequestDanglingBlockArgs = {
   requestBlockData: TRequestDanglingBlock;
 };
 
-
 export type MutationAcceptDeclineBlockArgs = {
   acceptDenyParams: TAcceptDenyParams;
 };
-
 
 export type MutationShareBlockArgs = {
   shareBlockArgs: TShareBlockArgs;
@@ -105,7 +101,6 @@ export type ReturnedUserSignup = {
   middleName?: Maybe<Scalars['String']>;
   privateKey: Scalars['String'];
 };
-
 
 export type TRequestedDanglingBlock = {
   __typename?: 'TRequestedDanglingBlock';
@@ -161,11 +156,7 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
-
-
-
 export type ResolverTypeWrapper<T> = Promise<T> | T;
-
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
@@ -304,7 +295,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
+  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, '_', ParentType, ContextType>;
 };
 
 export type TSignupArgsResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSignupArgs'] = ResolversParentTypes['TSignupArgs']> = {
@@ -401,7 +392,6 @@ export type Resolvers<ContextType = any> = {
   TSharedBlockResponse?: TSharedBlockResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
-
 
 /**
  * @deprecated

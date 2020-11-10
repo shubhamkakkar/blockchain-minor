@@ -3280,10 +3280,10 @@ https-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
-hybrid-crypto-js@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/hybrid-crypto-js/-/hybrid-crypto-js-0.2.3.tgz#a81cb8bf0b67a82e0797d46431658b69fb6e7ee9"
-  integrity sha512-46L7kQT/xvXMUX2Zng6aENOl2tQQJafQdsl5YCq49kiilbu3ZFGf4gmAOsy8rtXPC825v6iXoIv4eV77jo0fPg==
+hybrid-crypto-js@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/hybrid-crypto-js/-/hybrid-crypto-js-0.2.4.tgz#7e764a6c4c7542e84df368df9e84fd76ab7043a1"
+  integrity sha512-lm4iQn14rApw/7yLOnd9eZu8JaxD8+BB34bQaZY7faKiT78tVjxSwOabOPO2LSIS0QMANhjMXNLNUXyuAJwYXw==
   dependencies:
     node-forge "^0.8.5"
 

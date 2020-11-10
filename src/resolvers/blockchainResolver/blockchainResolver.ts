@@ -7,6 +7,8 @@ export default {
     publicLedger: (parent: any, args: any, context: any) => publicLedger(context),
   },
   Mutation: {
-    shareBlock: (parent: any, args: { shareBlockArgs: TShareBlockArgs }, context: any) => shareBlock(args, context),
+    shareBlock: (
+      parent: any, args: { shareBlockArgs: TShareBlockArgs }, context: any,
+    ) => shareBlock(args, context),
   },
 };

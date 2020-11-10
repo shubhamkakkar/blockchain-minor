@@ -19,7 +19,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
     "graphql-iso-date": "^3.6.1",
-    "hybrid-crypto-js": "^0.2.3",
+    "hybrid-crypto-js": "^0.2.4",
     "js-sha256": "^0.9.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.3",
