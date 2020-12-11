@@ -6,7 +6,7 @@
   "scripts": {
     "start":"ts-node index.ts",
     "start:dev": "nodemon --exec ts-node index.ts",
-    "poststart": "yarn codegen",
+    "poststart": "yarn codegen -r dotenv/config",
     "codegen": "graphql-codegen --config codegen.yml",
     "format": "prettier --write src/**/*.{js,ts}",
     "lintFormat": "eslint src/**/*.ts --fix"
