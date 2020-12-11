@@ -11,6 +11,7 @@ export default function app() {
       resolvers,
       context,
       playground: true,
+      introspection: true,
     },
   );
 
