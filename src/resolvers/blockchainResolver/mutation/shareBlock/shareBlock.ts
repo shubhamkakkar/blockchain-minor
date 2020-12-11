@@ -35,6 +35,7 @@ export default async function shareBlock(
             * userId will be used to get the user's publicKey to be passed in stringEncryption()
             * use stringEncryption() to generate the encrypted version of the block's message
             *  which will be returned below
+            * handle originalMessage false
             * */
             return {
               shareStatus: 'success',

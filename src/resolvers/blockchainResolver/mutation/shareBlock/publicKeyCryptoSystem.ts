@@ -50,6 +50,7 @@ export function stringEncryption(
   /*
    * this privateKey is issuerPrivateKey
    * this publicKey is receiverPublicKey
+   * TODO: RENAME variables
    * */
   { message, privateKey, publicKey }: { message: string, privateKey: string, publicKey: string },
 ) {
@@ -64,6 +65,7 @@ export function verification(
   /*
    * this privateKey is receiverPrivateKey
    * this publicKey is issuerPublicKey
+   * TODO: RENAME variables
    * */
   {
     publicKey,
