@@ -4,43 +4,53 @@ import { ReturnedUser, TPublicLedger, TShareBlockArgs } from '../../../../genera
 import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
 import BlockModel from '../../../../models/BlockModel';
 import UserModel from '../../../../models/UserModel';
+import ValidationContract from '../../../../utis/validator/validator';
 
 export default async function shareBlock(
-  /* TODO: update the typedef respectively to receive the following as well inside sharedBlockArgs
-  * this privateKey is issuerPrivateKey
-  */
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
   context: any,
 ) {
   try {
     const tokenContent = verifyToken(context.authorization);
     if (tokenContent) {
-      if (shareBlockArgs.recipientUserId === tokenContent.userId) {
-        return {
-          shareStatus: false,
-          message: 'You can\'t share the block to your self.',
-        };
-      }
-      const block = await BlockModel.findById(shareBlockArgs.blockId).lean() as TPublicLedger;
-      if (block) {
-        if (block.ownerId !== tokenContent.userId) {
+      const contract = new ValidationContract();
+      contract.isRequired(shareBlockArgs.recipientUserId, 'recipientUserId is required');
+      contract.isRequired(shareBlockArgs.privateKey, 'sender\'s privateKey is required');
+      if (contract.isValid()) {
+        if (shareBlockArgs.recipientUserId === tokenContent.userId) {
+          return {
+            shareStatus: false,
+            message: 'You can\'t share the block to your self.',
+          };
+        }
+        const block = await BlockModel
+          .findOne({
+            _id: shareBlockArgs.blockId,
+            ownerId: tokenContent.userId,
+          })
+          .lean() as TPublicLedger;
+        if (block) {
           const recipientUser = await UserModel.findById(
             shareBlockArgs.recipientUserId,
           ).lean() as ReturnedUser;
           if (recipientUser) {
-            const originalMessage = decryptMessageForRequestedBlock(
-              block.data, shareBlockArgs.cipherTextOfBlock,
-            );
+            let isSuccess: boolean = true;
+            try {
+              decryptMessageForRequestedBlock(
+                `${block.data}sd`, shareBlockArgs.cipherTextOfBlock,
+              );
+            } catch (e) {
+              isSuccess = false;
+            }
+            return {
+              isSuccess,
+            };
             /* TODO
             * userId will be used to get the user's publicKey to be passed in stringEncryption()
             * use stringEncryption() to generate the encrypted version of the block's message
             *  which will be returned below
             * handle originalMessage false
             * */
-            return {
-              shareStatus: 'success',
-              message: originalMessage, // TODO: instead of this, return the encrypted message
-            };
           }
           /*
           * TODO:
@@ -59,9 +69,11 @@ export default async function shareBlock(
             message: 'User not found, please ask the user to join the chain.',
           };
         }
-        return new GraphQLError('You are not the owner of the block.');
+        return new GraphQLError(
+          'No block found Or you are the owner of the block, and hence can not share the block',
+        );
       }
-      return new GraphQLError('No block found.');
+      return new GraphQLError(contract.errors() || 'Missing fields');
     }
     return new GraphQLError('Authentication token not present');
   } catch (e) {

@@ -23,6 +23,15 @@ export default gql`
         lastName: String!
         middleName: String
     }
+    
+    type User {
+        _id: ID!
+        email: String!
+        firstName: String!
+        lastName: String!
+        middleName: String        
+    }
+
 
     type ReturnedUserSignup {
         _id: ID!
@@ -40,6 +49,8 @@ export default gql`
             email: String!
             password: String!
         ):  ReturnedUser!  
+        
+        allUsers : [User]!
     }
 
     extend type Mutation {

@@ -19,6 +19,7 @@ export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
   login: ReturnedUser;
+  allUsers: Array<Maybe<User>>;
   requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   publicLedger: Array<Maybe<TPublicLedger>>;
@@ -94,6 +95,15 @@ export type ReturnedUser = {
   middleName?: Maybe<Scalars['String']>;
 };
 
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['ID'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  middleName?: Maybe<Scalars['String']>;
+};
+
 export type ReturnedUserSignup = {
   __typename?: 'ReturnedUserSignup';
   _id: Scalars['ID'];
@@ -146,14 +156,14 @@ export type TPublicLedger = {
 
 export type TSharedBlockResponse = {
   __typename?: 'TSharedBlockResponse';
-  shareStatus: Scalars['Boolean'];
-  message: Scalars['String'];
+  isSuccess: Scalars['Boolean'];
 };
 
 export type TShareBlockArgs = {
   blockId: Scalars['ID'];
   recipientUserId: Scalars['ID'];
   cipherTextOfBlock: Scalars['String'];
+  privateKey: Scalars['String'];
 };
 
 export enum CacheControlScope {
@@ -249,6 +259,7 @@ export type ResolversTypes = {
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  User: ResolverTypeWrapper<User>;
   ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
@@ -274,6 +285,7 @@ export type ResolversParentTypes = {
   TLoginArgs: TLoginArgs;
   ReturnedUser: ReturnedUser;
   ID: Scalars['ID'];
+  User: User;
   ReturnedUserSignup: ReturnedUserSignup;
   DateTime: Scalars['DateTime'];
   TRequestedDanglingBlock: TRequestedDanglingBlock;
@@ -290,6 +302,7 @@ export type ResolversParentTypes = {
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
+  allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
   requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
@@ -326,6 +339,15 @@ export type ReturnedUserResolvers<ContextType = any, ParentType extends Resolver
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -377,8 +399,7 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type TSharedBlockResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSharedBlockResponse'] = ResolversParentTypes['TSharedBlockResponse']> = {
-  shareStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isSuccess?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -393,6 +414,7 @@ export type Resolvers<ContextType = any> = {
   TSignupArgs?: TSignupArgsResolvers<ContextType>;
   TLoginArgs?: TLoginArgsResolvers<ContextType>;
   ReturnedUser?: ReturnedUserResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
   ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;

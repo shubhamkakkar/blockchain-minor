@@ -17,14 +17,14 @@ export default gql`
     }
     
     type TSharedBlockResponse {
-        shareStatus: Boolean!
-        message: String!
+        isSuccess: Boolean!
     }
     
     input TShareBlockArgs {
         blockId: ID!
         recipientUserId: ID!
         cipherTextOfBlock: String!
+        privateKey: String!
     }
 
     extend type Query {
