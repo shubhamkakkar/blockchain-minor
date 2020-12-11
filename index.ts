@@ -17,6 +17,6 @@ mongoose
   .then(() => {
     app();
   })
-  .catch((er) => {
+  .catch((er:any) => {
     console.log('failed to connect to mongoose', er);
   });

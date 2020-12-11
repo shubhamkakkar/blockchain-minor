@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon --exec ts-node index.ts",
+    "start":"ts-node index.ts",
+    "start:dev": "nodemon --exec ts-node index.ts",
     "poststart": "yarn codegen",
     "codegen": "graphql-codegen --config codegen.yml",
     "format": "prettier --write src/**/*.{js,ts}",
