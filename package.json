@@ -42,6 +42,7 @@
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "heroku": "^7.47.5",
     "prettier": "^2.1.1",
     "tslint": "^5.12.1",
     "typescript": "^4.0.2"
