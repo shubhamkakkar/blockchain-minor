@@ -1,81 +1,74 @@
 // @ts-ignore
 import { Crypt } from 'hybrid-crypto-js';
 
-type TSignature = { privateKey: string, message: string };
+type TSignature = {
+    message: string
+    issuerPrivateKey: string,
+};
+interface IStringEncryption extends TSignature{
+    receiverPublicKey: string
+}
+
 type TEncrypted = {
     cryptoSystemSignature: string | any;
-    publicKey: string;
+    receiverPublicKey: string;
     message: string | any;
 }
+
 type TVerify = {
-    publicKey: string,
-    cryptoSystemSignature: string,
+    issuerPublicKey: string,
+    cryptoSystemSignature: string | any;
     message: string,
 }
+
 type TVerification = {
-    publicKey: string,
-    privateKey: string,
+    issuerPublicKey: string,
+    receiverPrivateKey: string,
     encryptedMessage: string
 }
 
 const crypt = new Crypt();
 
 const signature = (
-  /*
-  * this privateKey is issuerPrivateKey
-  * */
-  { privateKey, message }:TSignature,
-) => crypt.signature(privateKey, message);
+  { issuerPrivateKey, message }:TSignature,
+) => crypt.signature(issuerPrivateKey, message);
 
 const encrypted = (
-  /*
-   *  this publicKey is receiverPublicKey
-   *  */
-  { publicKey, message, cryptoSystemSignature }:TEncrypted,
-) => crypt.encrypt(publicKey, message, cryptoSystemSignature);
+  { receiverPublicKey, message, cryptoSystemSignature }:TEncrypted,
+) => crypt.encrypt(receiverPublicKey, message, cryptoSystemSignature);
 
 export const verified = (
   {
-    publicKey,
+    issuerPublicKey,
     cryptoSystemSignature,
     message,
   }: TVerify,
 ) => crypt.verify(
-  publicKey,
+  issuerPublicKey,
   cryptoSystemSignature,
   message,
 );
 
 export function stringEncryption(
-  /*
-   * this privateKey is issuerPrivateKey
-   * this publicKey is receiverPublicKey
-   * TODO: RENAME variables
-   * */
-  { message, privateKey, publicKey }: { message: string, privateKey: string, publicKey: string },
+  { message, issuerPrivateKey, receiverPublicKey }: IStringEncryption,
 ) {
   const cryptoSystemSignature = signature({
     message,
-    privateKey,
+    issuerPrivateKey,
   });
-  return encrypted({ publicKey, message, cryptoSystemSignature });
+  return encrypted({ receiverPublicKey, message, cryptoSystemSignature });
 }
 
 export function verification(
-  /*
-   * this privateKey is receiverPrivateKey
-   * this publicKey is issuerPublicKey
-   * TODO: RENAME variables
-   * */
   {
-    publicKey,
+    issuerPublicKey,
+    receiverPrivateKey,
     encryptedMessage,
-    privateKey,
   }: TVerification,
 ) {
-  const { message, cryptoSystemSignature } = crypt.decrypt(privateKey, encryptedMessage);
+  const { message, cryptoSystemSignature } = crypt.decrypt(receiverPrivateKey, encryptedMessage);
   const verificationBool = verified({
-    publicKey,
+    issuerPublicKey,
     cryptoSystemSignature,
     message,
   });

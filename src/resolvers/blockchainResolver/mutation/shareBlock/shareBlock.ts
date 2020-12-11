@@ -1,4 +1,3 @@
-// @ts-ignore
 import { GraphQLError } from 'graphql';
 import { ReturnedUser, TPublicLedger, TShareBlockArgs } from '../../../../generated/graphql';
 import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
@@ -53,20 +52,13 @@ export default async function shareBlock(
             * */
           }
           /*
-          * TODO:
-          * make a getUser query which will return all the users [full information] as
-          * frontend will have a dropdown of user's to be selected as a sender,
-          * this drop down will show 'name - email', which under the hood will send the userid
-          * */
-
-          /*
           * TODO: once the above todos are completed
           * make a mutation in User mutation's
           * getMySharedBlocs() ->  this will follow the param's setup of verification()
           * */
           return {
-            shareStatus: 'fail',
-            message: 'User not found, please ask the user to join the chain.',
+            shareStatus: false,
+            message: 'User not found!',
           };
         }
         return new GraphQLError(
