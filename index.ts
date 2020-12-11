@@ -5,6 +5,7 @@ import app from './src';
 
 config({ path: resolve(__dirname, '.env') });
 const { MONGO_URI_DEV = '' } = process.env;
+console.log("env", process.env)
 
 mongoose
   .connect(MONGO_URI_DEV,
