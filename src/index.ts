@@ -17,5 +17,5 @@ export default function app() {
     { port: process.env.PORT || 4001 },
   )
     .then(({ url }: { url: string }) => console.log(`🚀 Server ready at ${url}`))
-    .catch((er) => console.log('ApolloServer Error', er));
+    .catch((er:any) => console.log('ApolloServer Error', er));
 }
