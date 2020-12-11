@@ -10,6 +10,7 @@ export default function app() {
       typeDefs,
       resolvers,
       context,
+      playground: true,
     },
   );
 
