@@ -56,7 +56,10 @@ export function stringEncryption(
     message,
     issuerPrivateKey,
   });
-  return encrypted({ receiverPublicKey, message, cryptoSystemSignature });
+  return {
+    signature: cryptoSystemSignature,
+    encryptedMessage: encrypted({ receiverPublicKey, message, cryptoSystemSignature }),
+  };
 }
 
 export function verification(
@@ -72,8 +75,6 @@ export function verification(
     cryptoSystemSignature,
     message,
   });
-
-  console.log('verification', verificationBool);
 
   if (verificationBool) {
     return message;

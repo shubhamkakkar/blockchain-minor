@@ -5,20 +5,23 @@ import { gql } from 'apollo-server';
  * as these all combines in one file so it will be taken care automatically
  */
 
+// extracted from TPublicLedger
+// prevHash: String!
+// hash: String!
+// timeStamp: Date!
+// nounce: Int!
+
 export default gql`
     type TPublicLedger {
         _id: ID!
         data: String!
-        prevHash: String!
-        hash: String!
-        timeStamp: Date!
-        nounce: Int!
         ownerId: ID!
     }
     
     type TSharedBlockResponse {
         isSuccess: Boolean!
-        message: String
+        errorMessage: String
+        signature: String
     }
     
     input TShareBlockArgs {

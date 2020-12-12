@@ -4,6 +4,7 @@ import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/j
 import BlockModel from '../../../../models/BlockModel';
 import UserModel from '../../../../models/UserModel';
 import ValidationContract from '../../../../utis/validator/validator';
+import { stringEncryption } from './publicKeyCryptoSystem';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
@@ -33,32 +34,45 @@ export default async function shareBlock(
             shareBlockArgs.recipientUserId,
           ).lean() as ReturnedUser;
           if (recipientUser) {
-            let isSuccess: boolean = true;
             try {
-              decryptMessageForRequestedBlock(
+              const message = decryptMessageForRequestedBlock(
                 `${block.data}sd`, shareBlockArgs.cipherTextOfBlock,
+              ) as string;
+              const {
+                encryptedMessage,
+                signature,
+              } = stringEncryption(
+                {
+                  message,
+                  issuerPrivateKey: shareBlockArgs.privateKey,
+                  receiverPublicKey: recipientUser.publicKey,
+                },
               );
+              /*
+              * save this encryptedMessage,
+                signature, in share-db or BlockModel I will see
+              * */
+              return {
+                isSuccess: true,
+                signature,
+              };
             } catch (e) {
-              isSuccess = false;
+              return {
+                isSuccess: false,
+              };
             }
-            return {
-              isSuccess,
-            };
-            /* TODO
-            * userId will be used to get the user's publicKey to be passed in stringEncryption()
-            * use stringEncryption() to generate the encrypted version of the block's message
-            *  which will be returned below
-            * handle originalMessage false
-            * */
           }
+          /* TODO
+          * add { recieverId, senderId, encryptedMessage to ledger }
+          * */
           /*
           * TODO: once the above todos are completed
           * make a mutation in User mutation's
           * getMySharedBlocs() ->  this will follow the param's setup of verification()
           * */
           return {
-            shareStatus: false,
-            message: 'User not found!',
+            isSuccess: false,
+            errorMessage: 'User not found!',
           };
         }
         return new GraphQLError(
