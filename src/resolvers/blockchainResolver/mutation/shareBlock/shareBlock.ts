@@ -36,40 +36,46 @@ export default async function shareBlock(
           if (recipientUser) {
             try {
               const message = decryptMessageForRequestedBlock(
-                `${block.data}sd`, shareBlockArgs.cipherTextOfBlock,
+                `${block.data}`, shareBlockArgs.cipherTextOfBlock,
               ) as string;
-              const {
-                encryptedMessage,
-                signature,
-              } = stringEncryption(
-                {
-                  message,
-                  issuerPrivateKey: shareBlockArgs.privateKey,
-                  receiverPublicKey: recipientUser.publicKey,
-                },
-              );
-              /*
-              * save this encryptedMessage,
-                signature, in share-db or BlockModel I will see
-              * */
+              if (message) {
+                const encryptedMessage = stringEncryption(
+                  {
+                    message,
+                    issuerPrivateKey: shareBlockArgs.privateKey,
+                    receiverPublicKey: recipientUser.publicKey,
+                  },
+                );
+                await BlockModel
+                  .findByIdAndUpdate(
+                    {
+                      _id: shareBlockArgs.blockId,
+                    },
+                    {
+                      $push: {
+                        shared: {
+                          encryptedMessage,
+                          recipientUserId: shareBlockArgs.recipientUserId,
+                          sharedAt: Date.now(),
+                        },
+                      },
+                    },
+                  );
+                return {
+                  isSuccess: true,
+                };
+              }
               return {
-                isSuccess: true,
-                signature,
+                isSuccess: false,
+                errorMessage: 'Failed to authenticate the block',
               };
             } catch (e) {
               return {
                 isSuccess: false,
+                errorMessage: e,
               };
             }
           }
-          /* TODO
-          * add { recieverId, senderId, encryptedMessage to ledger }
-          * */
-          /*
-          * TODO: once the above todos are completed
-          * make a mutation in User mutation's
-          * getMySharedBlocs() ->  this will follow the param's setup of verification()
-          * */
           return {
             isSuccess: false,
             errorMessage: 'User not found!',

@@ -26,6 +26,11 @@ const BlockModel = new Schema(
       type: String,
       required: true,
     },
+    shared: {
+      type: Array,
+      required: false,
+      default: [],
+    },
   },
   { collection: 'Blockchain' },
 );

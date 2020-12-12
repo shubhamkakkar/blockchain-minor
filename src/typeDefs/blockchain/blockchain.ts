@@ -21,7 +21,6 @@ export default gql`
     type TSharedBlockResponse {
         isSuccess: Boolean!
         errorMessage: String
-        signature: String
     }
     
     input TShareBlockArgs {

@@ -56,10 +56,11 @@ export function stringEncryption(
     message,
     issuerPrivateKey,
   });
-  return {
-    signature: cryptoSystemSignature,
-    encryptedMessage: encrypted({ receiverPublicKey, message, cryptoSystemSignature }),
-  };
+  return encrypted({
+    receiverPublicKey,
+    message,
+    cryptoSystemSignature,
+  });
 }
 
 export function verification(

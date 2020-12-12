@@ -51,6 +51,7 @@ export default gql`
         ):  ReturnedUser!  
         
         allUsers : [User]!
+        user: User!
     }
 
     extend type Mutation {

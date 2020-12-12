@@ -23,11 +23,9 @@ export default function loginUser(args: TLoginArgs) {
     .findOne({ email })
     .then((user) => {
       if (user) {
-        // eslint-disable-next-line no-underscore-dangle
         const token = generateToken({ email, userId: user._id });
         return {
-          // @ts-ignore
-          ...user._doc,
+          ...user.toObject(),
           token,
         };
       }

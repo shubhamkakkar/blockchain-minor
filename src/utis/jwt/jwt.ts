@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 type TTokenContent = {
   email: string;
   userId: string;
+  error?: any
 }
 const SECRET_JWT = 'SECRET_JWT';
 
@@ -11,13 +12,26 @@ export function generateToken(tokenContent: TTokenContent): string {
 }
 
 export function verifyToken(token: string) {
-  return jwt.verify(token, SECRET_JWT) as TTokenContent;
+  try {
+    return jwt.verify(token, SECRET_JWT) as TTokenContent;
+  } catch (error) {
+    return {
+      userId: '',
+      email: '',
+      error,
+    };
+  }
 }
 
 export function encryptMessageForRequestedBlock(message: string, secretKey: string) {
-  return jwt.sign(message, secretKey);
+  return jwt.sign(message, secretKey, { expiresIn: '365d' });
 }
 
 export function decryptMessageForRequestedBlock(message: string, secretKey: string) {
-  return jwt.verify(message, secretKey);
+  try {
+    return jwt.verify(message, secretKey);
+  } catch (e) {
+    console.log('decryptMessageForRequestedBlock e()', e);
+    return '';
+  }
 }
