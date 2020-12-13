@@ -1,6 +1,16 @@
 import { gql } from 'apollo-server';
 
 export default gql`
+    type Shared {
+       sharedAt: Date!
+    }
+    
+    type ReceivedBlock {
+       shared: [Shared]!
+       sharedBy: User!
+       _id: ID!
+    }    
+
     type SharedBlock {
         encryptedMessage: String!
         recipientUser: User!
@@ -29,6 +39,7 @@ export default gql`
     extend type Query {
         publicLedger: [TPublicLedger]!
         sharedBlocks: [SharedBlock!]! 
+        receivedBlocks: [ReceivedBlock!]!
     }
     
     extend type Mutation {
