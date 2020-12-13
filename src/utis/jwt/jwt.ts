@@ -8,7 +8,7 @@ type TTokenContent = {
 const SECRET_JWT = 'SECRET_JWT';
 
 export function generateToken(tokenContent: TTokenContent): string {
-  return jwt.sign(tokenContent, SECRET_JWT);
+  return jwt.sign(tokenContent, SECRET_JWT, { expiresIn: '365d' });
 }
 
 export function verifyToken(token: string) {
@@ -24,7 +24,7 @@ export function verifyToken(token: string) {
 }
 
 export function encryptMessageForRequestedBlock(message: string, secretKey: string) {
-  return jwt.sign(message, secretKey, { expiresIn: '365d' });
+  return jwt.sign(message, secretKey);
 }
 
 export function decryptMessageForRequestedBlock(message: string, secretKey: string) {

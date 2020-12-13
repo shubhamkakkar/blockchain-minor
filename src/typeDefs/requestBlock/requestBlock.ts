@@ -3,7 +3,6 @@ import { gql } from 'apollo-server';
 // todo: add file/image upload
 
 export default gql`
-    scalar Date
     type TRequestedDanglingBlock {
         _id : ID!
         user: ReturnedUser

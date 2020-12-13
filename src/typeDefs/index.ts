@@ -4,6 +4,7 @@ import requestBlock from './requestBlock/requestBlock';
 import blockchain from './blockchain/blockchain';
 
 const linkSchema = gql`
+    scalar Date
     type Query {
         _: Boolean
     }

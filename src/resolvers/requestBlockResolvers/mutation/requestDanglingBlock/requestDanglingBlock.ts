@@ -21,9 +21,7 @@ export default async function requestDanglingBlock(
     });
 
     await newRequestedBlock.save();
-    return {
-      ...newRequestedBlock.toObject(),
-    };
+    return newRequestedBlock.toObject();
   }
   throw new GraphQLError('Authentication token not present');
 }

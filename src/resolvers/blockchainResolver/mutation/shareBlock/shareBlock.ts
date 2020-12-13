@@ -56,7 +56,7 @@ export default async function shareBlock(
                         shared: {
                           encryptedMessage,
                           recipientUserId: shareBlockArgs.recipientUserId,
-                          sharedAt: Date.now(),
+                          sharedAt: new Date(),
                         },
                       },
                     },

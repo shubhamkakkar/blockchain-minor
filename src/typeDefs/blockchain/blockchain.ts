@@ -12,10 +12,17 @@ import { gql } from 'apollo-server';
 // nounce: Int!
 
 export default gql`
+    type SharedBlock {
+        encryptedMessage: String!
+        recipientUserId: ID!
+        sharedAt: Date!
+    }
+
     type TPublicLedger {
         _id: ID!
         data: String!
         ownerId: ID!
+        shared: [SharedBlock]!
     }
     
     type TSharedBlockResponse {
@@ -32,6 +39,7 @@ export default gql`
 
     extend type Query {
         publicLedger: [TPublicLedger]!
+        sharedBlocks: [SharedBlock]! 
     }
     
     extend type Mutation {
