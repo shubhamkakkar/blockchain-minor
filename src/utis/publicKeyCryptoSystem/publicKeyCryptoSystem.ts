@@ -70,15 +70,16 @@ export function verification(
     encryptedMessage,
   }: TVerification,
 ) {
-  const { message, cryptoSystemSignature } = crypt.decrypt(receiverPrivateKey, encryptedMessage);
+  const {
+    message, signature: cryptoSystemSignature,
+  } = crypt.decrypt(receiverPrivateKey, encryptedMessage);
   const verificationBool = verified({
     issuerPublicKey,
     cryptoSystemSignature,
     message,
   });
-
   if (verificationBool) {
     return message;
   }
-  return false;
+  return '';
 }

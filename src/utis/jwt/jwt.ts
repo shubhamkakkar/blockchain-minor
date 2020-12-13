@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../../generated/graphql';
+
+import { ReturnedUser } from '../../generated/graphql';
 import userHash from '../userHash/userHash';
 
 type TTokenContent = {
   email: string;
   userId: string;
   error?: any
-  user?: User
+  user?: ReturnedUser
 }
 const SECRET_JWT = 'SECRET_JWT';
 

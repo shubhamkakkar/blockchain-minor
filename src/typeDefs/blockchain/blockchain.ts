@@ -9,7 +9,13 @@ export default gql`
        shared: [Shared]!
        sharedBy: User!
        _id: ID!
-    }    
+    }
+    
+    type DecryptedReceivedBlock {
+       message: String!
+       sharedAt: Date!
+    }   
+     
 
     type SharedBlock {
         encryptedMessage: String!
@@ -35,11 +41,19 @@ export default gql`
         cipherTextOfBlock: String!
         privateKey: String!
     }
+    
+    input ReceivedBlockArgs {
+        blockId: ID!
+        privateKey: String!
+    }
 
     extend type Query {
         publicLedger: [TPublicLedger]!
         sharedBlocks: [SharedBlock!]! 
         receivedBlocks: [ReceivedBlock!]!
+        receivedBlock (
+             receivedBlockArgs: ReceivedBlockArgs!
+        ): DecryptedReceivedBlock!
     }
     
     extend type Mutation {

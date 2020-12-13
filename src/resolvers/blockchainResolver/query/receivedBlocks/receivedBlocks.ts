@@ -18,11 +18,14 @@ export default async function receivedBlocks(context: any) {
         },
         { 'shared.sharedAt': 1, ownerId: 1 },
       ).lean() as unknown as IReceivedBlock;
-      // @ts-ignore
-      for (const block of blocks) {
-        block.sharedBy = await userHash(block.ownerId);
+      if (blocks) {
+        // @ts-ignore
+        for (const block of blocks) {
+          block.sharedBy = await userHash(block.ownerId);
+        }
+        return blocks;
       }
-      return blocks;
+      return new GraphQLError('Either the block does not exists, or it is not shared with you');
     }
     return new GraphQLError(tokenContent.error || 'Authentication token not present');
   } catch (e) {

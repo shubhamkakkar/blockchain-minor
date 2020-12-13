@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint',
     'prettier',
     'graphql',
+    'simple-import-sort',
   ],
   rules: {
     'no-unused-vars': 0,
@@ -24,6 +25,12 @@ module.exports = {
     'no-restricted-syntax': 0,
     'no-await-in-loop': 0,
     'no-underscore-dangle': 0,
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+    'sort-imports': 'off',
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
   },
   settings: {
     'import/resolver': {
@@ -32,4 +39,13 @@ module.exports = {
       },
     },
   },
+  overrides: [
+    {
+      files: 'src/**/*.ts',
+      rules: {
+        'simple-import-sort/imports': 'off',
+        'import/order': ['error', { 'newlines-between': 'always' }],
+      },
+    },
+  ],
 };

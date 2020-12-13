@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start":"ts-node index.ts",
+    "start": "ts-node index.ts",
     "start:dev": "nodemon --exec ts-node index.ts",
     "poststart": "yarn codegen -r dotenv/config",
     "codegen": "graphql-codegen --config codegen.yml",
-    "format": "prettier --write src/**/*.{js,ts}",
+    "format": "prettier --write src/**/*.ts",
     "lintFormat": "eslint src/**/*.ts --fix"
   },
   "keywords": [],
@@ -43,6 +43,7 @@
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "heroku": "^7.47.5",
     "prettier": "^2.1.1",
     "tslint": "^5.12.1",

@@ -29,7 +29,7 @@ export default gql`
         email: String!
         firstName: String!
         lastName: String!
-        middleName: String        
+        middleName: String
     }
 
 
