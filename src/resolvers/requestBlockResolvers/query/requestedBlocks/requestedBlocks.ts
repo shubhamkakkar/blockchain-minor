@@ -1,21 +1,20 @@
 import { GraphQLError } from 'graphql';
 import { verifyToken } from '../../../../utis/jwt/jwt';
 import RequestBlockModel from '../../../../models/RequestBlockModel';
-import UserModel from '../../../../models/UserModel';
+import userHash from '../../../../utis/userHash/userHash';
 
 export default async function requestedBlocks(context: any, isUserOnly = false) {
   try {
-    const tokenContent = verifyToken(context.authorization);
-    if (tokenContent) {
+    const tokenContent = await verifyToken(context.authorization);
+    if (!tokenContent.error) {
       const { userId } = tokenContent;
       const searchCondition = isUserOnly ? { userId: { $in: [userId] } } : {};
       const requestBlocks = await RequestBlockModel.find(searchCondition);
       let modifiedRequestedBlocks = [];
       if (isUserOnly) {
-        const user = await UserModel.findById(userId);
         modifiedRequestedBlocks = requestBlocks.map(
           (requestedBlock) => ({
-            user: user?.toObject(),
+            user: tokenContent.user,
             ...requestedBlock.toObject(),
           }),
         );
@@ -24,9 +23,9 @@ export default async function requestedBlocks(context: any, isUserOnly = false) 
           async (requestedBlock) => {
             const objectifiedRequestedBlock = requestedBlock.toObject();
             const { userId: ownerId, ...restBlockFields } = objectifiedRequestedBlock;
-            const user = await UserModel.findById(ownerId);
+            const user = await userHash(ownerId);
             return {
-              user: user?.toObject(),
+              user,
               ...restBlockFields,
             };
           },
@@ -34,9 +33,9 @@ export default async function requestedBlocks(context: any, isUserOnly = false) 
       }
       return modifiedRequestedBlocks;
     }
+    return new GraphQLError(tokenContent.error || 'Invalid authentication token');
   } catch (e) {
     console.log('requestedBlocks() e', e);
     throw new GraphQLError('requestedBlocks() e');
   }
-  throw new GraphQLError('Authentication token not present');
 }

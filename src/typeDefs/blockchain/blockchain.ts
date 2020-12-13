@@ -1,20 +1,9 @@
 import { gql } from 'apollo-server';
 
-/**
- * no need to define Date as scalar here as it is done in the other resolver,
- * as these all combines in one file so it will be taken care automatically
- */
-
-// extracted from TPublicLedger
-// prevHash: String!
-// hash: String!
-// timeStamp: Date!
-// nounce: Int!
-
 export default gql`
     type SharedBlock {
         encryptedMessage: String!
-        recipientUserId: ID!
+        recipientUser: User!
         sharedAt: Date!
     }
 
@@ -22,7 +11,7 @@ export default gql`
         _id: ID!
         data: String!
         ownerId: ID!
-        shared: [SharedBlock]!
+        shared: [SharedBlock!]!
     }
     
     type TSharedBlockResponse {
@@ -39,7 +28,7 @@ export default gql`
 
     extend type Query {
         publicLedger: [TPublicLedger]!
-        sharedBlocks: [SharedBlock]! 
+        sharedBlocks: [SharedBlock!]! 
     }
     
     extend type Mutation {

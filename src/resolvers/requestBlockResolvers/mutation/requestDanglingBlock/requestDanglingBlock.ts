@@ -7,21 +7,18 @@ export default async function requestDanglingBlock(
   { requestBlockData }: { requestBlockData: TRequestDanglingBlock },
   context: any,
 ) {
-  const tokenContent = verifyToken(context.authorization);
-  if (tokenContent) {
+  const tokenContent = await verifyToken(context.authorization);
+  if (!tokenContent.error) {
     const {
       message,
       cipherKeyForTheMessage,
     } = requestBlockData;
-
-    const { userId } = tokenContent;
     const newRequestedBlock = new RequestBlockModel({
       message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage),
-      userId,
+      userId: tokenContent.userId,
     });
-
     await newRequestedBlock.save();
     return newRequestedBlock.toObject();
   }
-  throw new GraphQLError('Authentication token not present');
+  throw new GraphQLError(tokenContent.error || 'Authentication token not present');
 }

@@ -25,7 +25,7 @@ export type Query = {
   requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   publicLedger: Array<Maybe<TPublicLedger>>;
-  sharedBlocks: Array<Maybe<SharedBlock>>;
+  sharedBlocks: Array<SharedBlock>;
 };
 
 
@@ -122,7 +122,7 @@ export type ReturnedUserSignup = {
 export type TRequestedDanglingBlock = {
   __typename?: 'TRequestedDanglingBlock';
   _id: Scalars['ID'];
-  user?: Maybe<ReturnedUser>;
+  user: ReturnedUser;
   requestAt: Scalars['DateTime'];
   message: Scalars['String'];
   acceptCount: Scalars['Int'];
@@ -148,7 +148,7 @@ export type TAcceptDenyParams = {
 export type SharedBlock = {
   __typename?: 'SharedBlock';
   encryptedMessage: Scalars['String'];
-  recipientUserId: Scalars['ID'];
+  recipientUser: User;
   sharedAt: Scalars['DateTime'];
 };
 
@@ -157,7 +157,7 @@ export type TPublicLedger = {
   _id: Scalars['ID'];
   data: Scalars['String'];
   ownerId: Scalars['ID'];
-  shared: Array<Maybe<SharedBlock>>;
+  shared: Array<SharedBlock>;
 };
 
 export type TSharedBlockResponse = {
@@ -320,7 +320,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
-  sharedBlocks?: Resolver<Array<Maybe<ResolversTypes['SharedBlock']>>, ParentType, ContextType>;
+  sharedBlocks?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -384,7 +384,7 @@ export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends Re
 
 export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['TRequestedDanglingBlock'] = ResolversParentTypes['TRequestedDanglingBlock']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['ReturnedUser']>, ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType>;
   requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -400,7 +400,7 @@ export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends R
 
 export type SharedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['SharedBlock'] = ResolversParentTypes['SharedBlock']> = {
   encryptedMessage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  recipientUserId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  recipientUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -409,7 +409,7 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  shared?: Resolver<Array<Maybe<ResolversTypes['SharedBlock']>>, ParentType, ContextType>;
+  shared?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

@@ -1,18 +1,18 @@
 import { GraphQLError } from 'graphql';
-import { ReturnedUser, TPublicLedger, TShareBlockArgs } from '../../../../generated/graphql';
+import { TPublicLedger, TShareBlockArgs } from '../../../../generated/graphql';
 import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
 import BlockModel from '../../../../models/BlockModel';
-import UserModel from '../../../../models/UserModel';
 import ValidationContract from '../../../../utis/validator/validator';
 import { stringEncryption } from './publicKeyCryptoSystem';
+import userHash from '../../../../utis/userHash/userHash';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
   context: any,
 ) {
   try {
-    const tokenContent = verifyToken(context.authorization);
-    if (tokenContent) {
+    const tokenContent = await verifyToken(context.authorization);
+    if (!tokenContent.error) {
       const contract = new ValidationContract();
       contract.isRequired(shareBlockArgs.recipientUserId, 'recipientUserId is required');
       contract.isRequired(shareBlockArgs.privateKey, 'sender\'s privateKey is required');
@@ -30,9 +30,18 @@ export default async function shareBlock(
           })
           .lean() as TPublicLedger;
         if (block) {
-          const recipientUser = await UserModel.findById(
-            shareBlockArgs.recipientUserId,
-          ).lean() as ReturnedUser;
+          if (block
+            .shared
+            .find((
+              { recipientUser },
+            ) => recipientUser._id.toString() === shareBlockArgs.recipientUserId.toString())
+          ) {
+            return {
+              isSuccess: false,
+              errorMessage: 'Already shared with the user',
+            };
+          }
+          const recipientUser = await userHash(shareBlockArgs.recipientUserId);
           if (recipientUser) {
             try {
               const message = decryptMessageForRequestedBlock(
@@ -55,7 +64,7 @@ export default async function shareBlock(
                       $push: {
                         shared: {
                           encryptedMessage,
-                          recipientUserId: shareBlockArgs.recipientUserId,
+                          recipientUser,
                           sharedAt: new Date(),
                         },
                       },
@@ -82,12 +91,12 @@ export default async function shareBlock(
           };
         }
         return new GraphQLError(
-          'No block found Or you are the owner of the block, and hence can not share the block',
+          'No block found Or you are not the owner of the block, and hence can not share the block',
         );
       }
       return new GraphQLError(contract.errors() || 'Missing fields');
     }
-    return new GraphQLError('Authentication token not present');
+    return new GraphQLError(tokenContent.error || 'Authentication token not present');
   } catch (e) {
     console.log('shareBlock e()', e);
     throw new GraphQLError(`Internal server shareBlock e() : ${e}`);

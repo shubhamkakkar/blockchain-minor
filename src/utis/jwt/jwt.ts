@@ -1,9 +1,12 @@
 import jwt from 'jsonwebtoken';
+import { User } from '../../generated/graphql';
+import userHash from '../userHash/userHash';
 
 type TTokenContent = {
   email: string;
   userId: string;
   error?: any
+  user?: User
 }
 const SECRET_JWT = 'SECRET_JWT';
 
@@ -11,14 +14,24 @@ export function generateToken(tokenContent: TTokenContent): string {
   return jwt.sign(tokenContent, SECRET_JWT, { expiresIn: '365d' });
 }
 
-export function verifyToken(token: string) {
+export async function verifyToken(token: string) {
   try {
-    return jwt.verify(token, SECRET_JWT) as TTokenContent;
+    const tokenContent = jwt.verify(token, SECRET_JWT) as TTokenContent;
+    const user = await userHash(tokenContent.userId);
+    if (user) {
+      tokenContent.user = user;
+      return tokenContent;
+    }
+    return {
+      userId: '',
+      email: '',
+      error: 'Invalid authentication',
+    };
   } catch (error) {
     return {
       userId: '',
       email: '',
-      error,
+      error: 'Authentication token not provided',
     };
   }
 }
