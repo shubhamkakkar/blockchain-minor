@@ -1,6 +1,9 @@
-import { loginUser, allUsers, user } from './query';
-import { signUpUser } from './mutation';
 import { TLoginArgs, TSignupArgs } from '../../generated/graphql';
+
+import {
+  loginUser, allUsers, user,
+} from './query';
+import { signUpUser, generateInviteCode } from './mutation';
 
 export default {
   Query: {
@@ -10,5 +13,6 @@ export default {
   },
   Mutation: {
     singUp: (parent: any, args: TSignupArgs) => signUpUser(args),
+    generateInviteCode: (parent: any, args: any, context: any) => generateInviteCode(context),
   },
 };

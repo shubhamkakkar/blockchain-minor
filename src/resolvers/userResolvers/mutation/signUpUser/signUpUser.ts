@@ -1,12 +1,13 @@
 import { GraphQLError } from 'graphql';
+
 import { TSignupArgs } from '../../../../generated/graphql';
 import ValidationContract from '../../../../utis/validator/validator';
 import UserModel from '../../../../models/UserModel';
-import { generateToken } from '../../../../utis/jwt/jwt';
+import { generateToken, verifyInviteCode } from '../../../../utis/jwt/jwt';
 import { generatePasswordCrypt } from '../../../../utis/bcrypt/bcrypt';
 import { userProfileKeys } from '../../../../utis/rsa/rsa';
 
-export default function signUpUser(args: TSignupArgs) {
+export default async function signUpUser(args: TSignupArgs) {
   const contract = new ValidationContract();
   const {
     firstName,
@@ -14,15 +15,21 @@ export default function signUpUser(args: TSignupArgs) {
     middleName,
     email,
     password,
+    inviteCode,
   } = args;
 
   contract.isEmail(email, 'Email is invalid');
+  contract.isRequired(inviteCode, 'InviteCode is required');
   contract.hasMinLen(password, 6, 'password should be of atleast 6 characters');
 
   if (!contract.isValid()) {
     return new GraphQLError(contract.errors() || 'Review Signup information');
   }
 
+  const verifyCode = await verifyInviteCode(inviteCode);
+  if (!verifyCode) {
+    return new GraphQLError('invite code is expired');
+  }
   return UserModel
     .findOne({ email })
     .then(async (user: any) => {

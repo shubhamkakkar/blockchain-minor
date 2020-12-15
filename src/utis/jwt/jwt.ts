@@ -11,8 +11,17 @@ type TTokenContent = {
 }
 const SECRET_JWT = 'SECRET_JWT';
 
-export function generateToken(tokenContent: TTokenContent): string {
-  return jwt.sign(tokenContent, SECRET_JWT, { expiresIn: '365d' });
+export function generateToken(tokenContent: TTokenContent, expiresIn?: string): string {
+  return jwt.sign(tokenContent, SECRET_JWT, { expiresIn: expiresIn || '365d' });
+}
+
+export async function verifyInviteCode(token: string): Promise<boolean> {
+  try {
+    const tokenContent = jwt.verify(token, SECRET_JWT);
+    return !!tokenContent;
+  } catch (error) {
+    return false;
+  }
 }
 
 export async function verifyToken(token: string) {

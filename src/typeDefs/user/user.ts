@@ -7,6 +7,7 @@ export default gql`
         middleName: String
         email: String!
         password: String!
+        inviteCode: String!
     }
 
     type TLoginArgs {
@@ -22,6 +23,7 @@ export default gql`
         firstName: String!
         lastName: String!
         middleName: String
+        role: String!
     }
     
     type User {
@@ -44,13 +46,17 @@ export default gql`
         privateKey: String!
     }
     
-    extend type Query {
+    type InviteCode {
+        code: String!
+    }
+    
+    extend type Query {    
         login (
             email: String!
             password: String!
         ):  ReturnedUser!  
         
-        allUsers : [User]!
+        allUsers: [User]!
         user: User!
     }
 
@@ -62,5 +68,8 @@ export default gql`
             lastName: String!,
             middleName: String
         ): ReturnedUserSignup!
+        
+        generateInviteCode: InviteCode!
+
     }
 `;
