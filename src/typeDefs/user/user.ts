@@ -22,6 +22,7 @@ export default gql`
         firstName: String!
         lastName: String!
         middleName: String
+        role: String!
     }
     
     type User {
@@ -30,6 +31,8 @@ export default gql`
         firstName: String!
         lastName: String!
         middleName: String
+        publicKey: String!
+        role: String!
     }
 
 
@@ -62,5 +65,7 @@ export default gql`
             lastName: String!,
             middleName: String
         ): ReturnedUserSignup!
+        
+        makeUserAdmin (id: String!): Boolean!
     }
 `;
