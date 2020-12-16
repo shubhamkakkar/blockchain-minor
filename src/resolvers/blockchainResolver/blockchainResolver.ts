@@ -1,8 +1,9 @@
+import { MyBlockArgs, ReceivedBlockArgs, TShareBlockArgs } from '../../generated/graphql';
+
 import {
-  publicLedger, sharedBlocks, receivedBlocks, receivedBlock,
+  publicLedger, sharedBlocks, receivedBlocks, receivedBlock, myBlock,
 } from './query';
 import { shareBlock } from './mutation';
-import { ReceivedBlockArgs, TShareBlockArgs } from '../../generated/graphql';
 
 export default {
   Query: {
@@ -12,6 +13,10 @@ export default {
     receivedBlock: (
       parent: any, { receivedBlockArgs }: { receivedBlockArgs: ReceivedBlockArgs }, context: any,
     ) => receivedBlock(receivedBlockArgs, context),
+    myBlocks: (parent: any, args: any, context: any) => publicLedger(context, true),
+    myBlock: (
+      parent: any, { myBlockArgs }: { myBlockArgs: MyBlockArgs }, context: any,
+    ) => myBlock(myBlockArgs, context),
   },
   Mutation: {
     shareBlock: (

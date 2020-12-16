@@ -31,6 +31,10 @@ const BlockModel = new Schema(
       required: false,
       default: [],
     },
+    createdAt: {
+      type: Date,
+      default: new Date(),
+    },
   },
   { collection: 'Blockchain' },
 );

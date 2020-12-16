@@ -28,6 +28,13 @@ export default gql`
         data: String!
         ownerId: ID!
         shared: [SharedBlock!]!
+        createdAt: Date
+    }
+    
+    type MyBlock {
+        data: String!
+        shared: [SharedBlock!]!
+        createdAt: Date
     }
     
     type TSharedBlockResponse {
@@ -46,6 +53,11 @@ export default gql`
         blockId: ID!
         privateKey: String!
     }
+    
+    input MyBlockArgs {
+        blockId: ID!
+        cipherTextOfBlock: String!
+    }
 
     extend type Query {
         publicLedger: [TPublicLedger]!
@@ -54,6 +66,8 @@ export default gql`
         receivedBlock (
              receivedBlockArgs: ReceivedBlockArgs!
         ): DecryptedReceivedBlock!
+        myBlocks: [TPublicLedger!]!
+        myBlock (myBlockArgs: MyBlockArgs): MyBlock!
     }
     
     extend type Mutation {
