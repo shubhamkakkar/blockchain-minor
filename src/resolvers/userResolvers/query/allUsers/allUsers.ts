@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import UserModel from '../../../../models/UserModel';
+
+import UserModel from 'models/UserModel';
+import { verifyToken } from 'utis/jwt/jwt';
 
 export default async function allUsers(context: any) {
   try {

@@ -4,8 +4,8 @@ const context = (reqWrapper: any) => {
   try {
     return reqWrapper.req.headers;
   } catch (e) {
-    console.log('context e', e);
-    throw new GraphQLError('Authentication token is not present');
+    console.log('context e()', e);
+    throw new GraphQLError('context e()');
   }
 };
 

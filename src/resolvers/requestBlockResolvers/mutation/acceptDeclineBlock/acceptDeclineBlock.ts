@@ -1,13 +1,13 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import { TAcceptDenyParams } from '../../../../generated/graphql';
-import RequestBlockModel from '../../../../models/RequestBlockModel';
-import UserModel from '../../../../models/UserModel';
-import ValidationContract from '../../../../utis/validator/validator';
-
 import deletedTheBlockAndMoveToBlockchain from './deletedTheBlockAndMoveToBlockchain';
 import deletedTheBlock from './deletedTheBlock';
+
+import { verifyToken } from 'utis/jwt/jwt';
+import { TAcceptDenyParams } from 'generated/graphql';
+import RequestBlockModel from 'models/RequestBlockModel';
+import UserModel from 'models/UserModel';
+import ValidationContract from 'utis/validator/validator';
 
 export default async function acceptDeclineBlock(
   { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, context: any,

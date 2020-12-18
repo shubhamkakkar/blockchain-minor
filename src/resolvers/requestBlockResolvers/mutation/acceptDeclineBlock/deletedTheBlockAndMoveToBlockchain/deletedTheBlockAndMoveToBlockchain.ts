@@ -1,6 +1,7 @@
-import Block, { TBlock } from '../../../../../Blokchain/Block';
-import BlockModel from '../../../../../models/BlockModel';
 import deletedTheBlock from '../deletedTheBlock/deletedTheBlock';
+
+import Block, { TBlock } from 'Blokchain/Block';
+import BlockModel from 'models/BlockModel';
 
 export default async function deletedTheBlockAndMoveToBlockchain(
   message: string, blockId: string, ownerId: string,

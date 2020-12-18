@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { GraphQLError } from 'graphql';
-import ValidationContract from '../../../../utis/validator/validator';
-import { TLoginArgs } from '../../../../generated/graphql';
-import UserModel from '../../../../models/UserModel';
-import { generateToken } from '../../../../utis/jwt/jwt';
+
+import { TLoginArgs } from 'generated/graphql';
+import UserModel from 'models/UserModel';
+import { generateToken } from 'utis/jwt/jwt';
+import ValidationContract from 'utis/validator/validator';
 
 export default function loginUser(args: TLoginArgs) {
   const contract = new ValidationContract();

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import { ReturnedUser } from '../../generated/graphql';
-import userHash from '../userHash/userHash';
+import { ReturnedUser } from 'generated/graphql';
+import userHash from 'utis/userHash/userHash';
 
 type TTokenContent = {
   email: string;

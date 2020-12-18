@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-import { MyBlock, MyBlockArgs } from '../../../../generated/graphql';
-import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
-import BlockModel from '../../../../models/BlockModel';
+import { MyBlock, MyBlockArgs } from 'generated/graphql';
+import { decryptMessageForRequestedBlock, verifyToken } from 'utis/jwt/jwt';
+import BlockModel from 'models/BlockModel';
 
 export default async function myBlock(args: MyBlockArgs, context: any) {
   try {

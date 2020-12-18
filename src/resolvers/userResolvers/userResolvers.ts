@@ -1,7 +1,7 @@
-import { TLoginArgs, TSignupArgs } from '../../generated/graphql';
-
 import { loginUser, allUsers, user } from './query';
 import { signUpUser, makeUserAdmin } from './mutation';
+
+import { TLoginArgs, TSignupArgs } from 'generated/graphql';
 
 export default {
   Query: {

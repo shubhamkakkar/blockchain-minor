@@ -1,5 +1,5 @@
-import UserModel from '../../models/UserModel';
-import { ReturnedUser } from '../../generated/graphql';
+import UserModel from 'models/UserModel';
+import { ReturnedUser } from 'generated/graphql';
 
 export default async function userHash(userId: string) {
   const userInfo: any = {};

@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 import { FilterQuery } from 'mongoose';
 
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import BlockModel from '../../../../models/BlockModel';
+import { verifyToken } from 'utis/jwt/jwt';
+import BlockModel from 'models/BlockModel';
 
 export default async function publicLedger(context: any, myBlocksOnly = false) {
   const tokenContent = await verifyToken(context.authorization);

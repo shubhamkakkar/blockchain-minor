@@ -1,10 +1,10 @@
 import { GraphQLError } from 'graphql';
 
-import { ReceivedBlockArgs, SharedBlock } from '../../../../generated/graphql';
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import { verification } from '../../../../utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
-import BlockModel from '../../../../models/BlockModel';
-import userHash from '../../../../utis/userHash/userHash';
+import { ReceivedBlockArgs, SharedBlock } from 'generated/graphql';
+import { verifyToken } from 'utis/jwt/jwt';
+import { verification } from 'utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
+import BlockModel from 'models/BlockModel';
+import userHash from 'utis/userHash/userHash';
 
 export default async function receivedBlock(receivedBlockArgs: ReceivedBlockArgs, context: any) {
   try {

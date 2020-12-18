@@ -1,7 +1,8 @@
 import { GraphQLError } from 'graphql';
-import { TRequestDanglingBlock } from '../../../../generated/graphql';
-import { encryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
-import RequestBlockModel from '../../../../models/RequestBlockModel';
+
+import { TRequestDanglingBlock } from 'generated/graphql';
+import { encryptMessageForRequestedBlock, verifyToken } from 'utis/jwt/jwt';
+import RequestBlockModel from 'models/RequestBlockModel';
 
 export default async function requestDanglingBlock(
   { requestBlockData }: { requestBlockData: TRequestDanglingBlock },

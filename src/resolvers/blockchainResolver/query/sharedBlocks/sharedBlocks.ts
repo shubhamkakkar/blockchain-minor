@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import BlockModel from '../../../../models/BlockModel';
-import { SharedBlock } from '../../../../generated/graphql';
+import { verifyToken } from 'utis/jwt/jwt';
+import BlockModel from 'models/BlockModel';
+import { SharedBlock } from 'generated/graphql';
 
 export default async function sharedBlocks(context: any) {
   const tokenContent = await verifyToken(context.authorization);
