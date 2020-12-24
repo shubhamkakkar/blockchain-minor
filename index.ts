@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
 import { resolve } from 'path';
-
 import app from './src';
 
 config({ path: resolve(__dirname, '.env') });

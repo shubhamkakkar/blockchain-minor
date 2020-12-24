@@ -1,14 +1,23 @@
-version: "3"
+version: '3'
 
-services:
-   node-app:
-    container_name: node_app
-    restart: always
-    image: node:10.17
+services: 
+  blockchain-minor-redis:
+    container_name: blockchain-minor-redis
+    image: redis:5.0
     volumes:
-        - ./:/usr/src/node_app:cached
-        - ./node_modules:/usr/src/node_app/node_modules:cached
-    working_dir: /usr/src/node_app
-    command: sh -c "yarn && yarn start"
+      - ./blockchain-minor-redis:/data:cached
     ports:
-      - 4000:4000
+      - 6379:6379
+  blockchain-minor-mongodb:
+    container_name: blockchain-minor-mongodb
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./blockchain-minor-mongodb:/data:cached
+    ports:
+      - 27017:27017
+    working_dir: /var/lib/mongodb
+      

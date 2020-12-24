@@ -12,14 +12,10 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "src/*"
-      ]
-    }
+      "src/*": ["src/*"]
+    },
+    "rootDirs": ["src"]
   },
-  "include" : [
-    "src/**/*.ts"
-  ],
  "exclude": [
     "node_modules"
   ]

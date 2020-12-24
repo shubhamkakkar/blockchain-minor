@@ -35,8 +35,8 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.ts'],
-        paths: ['src'],
+        extensions: ['.js', '.d.ts', '.ts'],
+        paths: ['.'],
       },
     },
   },

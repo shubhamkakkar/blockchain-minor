@@ -3,11 +3,11 @@ import { GraphQLError } from 'graphql';
 import deletedTheBlockAndMoveToBlockchain from './deletedTheBlockAndMoveToBlockchain';
 import deletedTheBlock from './deletedTheBlock';
 
-import { verifyToken } from 'utis/jwt/jwt';
-import { TAcceptDenyParams } from 'generated/graphql';
-import RequestBlockModel from 'models/RequestBlockModel';
-import UserModel from 'models/UserModel';
-import ValidationContract from 'utis/validator/validator';
+import { verifyToken } from 'src/utis/jwt/jwt';
+import { TAcceptDenyParams } from 'src/generated/graphql';
+import RequestBlockModel from 'src/models/RequestBlockModel';
+import UserModel from 'src/models/UserModel';
+import ValidationContract from 'src/utis/validator/validator';
 
 export default async function acceptDeclineBlock(
   { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, context: any,

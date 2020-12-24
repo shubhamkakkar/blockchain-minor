@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from 'utis/jwt/jwt';
+import { verifyToken } from 'src/utis/jwt/jwt';
 
 export default async function user(context: any) {
   try {

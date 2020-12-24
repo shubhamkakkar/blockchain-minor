@@ -1,11 +1,11 @@
 import { GraphQLError } from 'graphql';
 
-import { decryptMessageForRequestedBlock, verifyToken } from 'utis/jwt/jwt';
-import BlockModel from 'models/BlockModel';
-import ValidationContract from 'utis/validator/validator';
-import { stringEncryption } from 'utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
-import userHash from 'utis/userHash/userHash';
-import { TPublicLedger, TShareBlockArgs } from 'generated/graphql';
+import { decryptMessageForRequestedBlock, verifyToken } from 'src/utis/jwt/jwt';
+import BlockModel from 'src/models/BlockModel';
+import ValidationContract from 'src/utis/validator/validator';
+import { stringEncryption } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
+import userHash from 'src/utis/userHash/userHash';
+import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },

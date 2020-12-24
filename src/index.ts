@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server';
-
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import context from './context';
@@ -11,8 +10,6 @@ export default function app() {
       typeDefs,
       resolvers,
       context,
-      playground: true,
-      introspection: true,
     },
   );
 

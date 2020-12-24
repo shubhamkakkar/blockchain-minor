@@ -1,11 +1,11 @@
 import { GraphQLError } from 'graphql';
 
-import { TSignupArgs } from 'generated/graphql';
-import ValidationContract from 'utis/validator/validator';
-import UserModel from 'models/UserModel';
-import { generateToken } from 'utis/jwt/jwt';
-import { generatePasswordCrypt } from 'utis/bcrypt/bcrypt';
-import { userProfileKeys } from 'utis/rsa/rsa';
+import { TSignupArgs } from 'src/generated/graphql';
+import ValidationContract from 'src/utis/validator/validator';
+import UserModel from 'src/models/UserModel';
+import { generateToken } from 'src/utis/jwt/jwt';
+import { generatePasswordCrypt } from 'src/utis/bcrypt/bcrypt';
+import { userProfileKeys } from 'src/utis/rsa/rsa';
 
 export default function signUpUser(args: TSignupArgs) {
   const contract = new ValidationContract();

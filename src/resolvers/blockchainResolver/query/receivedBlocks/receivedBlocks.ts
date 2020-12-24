@@ -1,9 +1,9 @@
 import { GraphQLError } from 'graphql';
 
-import userHash from 'utis/userHash/userHash';
-import BlockModel from 'models/BlockModel';
-import { verifyToken } from 'utis/jwt/jwt';
-import { ReceivedBlock } from 'generated/graphql';
+import userHash from 'src/utis/userHash/userHash';
+import BlockModel from 'src/models/BlockModel';
+import { verifyToken } from 'src/utis/jwt/jwt';
+import { ReceivedBlock } from 'src/generated/graphql';
 
 interface IReceivedBlock extends ReceivedBlock {
   ownerId: string

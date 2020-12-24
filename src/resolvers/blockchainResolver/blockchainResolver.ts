@@ -1,9 +1,9 @@
-import { MyBlockArgs, ReceivedBlockArgs, TShareBlockArgs } from '../../generated/graphql';
-
 import {
   publicLedger, sharedBlocks, receivedBlocks, receivedBlock, myBlock,
 } from './query';
 import { shareBlock } from './mutation';
+
+import { MyBlockArgs, ReceivedBlockArgs, TShareBlockArgs } from 'src/generated/graphql';
 
 export default {
   Query: {

@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from 'utis/jwt/jwt';
-import UserModel from 'models/UserModel';
+import { verifyToken } from 'src/utis/jwt/jwt';
+import UserModel from 'src/models/UserModel';
 
 export default async function makeUserAdmin(userId: string, context: any) {
   try {

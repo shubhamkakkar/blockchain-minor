@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from 'utis/jwt/jwt';
-import RequestBlockModel from 'models/RequestBlockModel';
-import userHash from 'utis/userHash/userHash';
+import { verifyToken } from 'src/utis/jwt/jwt';
+import RequestBlockModel from 'src/models/RequestBlockModel';
+import userHash from 'src/utis/userHash/userHash';
 
 export default async function requestedBlocks(context: any, isUserOnly = false) {
   try {
