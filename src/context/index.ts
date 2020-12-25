@@ -1,8 +1,9 @@
 import { GraphQLError } from 'graphql';
 
-const context = (reqWrapper: any) => {
+const context = async ({ req }: any) => {
   try {
-    return reqWrapper.req.headers;
+    await checkAuth(req);
+    return req.headers;
   } catch (e) {
     console.log('context e()', e);
     throw new GraphQLError('context e()');
