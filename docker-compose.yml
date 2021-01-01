@@ -1,6 +1,6 @@
 version: '3'
 
-services: 
+services:
   blockchain-minor-redis:
     container_name: blockchain-minor-redis
     image: redis:5.0
@@ -20,4 +20,3 @@ services:
     ports:
       - 27017:27017
     working_dir: /var/lib/mongodb
-      

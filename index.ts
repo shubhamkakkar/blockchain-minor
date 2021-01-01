@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
 import { resolve } from 'path';
+
 import app from './src';
 
 config({ path: resolve(__dirname, '.env') });
@@ -13,7 +14,10 @@ mongoose
       useFindAndModify: false,
       useUnifiedTopology: true,
     })
-  .then(app)
+  .then((res) => {
+    console.log('DB connected', res);
+    return app();
+  })
   .catch((er:any) => {
     console.log('failed to connect to mongoose', er);
   });

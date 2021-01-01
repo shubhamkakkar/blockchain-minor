@@ -15,7 +15,6 @@ export default function app() {
       typeDefs,
       resolvers,
       context,
-      x,
     },
   );
   server.applyMiddleware({ app: expressApp });
