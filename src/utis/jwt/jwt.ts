@@ -1,37 +1,30 @@
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 import { ReturnedUser } from 'src/generated/graphql';
-import userHash from 'src/utis/userHash/userHash';
+import UserModel from 'src/models/UserModel';
 
 type TTokenContent = {
-  email: string;
-  userId: string;
   error?: any
   user?: ReturnedUser
 }
-const SECRET_JWT = 'SECRET_JWT';
 
-export function generateToken(tokenContent: TTokenContent): string {
-  return jwt.sign(tokenContent, SECRET_JWT, { expiresIn: '365d' });
+dotenv.config();
+const SECRET = (process.env.SECRET_JWT || '') as Secret;
+
+export function generateToken(id: string): string {
+  return jwt.sign({ id }, SECRET, { expiresIn: '365d' });
 }
 
-export async function verifyToken(token: string) {
+export async function verifyToken(token: string):Promise<TTokenContent> {
   try {
-    const tokenContent = jwt.verify(token, SECRET_JWT) as TTokenContent;
-    const user = await userHash(tokenContent.userId);
-    if (user) {
-      tokenContent.user = user;
-      return tokenContent;
-    }
+    const { id } = await jwt.verify(token, SECRET) as { id?: string };
     return {
-      userId: '',
-      email: '',
-      error: 'Invalid authentication',
+      user: await UserModel.findById(id).lean() as ReturnedUser,
     };
-  } catch (error) {
+  } catch (e) {
+    console.log('verifyToken e()', e);
     return {
-      userId: '',
-      email: '',
       error: 'Authentication token not provided',
     };
   }

@@ -1,17 +1,17 @@
 import { GraphQLError } from 'graphql';
 import { FilterQuery } from 'mongoose';
 
-import { verifyToken } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 
 export default async function publicLedger(context: any, myBlocksOnly = false) {
-  const tokenContent = await verifyToken(context.authorization);
-  if (!tokenContent.error) {
+  if (context.user) {
     const condition:FilterQuery<any> = {};
     if (myBlocksOnly) {
-      condition.ownerId = tokenContent.userId;
+      condition.ownerId = context.user._id;
     }
-    return BlockModel.find(condition, { data: 1, ownerId: 1, shared: 1 });
+    return BlockModel.find(condition, {
+      data: 1, ownerId: 1, shared: 1, createdAt: 1,
+    });
   }
-  throw new GraphQLError(tokenContent.error || 'Authentication token not present');
+  return new GraphQLError('AUTHENTICATION NOT PROVIDED');
 }

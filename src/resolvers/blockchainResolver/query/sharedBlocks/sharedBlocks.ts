@@ -1,14 +1,12 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 import { SharedBlock } from 'src/generated/graphql';
 
 export default async function sharedBlocks(context: any) {
-  const tokenContent = await verifyToken(context.authorization);
-  if (!tokenContent.error) {
+  if (context.user) {
     const blocks = await BlockModel.find(
-      { 'shared.0': { $exists: true }, ownerId: tokenContent.userId },
+      { 'shared.0': { $exists: true }, ownerId: context.user._id },
       { shared: 1, _id: 0 },
     ).lean() as { shared: SharedBlock[] }[];
     const allSharedBlocks:SharedBlock[] = [];
@@ -18,5 +16,5 @@ export default async function sharedBlocks(context: any) {
 
     return allSharedBlocks;
   }
-  throw new GraphQLError(tokenContent.error || 'Authentication token not present');
+  return new GraphQLError('AUTHENTICATION NOT PROVIDED');
 }

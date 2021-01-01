@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { TSignupArgs } from 'src/generated/graphql';
+import { ReturnedUser, TSignupArgs } from 'src/generated/graphql';
 import ValidationContract from 'src/utis/validator/validator';
 import UserModel from 'src/models/UserModel';
 import { generateToken } from 'src/utis/jwt/jwt';
@@ -28,6 +28,7 @@ export default function signUpUser(args: TSignupArgs) {
     .findOne({ email })
     .then(async (user: any) => {
       if (user) {
+        console.log({ user });
         return new GraphQLError('user already exists');
       }
 
@@ -43,14 +44,15 @@ export default function signUpUser(args: TSignupArgs) {
         email,
       });
       await newUser.save();
-      // eslint-disable-next-line no-underscore-dangle
-      const token = generateToken({ email, userId: newUser.toObject()._id });
-
+      const generatedUser = newUser.toObject() as ReturnedUser;
       return {
-        ...newUser.toObject(),
+        ...generatedUser,
         privateKey,
-        token,
+        token: generateToken(generatedUser._id),
       };
     })
-    .catch((er) => new GraphQLError('signun failed', er));
+    .catch((er) => {
+      console.log('INTERNAL_SERVER_ERROR signup e()', er);
+      return new GraphQLError('signup failed', er);
+    });
 }

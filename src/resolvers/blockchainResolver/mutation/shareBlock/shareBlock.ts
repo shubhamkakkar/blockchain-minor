@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { decryptMessageForRequestedBlock, verifyToken } from 'src/utis/jwt/jwt';
+import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 import ValidationContract from 'src/utis/validator/validator';
 import { stringEncryption } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
@@ -12,13 +12,12 @@ export default async function shareBlock(
   context: any,
 ) {
   try {
-    const tokenContent = await verifyToken(context.authorization);
-    if (!tokenContent.error) {
+    if (context.user) {
       const contract = new ValidationContract();
       contract.isRequired(shareBlockArgs.recipientUserId, 'recipientUserId is required');
       contract.isRequired(shareBlockArgs.privateKey, 'sender\'s privateKey is required');
       if (contract.isValid()) {
-        if (shareBlockArgs.recipientUserId === tokenContent.userId) {
+        if (shareBlockArgs.recipientUserId === context.user._id) {
           return {
             shareStatus: false,
             message: 'You can\'t share the block to your self.',
@@ -27,7 +26,7 @@ export default async function shareBlock(
         const block = await BlockModel
           .findOne({
             _id: shareBlockArgs.blockId,
-            ownerId: tokenContent.userId,
+            ownerId: context.user._id,
           })
           .lean() as TPublicLedger;
         if (block) {
@@ -97,7 +96,7 @@ export default async function shareBlock(
       }
       return new GraphQLError(contract.errors() || 'Missing fields');
     }
-    return new GraphQLError(tokenContent.error || 'Authentication token not present');
+    return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
     console.log('shareBlock e()', e);
     throw new GraphQLError(`Internal server shareBlock e() : ${e}`);

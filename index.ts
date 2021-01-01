@@ -1,10 +1,10 @@
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { resolve } from 'path';
 
 import app from './src';
 
-config({ path: resolve(__dirname, '.env') });
+dotenv.config();
+
 const { MONGO_URI_DEV = '' } = process.env;
 
 mongoose
@@ -14,8 +14,8 @@ mongoose
       useFindAndModify: false,
       useUnifiedTopology: true,
     })
-  .then((res) => {
-    console.log('DB connected', res);
+  .then(() => {
+    console.log('DB connected');
     return app();
   })
   .catch((er:any) => {

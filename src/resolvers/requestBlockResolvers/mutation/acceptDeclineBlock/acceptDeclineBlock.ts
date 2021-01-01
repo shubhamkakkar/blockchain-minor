@@ -3,7 +3,6 @@ import { GraphQLError } from 'graphql';
 import deletedTheBlockAndMoveToBlockchain from './deletedTheBlockAndMoveToBlockchain';
 import deletedTheBlock from './deletedTheBlock';
 
-import { verifyToken } from 'src/utis/jwt/jwt';
 import { TAcceptDenyParams } from 'src/generated/graphql';
 import RequestBlockModel from 'src/models/RequestBlockModel';
 import UserModel from 'src/models/UserModel';
@@ -13,14 +12,12 @@ export default async function acceptDeclineBlock(
   { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, context: any,
 ) {
   try {
-    const tokenContent = await verifyToken(context.authorization);
-    if (!tokenContent.error) {
+    if (context.user) {
       const {
         blockId,
         isAccept,
       } = acceptDenyParams;
-
-      if (tokenContent.user?.role === 'admin') {
+      if (context.user.role === 'admin') {
         const contract = new ValidationContract();
         contract.isRequired(blockId, 'blockId is required');
         if (!contract.isValid()) {
@@ -37,21 +34,21 @@ export default async function acceptDeclineBlock(
             userId,
             votedUsers,
           } = requestedBlock.toObject();
-          if (userId === tokenContent.userId) {
+          if (userId === context.user._id) {
             return new GraphQLError('You are the owner of the block');
           }
-          if (votedUsers.includes(tokenContent.userId)) {
+          if (votedUsers.includes(context.user._id)) {
             return new GraphQLError('You have already voted');
           }
-          await RequestBlockModel.findOneAndUpdate(
-            { _id: blockId },
-            { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: tokenContent.userId } },
+
+          requestedBlock.update(
+            { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: context.user._id } },
           );
 
           const adminUserCount = await UserModel
-            .countDocuments({ _id: { $ne: tokenContent.userId }, role: 'admin' });
-          if ((acceptCount + 1) >= 0.51 * adminUserCount) {
-            await deletedTheBlockAndMoveToBlockchain(message, blockId, tokenContent.userId);
+            .countDocuments({ _id: { $ne: context.user._id }, role: 'admin' });
+          if (((acceptCount + 1) >= 0.51 * adminUserCount) || adminUserCount === 1) {
+            await deletedTheBlockAndMoveToBlockchain(message, blockId, userId);
           } else if (rejectCount >= 0.51 * adminUserCount) {
             await deletedTheBlock(blockId);
           }
@@ -64,7 +61,7 @@ export default async function acceptDeclineBlock(
       }
       return new GraphQLError('You do not have required permission to accept or deny');
     }
-    return new GraphQLError(tokenContent.error);
+    return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
     console.log('acceptDeclineBlock e()', e);
     throw new GraphQLError('Internal server e(): acceptDeclineBlock ');

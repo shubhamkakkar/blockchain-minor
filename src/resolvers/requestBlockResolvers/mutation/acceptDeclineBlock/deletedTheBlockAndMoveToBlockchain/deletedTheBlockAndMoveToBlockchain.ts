@@ -14,7 +14,9 @@ export default async function deletedTheBlockAndMoveToBlockchain(
     } else {
       block = new Block({ prevHash: '0', data: message });
     }
-    const blockOfBlockChain = new BlockModel({ ...block, ownerId });
+    // @ts-ignore
+    block.ownerId = ownerId;
+    const blockOfBlockChain = new BlockModel(block);
     await blockOfBlockChain.save();
     await deletedTheBlock(blockId);
   } catch (e) {

@@ -1,24 +1,30 @@
 import { GraphQLError } from 'graphql';
 
-import { verifyToken } from 'src/utis/jwt/jwt';
 import UserModel from 'src/models/UserModel';
+import { ReturnedUser } from 'src/generated/graphql';
 
 export default async function makeUserAdmin(userId: string, context: any) {
   try {
-    const tokenContent = await verifyToken(`${context.authorization}`);
-    if (tokenContent.error) {
-      return new GraphQLError(tokenContent.error);
+    if (!context.user) {
+      return new GraphQLError('AUTHENTICATION NOT PROVIDED');
     }
-    if (tokenContent.user?.role === 'admin') {
-      await UserModel.findOneAndUpdate(
-        {
-          _id: userId,
-        },
-        {
-          role: 'admin',
-        },
-      );
-      return true;
+    if (context.user?.role === 'admin') {
+      const user = await UserModel.findById(userId).lean() as unknown as ReturnedUser;
+      if (user) {
+        if (user.role === 'admin') {
+          return new GraphQLError('User is already admin');
+        }
+        await UserModel.findOneAndUpdate(
+          {
+            _id: userId,
+          },
+          {
+            role: 'admin',
+          },
+        );
+        return true;
+      }
+      return new GraphQLError('User not found');
     }
     return new GraphQLError('You can not make a user admin');
   } catch (e) {

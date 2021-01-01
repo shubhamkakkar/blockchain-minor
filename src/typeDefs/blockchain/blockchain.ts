@@ -1,12 +1,8 @@
 import { gql } from 'apollo-server';
 
 export default gql`
-    type Shared {
-       sharedAt: Date!
-    }
-    
     type ReceivedBlock {
-       shared: [Shared]!
+       sharedAt: Date!
        sharedBy: User!
        _id: ID!
     }

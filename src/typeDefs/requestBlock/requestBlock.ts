@@ -5,7 +5,7 @@ import { gql } from 'apollo-server';
 export default gql`
     type TRequestedDanglingBlock {
         _id : ID!
-        user: ReturnedUser!
+        user: User!
         requestAt: Date!
         message: String!
         acceptCount: Int!

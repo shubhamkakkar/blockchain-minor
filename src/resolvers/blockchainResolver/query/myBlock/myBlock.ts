@@ -1,14 +1,13 @@
 import { GraphQLError } from 'graphql';
 
 import { MyBlock, MyBlockArgs } from 'src/generated/graphql';
-import { decryptMessageForRequestedBlock, verifyToken } from 'src/utis/jwt/jwt';
+import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 
 export default async function myBlock(args: MyBlockArgs, context: any) {
   try {
-    const tokenContent = await verifyToken(context.authorization);
-    if (tokenContent.error) {
-      return new GraphQLError(tokenContent.error);
+    if (!context.user) {
+      return new GraphQLError('AUTHENTICATION NOT PROVIDED');
     }
     const block = await BlockModel.findById(args.blockId).lean() as unknown as MyBlock;
     if (block) {
@@ -21,7 +20,7 @@ export default async function myBlock(args: MyBlockArgs, context: any) {
       }
       return new GraphQLError('cipherTextOfBlock is incorrect');
     }
-    return new GraphQLError('No Block found');
+    return new GraphQLError('Block not found');
   } catch (e) {
     console.log('Internal Server Error myBlock e ()', e);
     return new GraphQLError('Internal Server Error myBlock e ()');
