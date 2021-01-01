@@ -1,5 +1,20 @@
 import { Schema, model } from 'mongoose';
 
+const sharedSchema = new Schema({
+  encryptedMessage: {
+    type: String,
+    required: true,
+  },
+  recipientUser: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  sharedAt: {
+    type: Date,
+    default: new Date(),
+  },
+});
+
 const BlockModel = new Schema(
   {
     data: {
@@ -27,7 +42,7 @@ const BlockModel = new Schema(
       required: true,
     },
     shared: {
-      type: Array,
+      type: [sharedSchema],
       required: false,
       default: [],
     },

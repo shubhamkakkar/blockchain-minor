@@ -23,13 +23,14 @@ export default async function shareBlock(
             message: 'You can\'t share the block to your self.',
           };
         }
-        const block = await BlockModel
+        const blockDB = await BlockModel
           .findOne({
             _id: shareBlockArgs.blockId,
             ownerId: context.user._id,
-          })
-          .lean() as TPublicLedger;
-        if (block) {
+          });
+
+        if (blockDB) {
+          const block = blockDB.toObject() as TPublicLedger;
           if (block
             .shared
             .find((
@@ -55,21 +56,14 @@ export default async function shareBlock(
                     receiverPublicKey: recipientUser.publicKey,
                   },
                 );
-                await BlockModel
-                  .findByIdAndUpdate(
-                    {
-                      _id: shareBlockArgs.blockId,
+                await blockDB.update({
+                  $push: {
+                    shared: {
+                      encryptedMessage,
+                      recipientUser: recipientUser._id,
                     },
-                    {
-                      $push: {
-                        shared: {
-                          encryptedMessage,
-                          recipientUser,
-                          sharedAt: new Date(),
-                        },
-                      },
-                    },
-                  );
+                  },
+                });
                 return {
                   isSuccess: true,
                 };
