@@ -8,9 +8,11 @@ import RequestBlockModel from 'src/models/RequestBlockModel';
 import UserModel from 'src/models/UserModel';
 import ValidationContract from 'src/utis/validator/validator';
 import { Context } from 'src/context';
+import { resetPublicLedgerCache, resetDanglingBlocksCache } from 'src/utis/redis/redis';
 
 export default async function acceptDeclineBlock(
-  { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, { req: context }: Context,
+  { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams },
+  { req: context, redisClient }: Context,
 ) {
   try {
     if (context.user) {
@@ -50,9 +52,11 @@ export default async function acceptDeclineBlock(
             .countDocuments({ _id: { $ne: context.user._id }, role: 'admin' });
           if (((acceptCount + 1) >= 0.51 * adminUserCount) || adminUserCount === 1) {
             await deletedTheBlockAndMoveToBlockchain(message, blockId, userId);
+            resetPublicLedgerCache(redisClient);
           } else if (rejectCount >= 0.51 * adminUserCount) {
             await deletedTheBlock(blockId);
           }
+          resetDanglingBlocksCache(redisClient);
           return {
             acceptCount: isAccept ? acceptCount + 1 : acceptCount,
             rejectCount: isAccept ? rejectCount : rejectCount + 1,

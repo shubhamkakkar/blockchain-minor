@@ -4,7 +4,9 @@ import UserModel from 'src/models/UserModel';
 import { ReturnedUser } from 'src/generated/graphql';
 import { Context } from 'src/context';
 
-export default async function makeUserAdmin(userId: string, { req: context }: Context) {
+export default async function makeUserAdmin(
+  userId: string, { req: context, redisClient }: Context,
+) {
   try {
     if (!context.user) {
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');
@@ -23,6 +25,7 @@ export default async function makeUserAdmin(userId: string, { req: context }: Co
             role: 'admin',
           },
         );
+        redisClient.del(user._id);
         return true;
       }
       return new GraphQLError('User not found');

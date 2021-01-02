@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 import { ReturnedUser } from 'src/generated/graphql';
 import UserModel from 'src/models/UserModel';
 
-type TTokenContent = {
+type TokenContent = {
   error?: any
-  user?: ReturnedUser
+  id?: string
 }
 
 dotenv.config();
@@ -16,12 +16,9 @@ export function generateToken(id: string): string {
   return jwt.sign({ id }, SECRET, { expiresIn: '365d' });
 }
 
-export async function verifyToken(token: string):Promise<TTokenContent> {
+export async function verifyToken(token: string): Promise<TokenContent> {
   try {
-    const { id } = await jwt.verify(token, SECRET) as { id?: string };
-    return {
-      user: await UserModel.findById(id).lean() as ReturnedUser,
-    };
+    return await jwt.verify(token, SECRET) as { id?: string };
   } catch (e) {
     console.log('verifyToken e()', e);
     return {

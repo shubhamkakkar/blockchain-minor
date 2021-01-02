@@ -6,8 +6,10 @@ import UserModel from 'src/models/UserModel';
 import { generateToken } from 'src/utis/jwt/jwt';
 import { generatePasswordCrypt } from 'src/utis/bcrypt/bcrypt';
 import { userProfileKeys } from 'src/utis/rsa/rsa';
+import { Context } from 'src/context';
+import { resetUsersCache } from 'src/utis/redis/redis';
 
-export default function signUpUser(args: TSignupArgs) {
+export default function signUpUser(args: TSignupArgs, { redisClient }: Context) {
   const contract = new ValidationContract();
   const {
     firstName,
@@ -45,6 +47,7 @@ export default function signUpUser(args: TSignupArgs) {
       });
       await newUser.save();
       const generatedUser = newUser.toObject() as ReturnedUser;
+      resetUsersCache(redisClient);
       return {
         ...generatedUser,
         privateKey,

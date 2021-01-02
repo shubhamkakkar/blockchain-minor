@@ -7,10 +7,11 @@ import { stringEncryption } from 'src/utis/publicKeyCryptoSystem/publicKeyCrypto
 import userHash from 'src/utis/userHash/userHash';
 import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
 import { Context } from 'src/context';
+import { resetPublicLedgerCache } from 'src/utis/redis/redis';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
-  { req: context }: Context,
+  { req: context, redisClient }: Context,
 ) {
   try {
     if (context.user) {
@@ -65,6 +66,7 @@ export default async function shareBlock(
                     },
                   },
                 });
+                resetPublicLedgerCache(redisClient);
                 return {
                   isSuccess: true,
                 };
