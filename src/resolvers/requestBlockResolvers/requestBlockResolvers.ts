@@ -2,18 +2,19 @@ import { acceptDeclineBlock, requestDanglingBlock } from './mutation';
 import { requestedBlocks } from './query';
 
 import { TRequestDanglingBlock, TAcceptDenyParams } from 'src/generated/graphql';
+import { Context } from 'src/context';
 
 export default {
   Query: {
-    requestedBlocks: (parent: any, args: any, context: any) => requestedBlocks(context),
-    myRequestedBlocks: (parent: any, args: any, context: any) => requestedBlocks(context, true),
+    requestedBlocks: (parent: any, args: any, context: Context) => requestedBlocks(context),
+    myRequestedBlocks: (parent: any, args: any, context: Context) => requestedBlocks(context, true),
   },
   Mutation: {
     requestDanglingBlock: (
-      parent: any, args: { requestBlockData: TRequestDanglingBlock }, context: any,
+      parent: any, args: { requestBlockData: TRequestDanglingBlock }, context: Context,
     ) => requestDanglingBlock(args, context),
     acceptDeclineBlock: (
-      parent: any, args: {acceptDenyParams: TAcceptDenyParams}, context: any,
+      parent: any, args: {acceptDenyParams: TAcceptDenyParams}, context: Context,
     ) => acceptDeclineBlock(args, context),
   },
 };

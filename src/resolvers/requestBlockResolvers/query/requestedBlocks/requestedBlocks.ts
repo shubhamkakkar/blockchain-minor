@@ -2,8 +2,9 @@ import { GraphQLError } from 'graphql';
 
 import RequestBlockModel from 'src/models/RequestBlockModel';
 import userHash from 'src/utis/userHash/userHash';
+import { Context } from 'src/context';
 
-export default async function requestedBlocks(context: any, isUserOnly = false) {
+export default async function requestedBlocks({ req: context }: Context, isUserOnly = false) {
   try {
     if (context.user) {
       const searchCondition = isUserOnly ? { userId: { $in: [context.user._id] } } : {};

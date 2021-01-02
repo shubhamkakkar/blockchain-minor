@@ -6,10 +6,11 @@ import ValidationContract from 'src/utis/validator/validator';
 import { stringEncryption } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
 import userHash from 'src/utis/userHash/userHash';
 import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
+import { Context } from 'src/context';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
-  context: any,
+  { req: context }: Context,
 ) {
   try {
     if (context.user) {

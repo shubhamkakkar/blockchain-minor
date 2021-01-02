@@ -1,8 +1,9 @@
 import { GraphQLError } from 'graphql';
 
 import UserModel from 'src/models/UserModel';
+import { Context } from 'src/context';
 
-export default async function allUsers(context: any) {
+export default async function allUsers({ req: context }: Context) {
   try {
     let conditions:any = {};
     if (context.user) {

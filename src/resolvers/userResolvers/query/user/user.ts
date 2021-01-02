@@ -1,6 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-export default async function user(context: any) {
+import { Context } from 'src/context';
+
+export default async function user({ req: context }: Context) {
   try {
     if (context.user) {
       return context.user;

@@ -3,12 +3,13 @@ import { GraphQLError } from 'graphql';
 import userHash from 'src/utis/userHash/userHash';
 import BlockModel from 'src/models/BlockModel';
 import { ReceivedBlock } from 'src/generated/graphql';
+import { Context } from 'src/context';
 
 interface IReceivedBlock extends ReceivedBlock {
   ownerId: string
 }
 
-export default async function receivedBlocks(context: any) {
+export default async function receivedBlocks({ req: context }: Context) {
   try {
     if (context.user) {
       const blocks = await BlockModel.find(

@@ -3,8 +3,12 @@ import { GraphQLError } from 'graphql';
 import { MyBlock, MyBlockArgs } from 'src/generated/graphql';
 import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
+import { Context } from 'src/context';
 
-export default async function myBlock(args: MyBlockArgs, context: any) {
+export default async function myBlock(
+  args: MyBlockArgs,
+  { req: context }: Context,
+) {
   try {
     if (!context.user) {
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');

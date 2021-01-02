@@ -2,8 +2,12 @@ import { GraphQLError } from 'graphql';
 import { FilterQuery } from 'mongoose';
 
 import BlockModel from 'src/models/BlockModel';
+import { Context } from 'src/context';
 
-export default async function publicLedger(context: any, myBlocksOnly = false) {
+export default async function publicLedger(
+  { req: context }: Context,
+  myBlocksOnly = false,
+) {
   if (context.user) {
     const condition:FilterQuery<any> = {};
     if (myBlocksOnly) {

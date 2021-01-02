@@ -2,8 +2,9 @@ import { GraphQLError } from 'graphql';
 
 import BlockModel from 'src/models/BlockModel';
 import { SharedBlock } from 'src/generated/graphql';
+import { Context } from 'src/context';
 
-export default async function sharedBlocks(context: any) {
+export default async function sharedBlocks({ req: context }: Context) {
   if (context.user) {
     const blocks = await BlockModel.find(
       { 'shared.0': { $exists: true }, ownerId: context.user._id },

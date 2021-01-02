@@ -4,8 +4,12 @@ import { ReceivedBlockArgs, SharedBlock } from 'src/generated/graphql';
 import { verification } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
 import BlockModel from 'src/models/BlockModel';
 import userHash from 'src/utis/userHash/userHash';
+import { Context } from 'src/context';
 
-export default async function receivedBlock(receivedBlockArgs: ReceivedBlockArgs, context: any) {
+export default async function receivedBlock(
+  receivedBlockArgs: ReceivedBlockArgs,
+  { req: context }: Context,
+) {
   try {
     if (context.user) {
       const block = await BlockModel.findOne(

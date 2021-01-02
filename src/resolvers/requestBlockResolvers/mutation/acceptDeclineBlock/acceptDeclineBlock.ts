@@ -7,9 +7,10 @@ import { TAcceptDenyParams } from 'src/generated/graphql';
 import RequestBlockModel from 'src/models/RequestBlockModel';
 import UserModel from 'src/models/UserModel';
 import ValidationContract from 'src/utis/validator/validator';
+import { Context } from 'src/context';
 
 export default async function acceptDeclineBlock(
-  { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, context: any,
+  { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams }, { req: context }: Context,
 ) {
   try {
     if (context.user) {

@@ -2,8 +2,9 @@ import { GraphQLError } from 'graphql';
 
 import UserModel from 'src/models/UserModel';
 import { ReturnedUser } from 'src/generated/graphql';
+import { Context } from 'src/context';
 
-export default async function makeUserAdmin(userId: string, context: any) {
+export default async function makeUserAdmin(userId: string, { req: context }: Context) {
   try {
     if (!context.user) {
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');
