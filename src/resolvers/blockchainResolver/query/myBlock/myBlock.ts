@@ -4,6 +4,7 @@ import { MyBlock, MyBlockArgs } from 'src/generated/graphql';
 import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 import { Context } from 'src/context';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function myBlock(
   args: MyBlockArgs,
@@ -26,7 +27,6 @@ export default async function myBlock(
     }
     return new GraphQLError('Block not found');
   } catch (e) {
-    console.log('Internal Server Error myBlock e ()', e);
-    return new GraphQLError('Internal Server Error myBlock e ()');
+    return errorHandler('myBlock', e);
   }
 }

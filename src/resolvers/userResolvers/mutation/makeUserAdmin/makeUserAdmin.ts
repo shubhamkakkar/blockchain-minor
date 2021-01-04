@@ -3,6 +3,7 @@ import { GraphQLError } from 'graphql';
 import UserModel from 'src/models/UserModel';
 import { ReturnedUser } from 'src/generated/graphql';
 import { Context } from 'src/context';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function makeUserAdmin(
   userId: string, { req: context, redisClient }: Context,
@@ -32,7 +33,6 @@ export default async function makeUserAdmin(
     }
     return new GraphQLError('You can not make a user admin');
   } catch (e) {
-    console.log('makeUserAdmin e()', e);
-    throw new GraphQLError(`Internal server makeUserAdmin e() : ${e}`);
+    return errorHandler('makeUserAdmin', e);
   }
 }

@@ -8,6 +8,7 @@ import userHash from 'src/utis/userHash/userHash';
 import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
 import { Context } from 'src/context';
 import { resetPublicLedgerCache } from 'src/utis/redis/redis';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
@@ -95,7 +96,6 @@ export default async function shareBlock(
     }
     return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
-    console.log('shareBlock e()', e);
-    throw new GraphQLError(`Internal server shareBlock e() : ${e}`);
+    return errorHandler('shareBlock', e);
   }
 }

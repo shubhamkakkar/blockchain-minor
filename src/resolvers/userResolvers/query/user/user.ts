@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
 
 import { Context } from 'src/context';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function user({ req: context }: Context) {
   try {
@@ -9,7 +10,6 @@ export default async function user({ req: context }: Context) {
     }
     return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
-    console.log('user e()', e);
-    throw new GraphQLError(`Internal server user e() : ${e}`);
+    return errorHandler('user', e);
   }
 }

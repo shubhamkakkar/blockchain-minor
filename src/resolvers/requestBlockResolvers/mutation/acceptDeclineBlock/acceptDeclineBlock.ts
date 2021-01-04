@@ -9,6 +9,7 @@ import UserModel from 'src/models/UserModel';
 import ValidationContract from 'src/utis/validator/validator';
 import { Context } from 'src/context';
 import { resetPublicLedgerCache, resetDanglingBlocksCache } from 'src/utis/redis/redis';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function acceptDeclineBlock(
   { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams },
@@ -68,7 +69,6 @@ export default async function acceptDeclineBlock(
     }
     return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
-    console.log('acceptDeclineBlock e()', e);
-    throw new GraphQLError('Internal server e(): acceptDeclineBlock ');
+    return errorHandler('acceptDeclineBlock', e);
   }
 }

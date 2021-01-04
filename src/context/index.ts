@@ -34,8 +34,7 @@ const customRedisGet = async (key: string) => {
   }
   return null;
 };
-// @ts-ignore
-// client.get = customRedisGet;
+
 async function checkAuth(req: IRequest) {
   const token = req.headers.authorization;
   let user: ReturnedUser | undefined;
@@ -43,7 +42,6 @@ async function checkAuth(req: IRequest) {
     const { id: userId } = await verifyToken(token);
     if (userId) {
       user = await customRedisGet(userId);
-      // @ts-ignore
       if (!user?._id) {
         const dbUser = await UserModel.findById(userId).select('-password');
         if (dbUser) {

@@ -4,6 +4,7 @@ import { FilterQuery } from 'mongoose';
 import BlockModel from 'src/models/BlockModel';
 import { Context } from 'src/context';
 import { REDIS_KEYS } from 'src/constants';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default async function publicLedger(
   { req: context, redisClient, customRedisGet }: Context,
@@ -13,10 +14,10 @@ export default async function publicLedger(
     const condition:FilterQuery<any> = {};
     const redisKey = myEntries ? 'MY_ENTRIES' : 'ALL_ENTRIES';
 
-    return redisClient.get(REDIS_KEYS[redisKey], async (er, cachedPublicLedger) => {
-      console.log({ cachedPublicLedger, er });
+    try {
+      const cachedPublicLedger = await customRedisGet(REDIS_KEYS[redisKey]);
       if (cachedPublicLedger) {
-        return JSON.parse(cachedPublicLedger);
+        return cachedPublicLedger;
       }
       if (myEntries) {
         condition.ownerId = context.user?._id;
@@ -29,10 +30,11 @@ export default async function publicLedger(
           path: 'shared',
           populate: 'recipientUser',
         }).lean();
-
       redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(blocks));
       return blocks;
-    });
+    } catch (e) {
+      return errorHandler('publicLedger', e);
+    }
   }
   return new GraphQLError('AUTHENTICATION NOT PROVIDED');
 }

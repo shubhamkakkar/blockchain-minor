@@ -8,6 +8,7 @@ import { generatePasswordCrypt } from 'src/utis/bcrypt/bcrypt';
 import { userProfileKeys } from 'src/utis/rsa/rsa';
 import { Context } from 'src/context';
 import { resetUsersCache } from 'src/utis/redis/redis';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
 
 export default function signUpUser(args: TSignupArgs, { redisClient }: Context) {
   const contract = new ValidationContract();
@@ -54,8 +55,5 @@ export default function signUpUser(args: TSignupArgs, { redisClient }: Context) 
         token: generateToken(generatedUser._id),
       };
     })
-    .catch((er) => {
-      console.log('INTERNAL_SERVER_ERROR signup e()', er);
-      return new GraphQLError('signup failed', er);
-    });
+    .catch((e) => errorHandler('signUpUser', e));
 }
