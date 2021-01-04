@@ -6,7 +6,7 @@ import { Context } from 'src/context';
 import { REDIS_KEYS } from 'src/constants';
 
 export default async function publicLedger(
-  { req: context, redisClient }: Context,
+  { req: context, redisClient, customRedisGet }: Context,
   myEntries = false,
 ) {
   if (context.user) {
@@ -14,6 +14,7 @@ export default async function publicLedger(
     const redisKey = myEntries ? 'MY_ENTRIES' : 'ALL_ENTRIES';
 
     return redisClient.get(REDIS_KEYS[redisKey], async (er, cachedPublicLedger) => {
+      console.log({ cachedPublicLedger, er });
       if (cachedPublicLedger) {
         return JSON.parse(cachedPublicLedger);
       }

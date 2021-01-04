@@ -1,5 +1,8 @@
+import { promisify } from 'util';
+
 import express from 'express';
-import { RedisClient } from 'redis';
+import redis, { RedisClient } from 'redis';
+import dotenv from 'dotenv';
 
 import { verifyToken } from 'src/utis/jwt/jwt';
 import { ReturnedUser } from 'src/generated/graphql';
@@ -10,35 +13,54 @@ interface IRequest extends express.Request {
 }
 
 export type Context = {
-  req: IRequest,
-  redisClient: RedisClient
+  req: {
+    user?: ReturnedUser
+  },
+  redisClient: RedisClient,
+  customRedisGet: (key: string) => Promise<any>
 }
 
-async function checkAuth(req: IRequest, client: RedisClient) {
+dotenv.config();
+
+const client = redis.createClient({
+  host: process.env.REDIS_DB_HOST,
+  port: Number(process.env.REDIS_DB_PORT),
+});
+
+const customRedisGet = async (key: string) => {
+  const redisCache = await promisify(client.get).bind(client)(key) as string;
+  if (redisCache) {
+    return JSON.parse(redisCache);
+  }
+  return null;
+};
+// @ts-ignore
+// client.get = customRedisGet;
+async function checkAuth(req: IRequest) {
   const token = req.headers.authorization;
+  let user: ReturnedUser | undefined;
   if (token) {
     const { id: userId } = await verifyToken(token);
     if (userId) {
-      client.get(userId, async (err, cachedUser) => {
-        if (cachedUser) {
-          req.user = JSON.parse(cachedUser);
-        } else {
-          const user = await UserModel.findById(userId).select('-password');
-          if (user) {
-            const objectifiedUser = user.toObject();
-            client.set(userId, JSON.stringify(objectifiedUser));
-            req.user = objectifiedUser;
-          }
+      user = await customRedisGet(userId);
+      // @ts-ignore
+      if (!user?._id) {
+        const dbUser = await UserModel.findById(userId).select('-password');
+        if (dbUser) {
+          // console.log('dbUser', dbUser);
+          const objectifiedUser = dbUser.toObject();
+          client.set(userId, JSON.stringify(objectifiedUser));
+          user = dbUser.toObject();
         }
-      });
+      }
     }
   }
+  return user;
 }
 
-async function context({ req, client }: { req: IRequest, client: RedisClient}): Promise<Context> {
+async function context({ req }: { req: IRequest}): Promise<Context> {
   try {
-    await checkAuth(req, client);
-    return { req, redisClient: client };
+    return { req: { user: await checkAuth(req) }, redisClient: client, customRedisGet };
   } catch (e) {
     console.log('context e()', e);
     throw new Error('context e()');
