@@ -11,7 +11,7 @@ export default async function receivedBlock(receivedBlockArgs: ReceivedBlockArgs
       const block = await BlockModel.findOne(
         {
           _id: receivedBlockArgs.blockId,
-          'shared.recipientUser.email': context.user.email,
+          'shared.recipientUser': context.user._id,
         },
         {
           'shared.sharedAt': 1, 'shared.encryptedMessage': 1, ownerId: 1, _id: 0,
