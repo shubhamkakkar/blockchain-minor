@@ -23,7 +23,7 @@ export default async function receivedBlocks(
         }
         const blocks = await BlockModel.find(
           {
-            'shared.recipientUser.email': context.user?.email,
+            'shared.recipientUser.email': context.user?._id,
           },
           { 'shared.sharedAt': 1, ownerId: 1 },
         ).lean() as unknown as IReceivedBlock;
