@@ -11,7 +11,7 @@ export default {
     user: (parent: any, args: any, context: Context) => user(context),
   },
   Mutation: {
-    singUp: (parent: any, args: TSignupArgs, context: Context) => signUpUser(args, context),
+    signUp: (parent: any, args: TSignupArgs, context: Context) => signUpUser(args, context),
     makeUserAdmin: (parent: any, args: string, context: Context) => makeUserAdmin(args, context),
   },
 };

@@ -45,6 +45,7 @@ export default gql`
         lastName: String!
         middleName: String
         privateKey: String!
+        role: String!
     }
     
     extend type Query {
@@ -58,7 +59,7 @@ export default gql`
     }
 
     extend type Mutation {
-        singUp(
+        signUp(
             email: String!
             password: String!
             firstName: String!,
