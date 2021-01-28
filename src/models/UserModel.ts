@@ -12,6 +12,7 @@ const UserSchema = new Schema(
     },
     middleName: {
       type: String,
+      default: '',
     },
     email: {
       type: String,

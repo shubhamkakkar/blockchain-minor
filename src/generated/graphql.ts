@@ -51,7 +51,7 @@ export type QueryMyBlockArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
-  singUp: ReturnedUserSignup;
+  signUp: ReturnedUserSignup;
   makeUserAdmin: Scalars['Boolean'];
   requestDanglingBlock: TRequestedDanglingBlock;
   acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
@@ -59,7 +59,7 @@ export type Mutation = {
 };
 
 
-export type MutationSingUpArgs = {
+export type MutationSignUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
   firstName: Scalars['String'];
@@ -140,6 +140,7 @@ export type ReturnedUserSignup = {
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
   privateKey: Scalars['String'];
+  role: Scalars['String'];
 };
 
 export type TRequestedDanglingBlock = {
@@ -393,7 +394,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
+  signUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
   makeUserAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMakeUserAdminArgs, 'id'>>;
   requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
   acceptDeclineBlock?: Resolver<Maybe<ResolversTypes['TAcceptDeclineCount']>, ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
@@ -451,6 +452,7 @@ export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends Re
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
