@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { RequestedBlockMessage } from 'src/generated/graphql';
+
 const RequestBlockSchema = new Schema(
   {
     message: {
@@ -8,6 +10,15 @@ const RequestBlockSchema = new Schema(
     },
     userId: {
       type: String,
+      required: true,
+    },
+    messageType: {
+      type: String,
+      enum: [
+        RequestedBlockMessage.InsuranceInformation,
+        RequestedBlockMessage.MedicalReports,
+        RequestedBlockMessage.PersonalMedicalInformation,
+      ],
       required: true,
     },
     requestAt: {

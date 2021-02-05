@@ -3,6 +3,11 @@ import { gql } from 'apollo-server';
 // todo: add file/image upload
 
 export default gql`
+    enum RequestedBlockMessage {
+        PERSONAL_MEDICAL_INFORMATION
+        INSURANCE_INFORMATION
+        MEDICAL_REPORTS
+    }
     type TRequestedDanglingBlock {
         _id : ID!
         user: User!
@@ -10,6 +15,7 @@ export default gql`
         message: String!
         acceptCount: Int!
         rejectCount: Int!
+        messageType: RequestedBlockMessage!
     }
     
     type TAcceptDeclineCount {
@@ -20,6 +26,7 @@ export default gql`
     input TRequestDanglingBlock {
         cipherKeyForTheMessage: String!
         message: String!
+        messageType: RequestedBlockMessage!
     }
     
     input TAcceptDenyParams {

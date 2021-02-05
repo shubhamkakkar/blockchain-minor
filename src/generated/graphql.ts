@@ -159,9 +159,16 @@ export type TAcceptDeclineCount = {
   rejectCount: Scalars['Int'];
 };
 
+export enum RequestedBlockMessage {
+  PersonalMedicalInformation = 'PERSONAL_MEDICAL_INFORMATION',
+  InsuranceInformation = 'INSURANCE_INFORMATION',
+  MedicalReports = 'MEDICAL_REPORTS'
+}
+
 export type TRequestDanglingBlock = {
   cipherKeyForTheMessage: Scalars['String'];
   message: Scalars['String'];
+  messageType: RequestedBlockMessage;
 };
 
 export type TAcceptDenyParams = {
@@ -327,6 +334,7 @@ export type ResolversTypes = {
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
+  RequestedBlockMessage: RequestedBlockMessage;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ResolverTypeWrapper<ReceivedBlock>;

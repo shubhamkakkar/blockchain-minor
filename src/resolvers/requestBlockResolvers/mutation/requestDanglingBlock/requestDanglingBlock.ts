@@ -16,10 +16,12 @@ export default async function requestDanglingBlock(
       const {
         message,
         cipherKeyForTheMessage,
+        messageType,
       } = requestBlockData;
       const newRequestedBlock = new RequestBlockModel({
         message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage),
         userId: context.user._id,
+        messageType,
       });
       await newRequestedBlock.save();
       redisClient.del(REDIS_KEYS.MY_REQUESTED_BLOCKS);
