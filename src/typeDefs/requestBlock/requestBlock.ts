@@ -22,11 +22,18 @@ export default gql`
         acceptCount: Int!
         rejectCount: Int!
     }
+
+    input File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+    }
     
     input TRequestDanglingBlock {
         cipherKeyForTheMessage: String!
         message: String!
         messageType: RequestedBlockMessage!
+        images: [File!]
     }
     
     input TAcceptDenyParams {

@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+const { MONGO_URI_DEV = '', REDIS_DB_HOST, REDIS_DB_PORT } = process.env;
+
 const REDIS_KEYS = {
   ALL_USERS: 'users/allUsers',
   MY_REQUESTED_BLOCKS: 'requestedBlocks/myRequestedBlocks',
@@ -8,4 +13,13 @@ const REDIS_KEYS = {
   MY_SHARED_BLOCKS: 'publicLedger/mySharedBlocks',
 };
 
-export { REDIS_KEYS };
+const MONGO_DB = {
+  MONGO_URI_DEV,
+};
+
+const REDIS_DB = {
+  REDIS_DB_HOST,
+  REDIS_DB_PORT,
+};
+
+export { MONGO_DB, REDIS_DB, REDIS_KEYS };

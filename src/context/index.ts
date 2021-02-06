@@ -2,11 +2,11 @@ import { promisify } from 'util';
 
 import express from 'express';
 import redis, { RedisClient } from 'redis';
-import dotenv from 'dotenv';
 
 import { verifyToken } from 'src/utis/jwt/jwt';
 import { ReturnedUser } from 'src/generated/graphql';
 import UserModel from 'src/models/UserModel';
+import { REDIS_DB } from 'src/constants';
 
 interface IRequest extends express.Request {
   user?: ReturnedUser
@@ -17,14 +17,13 @@ export type Context = {
     user?: ReturnedUser
   },
   redisClient: RedisClient,
-  customRedisGet: (key: string) => Promise<any>
+  customRedisGet: (key: string) => Promise<any>,
+  gfs: any
 }
 
-dotenv.config();
-
 const client = redis.createClient({
-  host: process.env.REDIS_DB_HOST,
-  port: Number(process.env.REDIS_DB_PORT),
+  host: REDIS_DB.REDIS_DB_HOST,
+  port: Number(REDIS_DB.REDIS_DB_PORT),
 });
 
 const customRedisGet = async (key: string) => {
@@ -56,9 +55,11 @@ async function checkAuth(req: IRequest) {
   return user;
 }
 
-async function context({ req }: { req: IRequest}): Promise<Context> {
+async function context({ req, gfs }: { req: IRequest, gfs: any}): Promise<Context> {
   try {
-    return { req: { user: await checkAuth(req) }, redisClient: client, customRedisGet };
+    return {
+      req: { user: await checkAuth(req) }, redisClient: client, customRedisGet, gfs,
+    };
   } catch (e) {
     console.log('context e()', e);
     throw new Error('context e()');

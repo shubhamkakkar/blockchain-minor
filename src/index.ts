@@ -6,14 +6,14 @@ import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import context from './context';
 
-export default function app() {
+export default function app(gfs: any) {
   const expressApp = express();
   expressApp.use(bodyParser.json());
   const server = new ApolloServer(
     {
       typeDefs,
       resolvers,
-      context,
+      context: ({ req }: any) => context({ req, gfs }),
     },
   );
   server.applyMiddleware({ app: expressApp });

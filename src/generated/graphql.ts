@@ -143,6 +143,12 @@ export type ReturnedUserSignup = {
   role: Scalars['String'];
 };
 
+export enum RequestedBlockMessage {
+  PersonalMedicalInformation = 'PERSONAL_MEDICAL_INFORMATION',
+  InsuranceInformation = 'INSURANCE_INFORMATION',
+  MedicalReports = 'MEDICAL_REPORTS'
+}
+
 export type TRequestedDanglingBlock = {
   __typename?: 'TRequestedDanglingBlock';
   _id: Scalars['ID'];
@@ -151,6 +157,7 @@ export type TRequestedDanglingBlock = {
   message: Scalars['String'];
   acceptCount: Scalars['Int'];
   rejectCount: Scalars['Int'];
+  messageType: RequestedBlockMessage;
 };
 
 export type TAcceptDeclineCount = {
@@ -159,16 +166,17 @@ export type TAcceptDeclineCount = {
   rejectCount: Scalars['Int'];
 };
 
-export enum RequestedBlockMessage {
-  PersonalMedicalInformation = 'PERSONAL_MEDICAL_INFORMATION',
-  InsuranceInformation = 'INSURANCE_INFORMATION',
-  MedicalReports = 'MEDICAL_REPORTS'
-}
+export type File = {
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  encoding: Scalars['String'];
+};
 
 export type TRequestDanglingBlock = {
   cipherKeyForTheMessage: Scalars['String'];
   message: Scalars['String'];
   messageType: RequestedBlockMessage;
+  images?: Maybe<Array<File>>;
 };
 
 export type TAcceptDenyParams = {
@@ -331,10 +339,11 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   User: ResolverTypeWrapper<User>;
   ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
+  RequestedBlockMessage: RequestedBlockMessage;
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
-  RequestedBlockMessage: RequestedBlockMessage;
+  File: File;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ResolverTypeWrapper<ReceivedBlock>;
@@ -367,6 +376,7 @@ export type ResolversParentTypes = {
   TRequestedDanglingBlock: TRequestedDanglingBlock;
   Int: Scalars['Int'];
   TAcceptDeclineCount: TAcceptDeclineCount;
+  File: File;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ReceivedBlock;
@@ -471,6 +481,7 @@ export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType exten
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rejectCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  messageType?: Resolver<ResolversTypes['RequestedBlockMessage'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

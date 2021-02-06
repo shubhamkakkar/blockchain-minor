@@ -17,6 +17,7 @@ export default async function requestDanglingBlock(
         message,
         cipherKeyForTheMessage,
         messageType,
+        images,
       } = requestBlockData;
       const newRequestedBlock = new RequestBlockModel({
         message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage),
