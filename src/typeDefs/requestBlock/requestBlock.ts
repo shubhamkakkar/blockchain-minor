@@ -1,7 +1,5 @@
 import { gql } from 'apollo-server';
 
-// todo: add file/image upload
-
 export default gql`
     enum RequestedBlockMessage {
         PERSONAL_MEDICAL_INFORMATION
@@ -23,7 +21,7 @@ export default gql`
         rejectCount: Int!
     }
 
-    input File {
+    type File {
         filename: String!
         mimetype: String!
         encoding: String!
@@ -33,7 +31,7 @@ export default gql`
         cipherKeyForTheMessage: String!
         message: String!
         messageType: RequestedBlockMessage!
-        images: [File!]
+        file: Upload!
     }
     
     input TAcceptDenyParams {

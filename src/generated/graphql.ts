@@ -167,6 +167,7 @@ export type TAcceptDeclineCount = {
 };
 
 export type File = {
+  __typename?: 'File';
   filename: Scalars['String'];
   mimetype: Scalars['String'];
   encoding: Scalars['String'];
@@ -176,7 +177,7 @@ export type TRequestDanglingBlock = {
   cipherKeyForTheMessage: Scalars['String'];
   message: Scalars['String'];
   messageType: RequestedBlockMessage;
-  images?: Maybe<Array<File>>;
+  file: Scalars['Upload'];
 };
 
 export type TAcceptDenyParams = {
@@ -343,7 +344,7 @@ export type ResolversTypes = {
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
-  File: File;
+  File: ResolverTypeWrapper<File>;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ResolverTypeWrapper<ReceivedBlock>;
@@ -491,6 +492,13 @@ export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type ReceivedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReceivedBlock'] = ResolversParentTypes['ReceivedBlock']> = {
   sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   sharedBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -549,6 +557,7 @@ export type Resolvers<ContextType = any> = {
   ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
+  File?: FileResolvers<ContextType>;
   ReceivedBlock?: ReceivedBlockResolvers<ContextType>;
   DecryptedReceivedBlock?: DecryptedReceivedBlockResolvers<ContextType>;
   SharedBlock?: SharedBlockResolvers<ContextType>;
