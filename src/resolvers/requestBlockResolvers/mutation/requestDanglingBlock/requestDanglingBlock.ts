@@ -17,24 +17,12 @@ export default async function requestDanglingBlock(
         message,
         cipherKeyForTheMessage,
         messageType,
-        file,
       } = requestBlockData;
-
-      const {
-        createReadStream, filename, mimetype,
-      } = await file;
-      const stream = createReadStream(filename);
-
-      console.log({ stream, mimetype });
 
       const newRequestedBlock = new RequestBlockModel({
         message: encryptMessageForRequestedBlock(message, cipherKeyForTheMessage),
         userId: context.user._id,
         messageType,
-        file: {
-          data: stream,
-          type: mimetype,
-        },
       });
       await newRequestedBlock.save();
       redisClient.del(REDIS_KEYS.MY_REQUESTED_BLOCKS);

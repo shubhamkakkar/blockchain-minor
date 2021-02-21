@@ -2,17 +2,6 @@ import { Schema, model } from 'mongoose';
 
 import { RequestedBlockMessage } from 'src/generated/graphql';
 
-const FileSchema = new Schema({
-  data: {
-    type: Buffer,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-});
-
 const RequestBlockSchema = new Schema(
   {
     message: {
@@ -30,10 +19,6 @@ const RequestBlockSchema = new Schema(
         RequestedBlockMessage.MedicalReports,
         RequestedBlockMessage.PersonalMedicalInformation,
       ],
-      required: true,
-    },
-    file: {
-      type: FileSchema,
       required: true,
     },
     requestAt: {

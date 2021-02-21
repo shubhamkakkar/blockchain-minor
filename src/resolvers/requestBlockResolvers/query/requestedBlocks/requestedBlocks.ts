@@ -5,9 +5,11 @@ import userHash from 'src/utis/userHash/userHash';
 import { Context } from 'src/context';
 import { REDIS_KEYS } from 'src/constants';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { QueryRequestedBlocksArgs } from 'src/generated/graphql';
 
 export default async function requestedBlocks(
-  { req: context, redisClient, customRedisGet }: Context, isUserOnly = false,
+  { isUserOnly }: QueryRequestedBlocksArgs,
+  { req: context, redisClient, customRedisGet }: Context,
 ) {
   try {
     if (context.user) {
@@ -18,26 +20,21 @@ export default async function requestedBlocks(
       }
       const searchCondition = isUserOnly ? { userId: { $in: [context.user?._id] } } : {};
       const requestBlocks = await RequestBlockModel.find(searchCondition);
-      let modifiedRequestedBlocks = [];
+      const modifiedRequestedBlocks: any[] = [];
       if (isUserOnly) {
-        modifiedRequestedBlocks = requestBlocks.map(
-          (requestedBlock) => ({
-            user: context.user,
-            ...requestedBlock.toObject(),
-          }),
-        );
-      } else {
-        modifiedRequestedBlocks = requestBlocks.map(
-          async (requestedBlock) => {
+        requestBlocks.forEach(
+          (requestedBlock) => {
             const objectifiedRequestedBlock = requestedBlock.toObject();
-            const { userId: ownerId, ...restBlockFields } = objectifiedRequestedBlock;
-            const user = await userHash(ownerId);
-            return {
-              user,
-              ...restBlockFields,
-            };
+            objectifiedRequestedBlock.user = context.user;
+            modifiedRequestedBlocks.push(objectifiedRequestedBlock);
           },
         );
+      } else {
+        for (const requestedBlock of requestBlocks) {
+          const objectifiedRequestedBlock = requestedBlock.toObject();
+          objectifiedRequestedBlock.user = await userHash(objectifiedRequestedBlock.userId);
+          modifiedRequestedBlocks.push(objectifiedRequestedBlock);
+        }
       }
       redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(modifiedRequestedBlocks));
       return modifiedRequestedBlocks;

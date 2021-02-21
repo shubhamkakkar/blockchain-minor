@@ -18,7 +18,6 @@ export type Context = {
   },
   redisClient: RedisClient,
   customRedisGet: (key: string) => Promise<any>,
-  gfs: any
 }
 
 const client = redis.createClient({
@@ -55,10 +54,10 @@ async function checkAuth(req: IRequest) {
   return user;
 }
 
-async function context({ req, gfs }: { req: IRequest, gfs: any}): Promise<Context> {
+async function context({ req }: { req: IRequest}): Promise<Context> {
   try {
     return {
-      req: { user: await checkAuth(req) }, redisClient: client, customRedisGet, gfs,
+      req: { user: await checkAuth(req) }, redisClient: client, customRedisGet,
     };
   } catch (e) {
     console.log('context e()', e);

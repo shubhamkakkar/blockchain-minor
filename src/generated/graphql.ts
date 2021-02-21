@@ -39,6 +39,11 @@ export type QueryLoginArgs = {
 };
 
 
+export type QueryRequestedBlocksArgs = {
+  isUserOnly?: Maybe<Scalars['Boolean']>;
+};
+
+
 export type QueryReceivedBlockArgs = {
   receivedBlockArgs: ReceivedBlockArgs;
 };
@@ -166,18 +171,10 @@ export type TAcceptDeclineCount = {
   rejectCount: Scalars['Int'];
 };
 
-export type File = {
-  __typename?: 'File';
-  filename: Scalars['String'];
-  mimetype: Scalars['String'];
-  encoding: Scalars['String'];
-};
-
 export type TRequestDanglingBlock = {
   cipherKeyForTheMessage: Scalars['String'];
   message: Scalars['String'];
   messageType: RequestedBlockMessage;
-  file: Scalars['Upload'];
 };
 
 export type TAcceptDenyParams = {
@@ -344,7 +341,6 @@ export type ResolversTypes = {
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
-  File: ResolverTypeWrapper<File>;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ResolverTypeWrapper<ReceivedBlock>;
@@ -377,7 +373,6 @@ export type ResolversParentTypes = {
   TRequestedDanglingBlock: TRequestedDanglingBlock;
   Int: Scalars['Int'];
   TAcceptDeclineCount: TAcceptDeclineCount;
-  File: File;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
   ReceivedBlock: ReceivedBlock;
@@ -401,7 +396,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
+  requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType, RequireFields<QueryRequestedBlocksArgs, never>>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
   sharedBlocks?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
@@ -492,13 +487,6 @@ export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
-  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
 export type ReceivedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReceivedBlock'] = ResolversParentTypes['ReceivedBlock']> = {
   sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   sharedBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -557,7 +545,6 @@ export type Resolvers<ContextType = any> = {
   ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
-  File?: FileResolvers<ContextType>;
   ReceivedBlock?: ReceivedBlockResolvers<ContextType>;
   DecryptedReceivedBlock?: DecryptedReceivedBlockResolvers<ContextType>;
   SharedBlock?: SharedBlockResolvers<ContextType>;

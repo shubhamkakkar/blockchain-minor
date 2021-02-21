@@ -21,17 +21,10 @@ export default gql`
         rejectCount: Int!
     }
 
-    type File {
-        filename: String!
-        mimetype: String!
-        encoding: String!
-    }
-    
     input TRequestDanglingBlock {
         cipherKeyForTheMessage: String!
         message: String!
         messageType: RequestedBlockMessage!
-        file: Upload!
     }
     
     input TAcceptDenyParams {
@@ -40,7 +33,7 @@ export default gql`
     }
     
     extend type Query {
-        requestedBlocks: [TRequestedDanglingBlock]!
+        requestedBlocks(isUserOnly: Boolean): [TRequestedDanglingBlock]!
         myRequestedBlocks: [TRequestedDanglingBlock]!
     }
     
