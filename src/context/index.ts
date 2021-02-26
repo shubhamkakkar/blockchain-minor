@@ -40,14 +40,19 @@ async function checkAuth(req: IRequest) {
     const { id: userId } = await verifyToken(token);
     if (userId) {
       user = await customRedisGet(userId);
-      if (!user?._id) {
+      if (user?._id) {
         const dbUser = await UserModel.findById(userId).select('-password');
         if (dbUser) {
-          // console.log('dbUser', dbUser);
           const objectifiedUser = dbUser.toObject();
           client.set(userId, JSON.stringify(objectifiedUser));
           user = dbUser.toObject();
+        } else {
+          client.del();
+          user = undefined;
         }
+      } else {
+        client.del();
+        user = undefined;
       }
     }
   }

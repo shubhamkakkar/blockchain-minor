@@ -23,6 +23,7 @@ export type Query = {
   allUsers: Array<Maybe<User>>;
   user: User;
   requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
+  isAlreadyVoted: Scalars['Boolean'];
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   publicLedger: Array<Maybe<TPublicLedger>>;
   sharedBlocks: Array<SharedBlock>;
@@ -41,6 +42,11 @@ export type QueryLoginArgs = {
 
 export type QueryRequestedBlocksArgs = {
   isUserOnly?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QueryIsAlreadyVotedArgs = {
+  blockId: Scalars['ID'];
 };
 
 
@@ -329,12 +335,12 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   TSignupArgs: ResolverTypeWrapper<TSignupArgs>;
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   User: ResolverTypeWrapper<User>;
   ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
   RequestedBlockMessage: RequestedBlockMessage;
@@ -362,12 +368,12 @@ export type ResolversParentTypes = {
   Query: {};
   Boolean: Scalars['Boolean'];
   String: Scalars['String'];
+  ID: Scalars['ID'];
   Mutation: {};
   Subscription: {};
   TSignupArgs: TSignupArgs;
   TLoginArgs: TLoginArgs;
   ReturnedUser: ReturnedUser;
-  ID: Scalars['ID'];
   User: User;
   ReturnedUserSignup: ReturnedUserSignup;
   TRequestedDanglingBlock: TRequestedDanglingBlock;
@@ -397,6 +403,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType, RequireFields<QueryRequestedBlocksArgs, never>>;
+  isAlreadyVoted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsAlreadyVotedArgs, 'blockId'>>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
   sharedBlocks?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;

@@ -1,7 +1,9 @@
 import { acceptDeclineBlock, requestDanglingBlock } from './mutation';
-import { requestedBlocks } from './query';
+import { requestedBlocks, isAlreadyVoted } from './query';
 
-import { TRequestDanglingBlock, TAcceptDenyParams, QueryRequestedBlocksArgs } from 'src/generated/graphql';
+import {
+ TRequestDanglingBlock, TAcceptDenyParams, QueryRequestedBlocksArgs, QueryIsAlreadyVotedArgs,
+} from 'src/generated/graphql';
 import { Context } from 'src/context';
 
 export default {
@@ -12,6 +14,9 @@ export default {
     myRequestedBlocks: (
       parent: any, args: any, context: Context,
     ) => requestedBlocks({ isUserOnly: true }, context),
+    isAlreadyVoted: (
+      parent: any, args: QueryIsAlreadyVotedArgs, context: Context,
+    ) => isAlreadyVoted(args, context),
   },
   Mutation: {
     requestDanglingBlock: (

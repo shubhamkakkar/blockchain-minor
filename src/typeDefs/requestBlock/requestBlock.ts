@@ -34,6 +34,7 @@ export default gql`
     
     extend type Query {
         requestedBlocks(isUserOnly: Boolean): [TRequestedDanglingBlock]!
+        isAlreadyVoted(blockId: ID!): Boolean!
         myRequestedBlocks: [TRequestedDanglingBlock]!
     }
     
