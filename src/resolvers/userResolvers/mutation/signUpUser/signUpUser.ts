@@ -31,13 +31,11 @@ export default function signUpUser(args: TSignupArgs, { redisClient }: Context) 
     .findOne({ email })
     .then(async (user: any) => {
       if (user) {
-        console.log({ user });
         return new GraphQLError('user already exists');
       }
 
       const cryptPassword = await generatePasswordCrypt(password);
       const { privateKey, publicKey } = await userProfileKeys();
-
       const newUser = new UserModel({
         firstName,
         lastName,

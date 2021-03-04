@@ -4,6 +4,7 @@ import UserModel from 'src/models/UserModel';
 import { ReturnedUser } from 'src/generated/graphql';
 import { Context } from 'src/context';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { resetUsersCache } from 'src/utis/redis/redis';
 
 export default async function makeUserAdmin(
   userId: string, { req: context, redisClient }: Context,
@@ -26,7 +27,7 @@ export default async function makeUserAdmin(
             role: 'admin',
           },
         );
-        redisClient.del(user._id);
+        resetUsersCache(redisClient);
         return true;
       }
       return new GraphQLError('User not found');

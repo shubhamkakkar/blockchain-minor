@@ -7,10 +7,10 @@ export default async function deletedTheBlockAndMoveToBlockchain(
   message: string, blockId: string, ownerId: string,
 ) {
   try {
-    const lastElementOfBlockchain = await BlockModel.find().slice('array', -1).lean() as TBlock[];
+    const [lastElementOfBlockchain] = await BlockModel.find().slice('array', 0).lean() as TBlock[];
     let block;
-    if (lastElementOfBlockchain.length) {
-      block = new Block({ prevHash: lastElementOfBlockchain[0].prevHash, data: message });
+    if (lastElementOfBlockchain) {
+      block = new Block({ prevHash: lastElementOfBlockchain.prevHash, data: message });
     } else {
       block = new Block({ prevHash: '0', data: message });
     }

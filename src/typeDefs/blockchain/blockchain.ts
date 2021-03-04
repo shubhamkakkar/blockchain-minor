@@ -24,7 +24,9 @@ export default gql`
         data: String!
         ownerId: ID!
         shared: [SharedBlock!]!
-        createdAt: Date
+        createdAt: Date!
+        prevHash: String!
+        hash: String!
     }
     
     type MyBlock {

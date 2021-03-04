@@ -25,7 +25,7 @@ export default async function acceptDeclineBlock(
         const contract = new ValidationContract();
         contract.isRequired(blockId, 'blockId is required');
         if (!contract.isValid()) {
-          return new GraphQLError(contract.errors() || 'Review Signup information');
+          return new GraphQLError(contract.errors() || 'Review information');
         }
 
         const keyToUpdate = isAccept ? 'acceptCount' : 'rejectCount';
@@ -47,17 +47,26 @@ export default async function acceptDeclineBlock(
 
           requestedBlock.update(
             { $inc: { [keyToUpdate]: 1 }, $push: { votedUsers: context.user._id } },
+            async (er) => {
+              if (er) {
+                return new GraphQLError(er);
+              }
+              const adminUserCount = await UserModel
+                .countDocuments({ _id: { $ne: userId }, role: 'admin' });
+
+              if (isAccept) {
+                if (adminUserCount === 1 || ((acceptCount + 1) >= 0.51 * adminUserCount)) {
+                  await deletedTheBlockAndMoveToBlockchain(message, blockId, userId);
+                  resetPublicLedgerCache(redisClient);
+                }
+              } else if (adminUserCount === 1 || (rejectCount + 1) >= 0.51 * adminUserCount) {
+                await deletedTheBlock(blockId);
+              }
+              resetDanglingBlocksCache(redisClient);
+              return 0;
+            },
           );
 
-          const adminUserCount = await UserModel
-            .countDocuments({ _id: { $ne: context.user._id }, role: 'admin' });
-          if (((acceptCount + 1) >= 0.51 * adminUserCount) || adminUserCount === 1) {
-            await deletedTheBlockAndMoveToBlockchain(message, blockId, userId);
-            resetPublicLedgerCache(redisClient);
-          } else if (rejectCount >= 0.51 * adminUserCount) {
-            await deletedTheBlock(blockId);
-          }
-          resetDanglingBlocksCache(redisClient);
           return {
             acceptCount: isAccept ? acceptCount + 1 : acceptCount,
             rejectCount: isAccept ? rejectCount : rejectCount + 1,

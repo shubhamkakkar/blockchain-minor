@@ -13,7 +13,6 @@ export default async function publicLedger(
   if (context.user) {
     const condition:FilterQuery<any> = {};
     const redisKey = myEntries ? 'MY_ENTRIES' : 'ALL_ENTRIES';
-
     try {
       const cachedPublicLedger = await customRedisGet(REDIS_KEYS[redisKey]);
       if (cachedPublicLedger) {
@@ -23,13 +22,13 @@ export default async function publicLedger(
         condition.ownerId = context.user?._id;
       }
       const blocks = await BlockModel
-        .find(condition, {
-          data: 1, ownerId: 1, shared: 1, createdAt: 1,
-        })
+        .find(condition)
+        .select('-nounce-timeStamp')
         .populate({
           path: 'shared',
           populate: 'recipientUser',
-        }).lean();
+        })
+        .sort([['createdAt', 'descending']]);
       redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(blocks));
       return blocks;
     } catch (e) {
