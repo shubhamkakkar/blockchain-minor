@@ -5,6 +5,7 @@ import { ReturnedUser } from 'src/generated/graphql';
 import { Context } from 'src/context';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
 import { resetUsersCache } from 'src/utis/redis/redis';
+import { USER_ROLE_TYPE } from 'src/constants';
 
 export default async function makeUserAdmin(
   userId: string, { req: context, redisClient }: Context,
@@ -13,10 +14,10 @@ export default async function makeUserAdmin(
     if (!context.user) {
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');
     }
-    if (context.user?.role === 'admin') {
+    if (context.user?.role === USER_ROLE_TYPE.ADMIN) {
       const user = await UserModel.findById(userId).lean() as unknown as ReturnedUser;
       if (user) {
-        if (user.role === 'admin') {
+        if (user.role === USER_ROLE_TYPE.ADMIN) {
           return new GraphQLError('User is already admin');
         }
         await UserModel.findOneAndUpdate(
@@ -24,7 +25,7 @@ export default async function makeUserAdmin(
             _id: userId,
           },
           {
-            role: 'admin',
+            role: USER_ROLE_TYPE.ADMIN,
           },
         );
         resetUsersCache(redisClient);

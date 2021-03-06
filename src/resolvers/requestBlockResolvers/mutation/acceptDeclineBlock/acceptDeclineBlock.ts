@@ -10,6 +10,7 @@ import ValidationContract from 'src/utis/validator/validator';
 import { Context } from 'src/context';
 import { resetPublicLedgerCache, resetDanglingBlocksCache } from 'src/utis/redis/redis';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { USER_ROLE_TYPE } from 'src/constants';
 
 export default async function acceptDeclineBlock(
   { acceptDenyParams }: { acceptDenyParams: TAcceptDenyParams },
@@ -21,7 +22,7 @@ export default async function acceptDeclineBlock(
         blockId,
         isAccept,
       } = acceptDenyParams;
-      if (context.user.role === 'admin') {
+      if (context.user.role === USER_ROLE_TYPE.ADMIN) {
         const contract = new ValidationContract();
         contract.isRequired(blockId, 'blockId is required');
         if (!contract.isValid()) {
@@ -52,7 +53,7 @@ export default async function acceptDeclineBlock(
                 return new GraphQLError(er);
               }
               const adminUserCount = await UserModel
-                .countDocuments({ _id: { $ne: userId }, role: 'admin' });
+                .countDocuments({ _id: { $ne: userId }, role: USER_ROLE_TYPE.ADMIN });
 
               if (isAccept) {
                 if (adminUserCount === 1 || ((acceptCount + 1) >= 0.51 * adminUserCount)) {

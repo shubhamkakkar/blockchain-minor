@@ -27,4 +27,6 @@ enum USER_ROLE_TYPE {
   ADMIN = 'admin',
 }
 
-export { MONGO_DB, REDIS_DB, REDIS_KEYS, USER_ROLE_TYPE };
+export {
+  MONGO_DB, REDIS_DB, REDIS_KEYS, USER_ROLE_TYPE,
+};

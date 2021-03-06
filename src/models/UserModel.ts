@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { USER_ROLE_TYPE } from 'src/constants';
+
 const UserSchema = new Schema(
   {
     firstName: {
@@ -28,7 +30,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      default: 'user',
+      default: USER_ROLE_TYPE.USER,
     },
   },
   { collection: 'User' },
