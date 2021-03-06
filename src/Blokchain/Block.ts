@@ -1,32 +1,36 @@
 // @ts-ginore
 import { sha256 } from 'js-sha256';
 
+import { RequestedBlockMessage } from 'src/generated/graphql';
+
 export type TBlockConstructor = {
   data: any;
   prevHash: string;
+  messageType: RequestedBlockMessage
 };
 
-export type TBlock = {
+export interface TBlock extends TBlockConstructor {
   timeStamp?: number;
-  data: any;
-  prevHash: string;
   hash: string;
   nounce: number;
-};
+}
 
 class Block {
   timeStamp: number;
 
   data: any;
 
+  messageType: RequestedBlockMessage;
+
   prevHash: string;
 
   hash: string;
 
   nounce: number;
 
-  constructor({ data, prevHash }: TBlockConstructor) {
+  constructor({ data, prevHash, messageType }: TBlockConstructor) {
     this.data = data;
+    this.messageType = messageType;
     this.prevHash = prevHash;
     this.timeStamp = Date.now();
     this.nounce = 1;

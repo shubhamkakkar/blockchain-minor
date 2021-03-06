@@ -36,6 +36,7 @@ export default async function acceptDeclineBlock(
             rejectCount,
             acceptCount,
             message,
+            messageType,
             userId,
             votedUsers,
           } = requestedBlock.toObject();
@@ -57,7 +58,7 @@ export default async function acceptDeclineBlock(
 
               if (isAccept) {
                 if (adminUserCount === 1 || ((acceptCount + 1) >= 0.51 * adminUserCount)) {
-                  await deletedTheBlockAndMoveToBlockchain(message, blockId, userId);
+                  await deletedTheBlockAndMoveToBlockchain(message, messageType, blockId, userId);
                   resetPublicLedgerCache(redisClient);
                 }
               } else if (adminUserCount === 1 || (rejectCount + 1) >= 0.51 * adminUserCount) {

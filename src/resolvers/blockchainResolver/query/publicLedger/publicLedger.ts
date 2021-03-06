@@ -14,14 +14,14 @@ export default async function publicLedger(
   if (context.user) {
     const isAdmin = context.user?.role === USER_ROLE_TYPE.ADMIN;
     const condition:FilterQuery<any> = {};
+    const redisKey = isAdmin ? 'ALL_ENTRIES_ADMIN' : 'ALL_ENTRIES';
     try {
       if (!myEntries) {
-        const cachedPublicLedger = await customRedisGet(REDIS_KEYS.ALL_ENTRIES);
+        const cachedPublicLedger = await customRedisGet(REDIS_KEYS[redisKey]);
         if (cachedPublicLedger) {
           return cachedPublicLedger;
         }
-      }
-      if (myEntries) {
+      } else {
         condition.ownerId = context.user?._id;
       }
       const blocks = await BlockModel
@@ -39,11 +39,11 @@ export default async function publicLedger(
           objectifiedBlock.ownerProfile = await userHash(objectifiedBlock.ownerId, false);
           modifiedBlock.push(objectifiedBlock);
         }
-        redisClient.set(REDIS_KEYS.ALL_ENTRIES, JSON.stringify(modifiedBlock));
+        redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(modifiedBlock));
         return modifiedBlock;
       }
 
-      if (!myEntries) redisClient.set(REDIS_KEYS.ALL_ENTRIES, JSON.stringify(blocks));
+      if (!myEntries) redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(blocks));
       return blocks;
     } catch (e) {
       return errorHandler('publicLedger', e);

@@ -9,6 +9,7 @@ const REDIS_KEYS = {
   REQUESTED_BLOCKS: 'requestedBlocks/requestedBlocks',
   MY_ENTRIES: 'publicLedger/myEntries',
   ALL_ENTRIES: 'publicLedger/allEntries',
+  ALL_ENTRIES_ADMIN: 'publicLedger/allEntriesAdmin',
   MY_RECEIVED_BLOCKS: 'publicLedger/myReceivedBlocks',
   MY_SHARED_BLOCKS: 'publicLedger/mySharedBlocks',
 };

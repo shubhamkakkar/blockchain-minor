@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { RequestedBlockMessage } from 'src/generated/graphql';
+
 const sharedSchema = new Schema({
   encryptedMessage: {
     type: String,
@@ -19,6 +21,10 @@ const BlockModel = new Schema(
   {
     data: {
       type: String,
+      required: true,
+    },
+    messageType: {
+      type: RequestedBlockMessage,
       required: true,
     },
     prevHash: {

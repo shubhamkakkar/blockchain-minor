@@ -4,6 +4,7 @@ import { REDIS_KEYS } from 'src/constants';
 
 export function resetPublicLedgerCache(redisClient: RedisClient) {
   redisClient.del(REDIS_KEYS.ALL_ENTRIES);
+  redisClient.del(REDIS_KEYS.ALL_ENTRIES_ADMIN);
   redisClient.del(REDIS_KEYS.MY_ENTRIES);
   redisClient.del(REDIS_KEYS.MY_RECEIVED_BLOCKS);
   redisClient.del(REDIS_KEYS.MY_SHARED_BLOCKS);

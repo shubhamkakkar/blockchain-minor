@@ -19,7 +19,9 @@ export default async function requestedBlocks(
         return cachedRequestedBlocks;
       }
       const searchCondition = isUserOnly ? { userId: { $in: [context.user?._id] } } : {};
-      const requestBlocks = await RequestBlockModel.find(searchCondition);
+      const requestBlocks = await RequestBlockModel
+        .find(searchCondition)
+        .sort([['createdAt', 'requestAt']]);
       const modifiedRequestedBlocks: any[] = [];
       if (isUserOnly) {
         requestBlocks.forEach(
