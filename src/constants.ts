@@ -22,4 +22,9 @@ const REDIS_DB = {
   REDIS_DB_PORT,
 };
 
-export { MONGO_DB, REDIS_DB, REDIS_KEYS };
+enum USER_ROLE_TYPE {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
+export { MONGO_DB, REDIS_DB, REDIS_KEYS, USER_ROLE_TYPE };

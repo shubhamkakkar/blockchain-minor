@@ -27,6 +27,7 @@ export default gql`
         createdAt: Date!
         prevHash: String!
         hash: String!
+        ownerProfile: User
     }
     
     type MyBlock {

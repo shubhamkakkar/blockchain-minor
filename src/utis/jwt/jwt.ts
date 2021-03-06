@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import { ReturnedUser } from 'src/generated/graphql';
 import UserModel from 'src/models/UserModel';
+import { GraphQLError } from 'graphql';
 
 type TokenContent = {
   error?: any
