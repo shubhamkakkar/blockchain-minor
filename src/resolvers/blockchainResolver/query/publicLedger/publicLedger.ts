@@ -26,12 +26,13 @@ export default async function publicLedger(
       }
       const blocks = await BlockModel
         .find(condition)
-        .select('-nounce-timeStamp')
+        // .select('-nounce-timeStamp-prevHash')
         .populate({
           path: 'shared',
           populate: 'recipientUser',
         })
         .sort([['createdAt', 'descending']]);
+        console.log({blocks });
       if (isAdmin && !myEntries) {
         const modifiedBlock = [];
         for (const block of blocks) {

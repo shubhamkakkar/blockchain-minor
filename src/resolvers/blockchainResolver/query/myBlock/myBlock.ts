@@ -14,14 +14,17 @@ export default async function myBlock(
     if (!context.user) {
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');
     }
-    const block = await BlockModel.findById(args.blockId).lean() as unknown as TPublicLedger;
+    const block = await BlockModel
+      .findById(args.blockId)
+      .select(['data', 'prevHash', 'ownerId', '-_id'])
+      .lean() as any;
     if (block) {
       if (block.ownerId.toString() === context.user._id.toString()) {
         const message = decryptMessageForRequestedBlock(
           `${block.data}`, args.cipherTextOfBlock,
         ) as string;
         if (message) {
-          block.data = message;
+          block.data = JSON.stringify(message);
           return block;
         }
         return new GraphQLError('cipherTextOfBlock is incorrect');

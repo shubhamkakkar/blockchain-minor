@@ -25,15 +25,14 @@ export default gql`
         ownerId: ID!
         shared: [SharedBlock!]!
         createdAt: Date!
-        prevHash: String!
         hash: String!
         ownerProfile: User
+        messageType: RequestedBlockMessage
     }
     
     type MyBlock {
         data: String!
-        shared: [SharedBlock!]!
-        createdAt: Date
+        prevHash: String!
     }
     
     type TSharedBlockResponse {
