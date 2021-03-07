@@ -4,8 +4,8 @@ import { TRequestDanglingBlock } from 'src/generated/graphql';
 import { encryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import RequestBlockModel from 'src/models/RequestBlockModel';
 import { Context } from 'src/context';
-import { REDIS_KEYS } from 'src/constants';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { resetDanglingBlocksCache } from 'src/utis/redis/redis';
 
 export default async function requestDanglingBlock(
   { requestBlockData }: { requestBlockData: TRequestDanglingBlock },
@@ -25,8 +25,7 @@ export default async function requestDanglingBlock(
         messageType,
       });
       await newRequestedBlock.save();
-      redisClient.del(REDIS_KEYS.MY_REQUESTED_BLOCKS);
-      redisClient.del(REDIS_KEYS.REQUESTED_BLOCKS);
+      resetDanglingBlocksCache(redisClient);
       return newRequestedBlock.toObject();
     }
     return new GraphQLError('AUTHENTICATION NOT PROVIDED');
