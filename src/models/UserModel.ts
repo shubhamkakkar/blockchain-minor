@@ -36,4 +36,8 @@ const UserSchema = new Schema(
   { collection: 'User' },
 );
 
+UserSchema.index({
+  firstName: 'text', lastName: 'text', middleName: 'text', email: 'text',
+});
+
 export default model('User', UserSchema);

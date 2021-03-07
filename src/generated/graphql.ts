@@ -22,6 +22,7 @@ export type Query = {
   login: ReturnedUser;
   allUsers: Array<Maybe<User>>;
   user: User;
+  searchUser: Array<Maybe<User>>;
   requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   isAlreadyVoted: Scalars['Boolean'];
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
@@ -37,6 +38,11 @@ export type Query = {
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type QuerySearchUserArgs = {
+  filter: Scalars['String'];
 };
 
 
@@ -215,15 +221,15 @@ export type TPublicLedger = {
   ownerId: Scalars['ID'];
   shared: Array<SharedBlock>;
   createdAt: Scalars['DateTime'];
-  prevHash: Scalars['String'];
   hash: Scalars['String'];
+  ownerProfile?: Maybe<User>;
+  messageType?: Maybe<RequestedBlockMessage>;
 };
 
 export type MyBlock = {
   __typename?: 'MyBlock';
   data: Scalars['String'];
-  shared: Array<SharedBlock>;
-  createdAt?: Maybe<Scalars['DateTime']>;
+  prevHash: Scalars['String'];
 };
 
 export type TSharedBlockResponse = {
@@ -404,6 +410,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  searchUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QuerySearchUserArgs, 'filter'>>;
   requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType, RequireFields<QueryRequestedBlocksArgs, never>>;
   isAlreadyVoted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsAlreadyVotedArgs, 'blockId'>>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
@@ -522,15 +529,15 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   shared?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  messageType?: Resolver<Maybe<ResolversTypes['RequestedBlockMessage']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type MyBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlock'] = ResolversParentTypes['MyBlock']> = {
   data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  shared?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

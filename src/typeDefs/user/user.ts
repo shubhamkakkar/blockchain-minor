@@ -56,6 +56,7 @@ export default gql`
         
         allUsers : [User]!
         user: User!
+        searchUser(filter: String!): [User]!
     }
 
     extend type Mutation {
