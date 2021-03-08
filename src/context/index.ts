@@ -6,7 +6,7 @@ import redis, { RedisClient } from 'redis';
 import { verifyToken } from 'src/utis/jwt/jwt';
 import { ReturnedUser } from 'src/generated/graphql';
 import UserModel from 'src/models/UserModel';
-import { REDIS_DB } from 'src/constants';
+import { REDIS_DB, REDIS_KEYS, REDIS_KEY_DURATION } from 'src/constants';
 
 interface IRequest extends express.Request {
   user?: ReturnedUser
@@ -18,6 +18,7 @@ export type Context = {
   },
   redisClient: RedisClient,
   customRedisGet: (key: string) => Promise<any>,
+  customRedisSetEx: (key: string, value: any, seconds?: REDIS_KEY_DURATION) => Promise<any>
 }
 
 const client = redis.createClient({
@@ -32,6 +33,10 @@ const customRedisGet = async (key: string) => {
   }
   return null;
 };
+
+const customRedisSetEx = async (
+  key: string, value: any, seconds = REDIS_KEY_DURATION.TEN_MINUTES,
+) => promisify(client.setex).bind(client)(key, seconds, JSON.stringify(value));
 
 async function checkAuth(req: IRequest) {
   const token = req.headers.authorization;
@@ -52,7 +57,7 @@ async function checkAuth(req: IRequest) {
 async function context({ req }: { req: IRequest}): Promise<Context> {
   try {
     return {
-      req: { user: await checkAuth(req) }, redisClient: client, customRedisGet,
+      req: { user: await checkAuth(req) }, redisClient: client, customRedisGet, customRedisSetEx,
     };
   } catch (e) {
     console.log('context e()', e);

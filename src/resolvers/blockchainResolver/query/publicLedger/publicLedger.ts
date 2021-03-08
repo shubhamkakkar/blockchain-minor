@@ -32,7 +32,6 @@ export default async function publicLedger(
           populate: 'recipientUser',
         })
         .sort([['createdAt', 'descending']]);
-        console.log({blocks });
       if (isAdmin && !myEntries) {
         const modifiedBlock = [];
         for (const block of blocks) {
