@@ -30,19 +30,22 @@ services:
     working_dir: /usr/src/blockchain-minor-node
     command: bash -c "
       yarn &&
-      yarn start"
+      yarn clean &&
+      yarn tsc &&
+      yarn start:build"
     ports:
       - 4001:4001
     depends_on:
       - blockchain-minor-mongodb
       - blockchain-minor-redis  
     environment:
-      - MONGO_URI_DEV=mongodb://root:rootpassword@0.0.0.0:27017/blockchain-minor?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+      - MONGO_URI_DEV=mongodb://root:rootpassword@blockchain-minor-mongodb:27017/blockchain-minor?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
       - PORT=4001
       - SCHEMA_PATH=http://0.0.0.0:4001
       - REDIS_URL=redis://redis-docker
       - REDIS_DB_PORT=6379
-      - REDIS_DB_HOST=redis
+      - REDIS_DB_HOST=blockchain-minor-redis
     links:
       - blockchain-minor-mongodb
       - blockchain-minor-redis
+ 
