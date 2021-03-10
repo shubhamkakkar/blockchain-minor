@@ -10,12 +10,16 @@
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "format": "prettier --write src/**/*.ts",
     "lintFormat": "eslint src/**/*.ts --fix",
-    "build": "tsc && yarn run start:build",
-    "start:build": "node dist"
+    "tsc": "tsc",
+    "start:build": "node dist",
+    "clean": "rimraf dist"
   },
   "eslintIgnore": [
     "src/generated/graphql.ts"
   ],
+  "_moduleAliases": {
+    "src": "dist/"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -32,6 +36,7 @@
     "hybrid-crypto-js": "^0.2.4",
     "js-sha256": "^0.9.0",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "mongoose": "^5.10.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
@@ -63,9 +68,9 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "heroku": "^7.47.5",
     "prettier": "^2.1.1",
+    "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.12.1",
-    "typescript": "^4.0.2",
-    "ts-node": "^9.0.0"
+    "typescript": "^4.0.2"
   }
 }
