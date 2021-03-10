@@ -1,22 +1,31 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
     "module": "commonjs",
     "target": "ES2019",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "dist",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
     },
-    "rootDirs": ["src"]
+    "rootDirs": ["src"],
   },
- "exclude": [
+  "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "src/typeDefs/index.ts",
+    "src/**/*",
+    "src/constants.ts",
   ]
 }

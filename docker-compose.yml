@@ -7,11 +7,10 @@ services:
     volumes:
       - ./blockchain-minor-redis:/data:cached
     ports:
-      - 6379:6379
+      - 6379:6379      
   blockchain-minor-mongodb:
     container_name: blockchain-minor-mongodb
     image: mongo:latest
-    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
@@ -19,4 +18,31 @@ services:
       - ./blockchain-minor-mongodb:/data:cached
     ports:
       - 27017:27017
+    build: .
     working_dir: /var/lib/mongodb
+  blockchain-minor-node:
+    container_name: blockchain-minor-node
+    image: node:10.17
+    build: .
+    volumes:
+      - ./:/usr/src/blockchain-minor-node:cached
+      - ./node_modules:/usr/src/blockchain-minor-node/node_modules:cached
+    working_dir: /usr/src/blockchain-minor-node
+    command: bash -c "
+      yarn &&
+      yarn start"
+    ports:
+      - 4001:4001
+    depends_on:
+      - blockchain-minor-mongodb
+      - blockchain-minor-redis  
+    environment:
+      - MONGO_URI_DEV=mongodb://root:rootpassword@0.0.0.0:27017/blockchain-minor?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+      - PORT=4001
+      - SCHEMA_PATH=http://0.0.0.0:4001
+      - REDIS_URL=redis://redis-docker
+      - REDIS_DB_PORT=6379
+      - REDIS_DB_HOST=redis
+    links:
+      - blockchain-minor-mongodb
+      - blockchain-minor-redis

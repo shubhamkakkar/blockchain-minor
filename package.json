@@ -2,14 +2,16 @@
   "name": "blockchain-minor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register index.ts",
-    "start-dev": "nodemon --exec ts-node -r tsconfig-paths/register index.ts",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start-dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "poststart": "yarn codegen",
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "format": "prettier --write src/**/*.ts",
-    "lintFormat": "eslint src/**/*.ts --fix"
+    "lintFormat": "eslint src/**/*.ts --fix",
+    "build": "tsc && yarn run start:build",
+    "start:build": "node dist"
   },
   "eslintIgnore": [
     "src/generated/graphql.ts"
@@ -33,8 +35,7 @@
     "mongoose": "^5.10.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
-    "redis": "^3.0.2",
-    "ts-node": "^9.0.0"
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.8",
@@ -64,6 +65,7 @@
     "prettier": "^2.1.1",
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.12.1",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "ts-node": "^9.0.0"
   }
 }

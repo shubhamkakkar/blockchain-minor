@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 dotenv.config();
-const { MONGO_URI_DEV = '', REDIS_DB_HOST, REDIS_DB_PORT } = process.env;
+const { MONGO_URI_DEV = '', REDIS_DB_HOST, REDIS_DB_PORT, REDIS_URL } = process.env;
 
 enum REDIS_KEYS {
   ALL_USERS = 'users/allUsers',
@@ -22,6 +22,7 @@ const MONGO_DB = {
 const REDIS_DB = {
   REDIS_DB_HOST,
   REDIS_DB_PORT,
+  REDIS_URL,
 };
 
 enum USER_ROLE_TYPE {
