@@ -39,10 +39,15 @@ export default gql`
         isSuccess: Boolean!
         errorMessage: String
     }
+
+    input RecipientUser {
+        userId: String!
+        publicKey: String!
+    }
     
     input TShareBlockArgs {
         blockId: ID!
-        recipientUserId: ID!
+        recipientUser: RecipientUser!
         cipherTextOfBlock: String!
         privateKey: String!
     }

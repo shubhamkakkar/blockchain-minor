@@ -26,7 +26,7 @@ export default async function publicLedger(
       }
       const blocks = await BlockModel
         .find(condition)
-        // .select('-nounce-timeStamp-prevHash')
+        .select('-nounce-timeStamp-prevHash')
         .populate({
           path: 'shared',
           populate: 'recipientUser',

@@ -1883,6 +1883,45 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "RecipientUser",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "userId",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "publicKey",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "TShareBlockArgs",
         "description": null,
         "fields": null,
@@ -1902,14 +1941,14 @@
             "defaultValue": null
           },
           {
-            "name": "recipientUserId",
+            "name": "recipientUser",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
+                "kind": "INPUT_OBJECT",
+                "name": "RecipientUser",
                 "ofType": null
               }
             },

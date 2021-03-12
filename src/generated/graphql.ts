@@ -238,9 +238,14 @@ export type TSharedBlockResponse = {
   errorMessage?: Maybe<Scalars['String']>;
 };
 
+export type RecipientUser = {
+  userId: Scalars['String'];
+  publicKey: Scalars['String'];
+};
+
 export type TShareBlockArgs = {
   blockId: Scalars['ID'];
-  recipientUserId: Scalars['ID'];
+  recipientUser: RecipientUser;
   cipherTextOfBlock: Scalars['String'];
   privateKey: Scalars['String'];
 };
@@ -363,6 +368,7 @@ export type ResolversTypes = {
   TPublicLedger: ResolverTypeWrapper<TPublicLedger>;
   MyBlock: ResolverTypeWrapper<MyBlock>;
   TSharedBlockResponse: ResolverTypeWrapper<TSharedBlockResponse>;
+  RecipientUser: RecipientUser;
   TShareBlockArgs: TShareBlockArgs;
   ReceivedBlockArgs: ReceivedBlockArgs;
   MyBlockArgs: MyBlockArgs;
@@ -395,6 +401,7 @@ export type ResolversParentTypes = {
   TPublicLedger: TPublicLedger;
   MyBlock: MyBlock;
   TSharedBlockResponse: TSharedBlockResponse;
+  RecipientUser: RecipientUser;
   TShareBlockArgs: TShareBlockArgs;
   ReceivedBlockArgs: ReceivedBlockArgs;
   MyBlockArgs: MyBlockArgs;
