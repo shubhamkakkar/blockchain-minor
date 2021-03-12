@@ -20,32 +20,32 @@ services:
       - 27017:27017
     build: .
     working_dir: /var/lib/mongodb
-  blockchain-minor-node:
-    container_name: blockchain-minor-node
-    image: node:10.17
-    build: .
-    volumes:
-      - ./:/usr/src/blockchain-minor-node:cached
-      - ./node_modules:/usr/src/blockchain-minor-node/node_modules:cached
-    working_dir: /usr/src/blockchain-minor-node
-    command: bash -c "
-      yarn &&
-      yarn clean &&
-      yarn tsc &&
-      yarn start:build"
-    ports:
-      - 4001:4001
-    depends_on:
-      - blockchain-minor-mongodb
-      - blockchain-minor-redis  
-    environment:
-      - MONGO_URI_DEV=mongodb://root:rootpassword@blockchain-minor-mongodb:27017/blockchain-minor?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
-      - PORT=4001
-      - SCHEMA_PATH=http://0.0.0.0:4001
-      - REDIS_URL=redis://redis-docker
-      - REDIS_DB_PORT=6379
-      - REDIS_DB_HOST=blockchain-minor-redis
-    links:
-      - blockchain-minor-mongodb
-      - blockchain-minor-redis
+  # blockchain-minor-node:
+  #   container_name: blockchain-minor-node
+  #   image: node:10.17
+  #   build: .
+  #   volumes:
+  #     - ./:/usr/src/blockchain-minor-node:cached
+  #     - ./node_modules:/usr/src/blockchain-minor-node/node_modules:cached
+  #   working_dir: /usr/src/blockchain-minor-node
+  #   command: bash -c "
+  #     yarn &&
+  #     yarn clean &&
+  #     yarn tsc &&
+  #     yarn start:build"
+  #   ports:
+  #     - 4001:4001
+  #   depends_on:
+  #     - blockchain-minor-mongodb
+  #     - blockchain-minor-redis  
+  #   environment:
+  #     - MONGO_URI_DEV=mongodb://root:rootpassword@blockchain-minor-mongodb:27017/blockchain-minor?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+  #     - PORT=4001
+  #     - SCHEMA_PATH=http://0.0.0.0:4001
+  #     - REDIS_URL=redis://redis-docker
+  #     - REDIS_DB_PORT=6379
+  #     - REDIS_DB_HOST=blockchain-minor-redis
+  #   links:
+  #     - blockchain-minor-mongodb
+  #     - blockchain-minor-redis
  
