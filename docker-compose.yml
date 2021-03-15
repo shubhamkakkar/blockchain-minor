@@ -29,7 +29,9 @@ services:
   #     - ./node_modules:/usr/src/blockchain-minor-node/node_modules:cached
   #   working_dir: /usr/src/blockchain-minor-node
   #   command: bash -c "
+  #     cp .env-example .env
   #     yarn &&
+  #     yarn codegen
   #     yarn clean &&
   #     yarn tsc &&
   #     yarn start:build"

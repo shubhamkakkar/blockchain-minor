@@ -37,6 +37,7 @@ export default async function shareBlock(
             errorMessage: 'Already shared with the user',
           };
         }
+        console.log({shareBlockArgs})
         try {
           const message = decryptMessageForRequestedBlock(
             `${block.data}`, shareBlockArgs.cipherTextOfBlock,

@@ -41,7 +41,7 @@ export default gql`
     }
 
     input RecipientUser {
-        userId: String!
+        userId: ID!
         publicKey: String!
     }
     
