@@ -239,7 +239,7 @@ export type TSharedBlockResponse = {
 };
 
 export type RecipientUser = {
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
   publicKey: Scalars['String'];
 };
 
