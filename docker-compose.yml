@@ -18,12 +18,10 @@ services:
       - ./blockchain-minor-mongodb:/data:cached
     ports:
       - 27017:27017
-    build: .
     working_dir: /var/lib/mongodb
   blockchain-minor-node:
     container_name: blockchain-minor-node
     image: node:10.17
-    build: .
     volumes:
       - ./:/usr/src/blockchain-minor-node:cached
       - ./node_modules:/usr/src/blockchain-minor-node/node_modules:cached
