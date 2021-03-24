@@ -7,6 +7,7 @@ import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
 import { Context } from 'src/context';
 import { resetPublicLedgerCache } from 'src/utis/redis/redis';
 import errorHandler from 'src/utis/errorHandler/errorHandler';
+import UserModel from 'src/models/UserModel';
 
 export default async function shareBlock(
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
@@ -20,63 +21,68 @@ export default async function shareBlock(
           message: 'You can\'t share the block to your self.',
         };
       }
-      const blockDB = await BlockModel
-        .findOne({
-          _id: shareBlockArgs.blockId,
-          ownerId: context.user._id,
-        });
+      const user = await UserModel.findById(shareBlockArgs.recipientUser.userId);
+      if (user) {
+        const blockDB = await BlockModel
+          .findOne({
+            _id: shareBlockArgs.blockId,
+            ownerId: context.user._id,
+          });
 
-      if (blockDB) {
-        const block = blockDB.toObject() as TPublicLedger;
-        if (block.shared.find((
-          { recipientUser },
-        ) => recipientUser._id.toString() === shareBlockArgs.recipientUser.userId.toString())
-        ) {
-          return {
-            isSuccess: false,
-            errorMessage: 'Already shared with the user',
-          };
-        }
-        console.log({shareBlockArgs})
-        try {
-          const message = decryptMessageForRequestedBlock(
-            `${block.data}`, shareBlockArgs.cipherTextOfBlock,
-          ) as string;
-          if (message) {
-            const encryptedMessage = stringEncryption(
-              {
-                message,
-                issuerPrivateKey: shareBlockArgs.privateKey,
-                receiverPublicKey: shareBlockArgs.recipientUser.publicKey,
-              },
-            );
-            await blockDB.update({
-              $push: {
-                shared: {
-                  encryptedMessage,
-                  recipientUser: shareBlockArgs.recipientUser.userId,
-                },
-              },
-            });
-            resetPublicLedgerCache(redisClient);
+        if (blockDB) {
+          const block = blockDB.toObject() as TPublicLedger;
+          if (block.shared.find((
+            { recipientUser },
+          ) => recipientUser._id.toString() === shareBlockArgs.recipientUser.userId.toString())
+          ) {
             return {
-              isSuccess: true,
+              isSuccess: false,
+              errorMessage: 'Already shared with the user',
             };
           }
-          return {
-            isSuccess: false,
-            errorMessage: 'Failed to authenticate the block',
-          };
-        } catch (e) {
-          return {
-            isSuccess: false,
-            errorMessage: e,
-          };
+
+          try {
+            const message = decryptMessageForRequestedBlock(
+              `${block.data}`, shareBlockArgs.cipherTextOfBlock,
+            ) as string;
+            if (message) {
+              const encryptedMessage = stringEncryption(
+                {
+                  message,
+                  issuerPrivateKey: shareBlockArgs.privateKey,
+                  receiverPublicKey: user?.toObject().publicKey,
+                },
+              );
+              await blockDB.update({
+                $push: {
+                  shared: {
+                    encryptedMessage,
+                    recipientUser: shareBlockArgs.recipientUser.userId,
+                  },
+                },
+              });
+              resetPublicLedgerCache(redisClient);
+              return {
+                isSuccess: true,
+              };
+            }
+            return {
+              isSuccess: false,
+              errorMessage: 'Failed to authenticate the block',
+            };
+          } catch (e) {
+            return {
+              isSuccess: false,
+              errorMessage: e,
+            };
+          }
         }
+      } else {
+        return new GraphQLError(
+          'No block found Or you are not the owner of the block, and hence can not share the block',
+        );
       }
-      return new GraphQLError(
-        'No block found Or you are not the owner of the block, and hence can not share the block',
-      );
+      return new GraphQLError('No user found');
     }
     return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {

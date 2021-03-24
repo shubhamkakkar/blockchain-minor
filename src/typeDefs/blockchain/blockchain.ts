@@ -42,7 +42,7 @@ export default gql`
 
     input RecipientUser {
         userId: ID!
-        publicKey: String!
+        publicKey: String
     }
     
     input TShareBlockArgs {
