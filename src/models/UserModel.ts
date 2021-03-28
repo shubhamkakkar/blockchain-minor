@@ -33,18 +33,18 @@ const UserSchema = new Schema(
       default: USER_ROLE_TYPE.USER,
     },
   },
-  { collection: 'User', autoIndex: true },
+  { collection: 'User' },
 );
 
-UserSchema.index({
-  firstName: 'text', lastName: 'text', middleName: 'text', email: 'text',
-});
+// UserSchema.index({
+//   firstName: 'text', lastName: 'text', middleName: 'text', email: 'text',
+// });
 
-UserSchema.index({
-  firstName: 1,
-  lastName: 1,
-  middleName: 1,
-  email: 1,
-});
+// UserSchema.index({
+//   firstName: 1,
+//   lastName: 1,
+//   middleName: 1,
+//   email: 1,
+// });
 
 export default model('User', UserSchema);

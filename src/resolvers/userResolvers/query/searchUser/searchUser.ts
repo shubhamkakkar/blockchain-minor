@@ -18,14 +18,14 @@ export default async function searchUser(
     if (cachedSearchUser) {
       return cachedSearchUser;
     }
-    const indexSearchResult = await UserModel.find(
-      { $text: { $search: filter } },
-    );
+    // const indexSearchResult = await UserModel.find(
+    //   { $text: { $search: filter } },
+    // );
 
-    if (indexSearchResult.length) {
-      customRedisSetEx(redisKey, indexSearchResult);
-      return indexSearchResult;
-    }
+    // if (indexSearchResult.length) {
+    //   customRedisSetEx(redisKey, indexSearchResult);
+    //   return indexSearchResult;
+    // }
     const regexUserSearch = await UserModel.find(
       {
         $or: [

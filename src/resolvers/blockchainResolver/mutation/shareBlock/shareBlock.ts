@@ -21,7 +21,7 @@ export default async function shareBlock(
           message: 'You can\'t share the block to your self.',
         };
       }
-      const user = await UserModel.findById(shareBlockArgs.recipientUser.userId);
+      const user = await UserModel.findById(shareBlockArgs.recipientUser.userId).select('_id');
       if (user) {
         const blockDB = await BlockModel
           .findOne({
@@ -50,7 +50,7 @@ export default async function shareBlock(
                 {
                   message,
                   issuerPrivateKey: shareBlockArgs.privateKey,
-                  receiverPublicKey: user?.toObject().publicKey,
+                  receiverPublicKey: shareBlockArgs.recipientUser.publicKey,
                 },
               );
               await blockDB.update({
@@ -71,6 +71,7 @@ export default async function shareBlock(
               errorMessage: 'Failed to authenticate the block',
             };
           } catch (e) {
+            console.log({ e });
             return {
               isSuccess: false,
               errorMessage: e,
