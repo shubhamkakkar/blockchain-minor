@@ -23,6 +23,7 @@ export default gql`
         lastName: String!
         middleName: String
         role: String!
+        privateKey: String!
     }
     
     type User {
@@ -35,19 +36,6 @@ export default gql`
         role: String!
     }
 
-
-    type ReturnedUserSignup {
-        _id: ID!
-        publicKey: String!
-        token: String!
-        email: String!
-        firstName: String!
-        lastName: String!
-        middleName: String
-        privateKey: String!
-        role: String!
-    }
-    
     extend type Query {
         login (
             email: String!
@@ -66,7 +54,7 @@ export default gql`
             firstName: String!,
             lastName: String!,
             middleName: String
-        ): ReturnedUserSignup!
+        ): ReturnedUser!
         
         makeUserAdmin (id: String!): Boolean!
     }

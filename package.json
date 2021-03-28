@@ -17,9 +17,6 @@
   "eslintIgnore": [
     "src/generated/graphql.ts"
   ],
-  "_moduleAliases": {
-    "src": "dist/"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

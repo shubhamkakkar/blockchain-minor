@@ -42,6 +42,7 @@ export default function signUpUser(args: TSignupArgs, { redisClient }: Context) 
         middleName,
         password: cryptPassword,
         publicKey,
+        privateKey,
         email,
       });
       await newUser.save();
@@ -49,7 +50,6 @@ export default function signUpUser(args: TSignupArgs, { redisClient }: Context) 
       resetUsersCache(redisClient);
       return {
         ...generatedUser,
-        privateKey,
         token: generateToken(generatedUser._id),
       };
     })

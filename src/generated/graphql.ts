@@ -68,7 +68,7 @@ export type QueryMyBlockArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
-  signUp: ReturnedUserSignup;
+  signUp: ReturnedUser;
   makeUserAdmin: Scalars['Boolean'];
   requestDanglingBlock: TRequestedDanglingBlock;
   acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
@@ -134,6 +134,7 @@ export type ReturnedUser = {
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
   role: Scalars['String'];
+  privateKey: Scalars['String'];
 };
 
 export type User = {
@@ -144,19 +145,6 @@ export type User = {
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
   publicKey: Scalars['String'];
-  role: Scalars['String'];
-};
-
-export type ReturnedUserSignup = {
-  __typename?: 'ReturnedUserSignup';
-  _id: Scalars['ID'];
-  publicKey: Scalars['String'];
-  token: Scalars['String'];
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  middleName?: Maybe<Scalars['String']>;
-  privateKey: Scalars['String'];
   role: Scalars['String'];
 };
 
@@ -240,14 +228,12 @@ export type TSharedBlockResponse = {
 
 export type RecipientUser = {
   userId: Scalars['ID'];
-  publicKey: Scalars['String'];
 };
 
 export type TShareBlockArgs = {
   blockId: Scalars['ID'];
-  recipientUser: RecipientUser;
+  recipientUserId: Scalars['ID'];
   cipherTextOfBlock: Scalars['String'];
-  privateKey: Scalars['String'];
 };
 
 export type ReceivedBlockArgs = {
@@ -355,7 +341,6 @@ export type ResolversTypes = {
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
   User: ResolverTypeWrapper<User>;
-  ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
   RequestedBlockMessage: RequestedBlockMessage;
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -389,7 +374,6 @@ export type ResolversParentTypes = {
   TLoginArgs: TLoginArgs;
   ReturnedUser: ReturnedUser;
   User: User;
-  ReturnedUserSignup: ReturnedUserSignup;
   TRequestedDanglingBlock: TRequestedDanglingBlock;
   Int: Scalars['Int'];
   TAcceptDeclineCount: TAcceptDeclineCount;
@@ -431,7 +415,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  signUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
+  signUp?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
   makeUserAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMakeUserAdminArgs, 'id'>>;
   requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
   acceptDeclineBlock?: Resolver<Maybe<ResolversTypes['TAcceptDeclineCount']>, ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
@@ -466,6 +450,7 @@ export type ReturnedUserResolvers<ContextType = any, ParentType extends Resolver
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -476,19 +461,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReturnedUserSignup'] = ResolversParentTypes['ReturnedUserSignup']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -567,7 +539,6 @@ export type Resolvers<ContextType = any> = {
   TLoginArgs?: TLoginArgsResolvers<ContextType>;
   ReturnedUser?: ReturnedUserResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
-  ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
   ReceivedBlock?: ReceivedBlockResolvers<ContextType>;

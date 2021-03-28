@@ -28,6 +28,10 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    privateKey: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       default: USER_ROLE_TYPE.USER,

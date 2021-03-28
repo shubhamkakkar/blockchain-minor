@@ -42,14 +42,12 @@ export default gql`
 
     input RecipientUser {
         userId: ID!
-        publicKey: String!
     }
     
     input TShareBlockArgs {
         blockId: ID!
-        recipientUser: RecipientUser!
+        recipientUserId: ID!
         cipherTextOfBlock: String!
-        privateKey: String!
     }
     
     input ReceivedBlockArgs {

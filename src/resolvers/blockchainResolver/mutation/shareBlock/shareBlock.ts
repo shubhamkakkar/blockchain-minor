@@ -15,13 +15,13 @@ export default async function shareBlock(
 ) {
   try {
     if (context.user) {
-      if (shareBlockArgs.recipientUser.userId === context.user._id) {
+      if (shareBlockArgs.recipientUserId === context.user._id) {
         return {
           shareStatus: false,
           message: 'You can\'t share the block to your self.',
         };
       }
-      const user = await UserModel.findById(shareBlockArgs.recipientUser.userId).select('_id');
+      const user = await UserModel.findById(shareBlockArgs.recipientUserId).select('_id, publicKey');
       if (user) {
         const blockDB = await BlockModel
           .findOne({
@@ -33,7 +33,7 @@ export default async function shareBlock(
           const block = blockDB.toObject() as TPublicLedger;
           if (block.shared.find((
             { recipientUser },
-          ) => recipientUser._id.toString() === shareBlockArgs.recipientUser.userId.toString())
+          ) => recipientUser._id.toString() === shareBlockArgs.recipientUserId.toString())
           ) {
             return {
               isSuccess: false,
@@ -49,15 +49,15 @@ export default async function shareBlock(
               const encryptedMessage = stringEncryption(
                 {
                   message,
-                  issuerPrivateKey: shareBlockArgs.privateKey,
-                  receiverPublicKey: shareBlockArgs.recipientUser.publicKey,
+                  issuerPrivateKey: context.user.privateKey,
+                  receiverPublicKey: user.toObject().publicKey,
                 },
               );
               await blockDB.update({
                 $push: {
                   shared: {
                     encryptedMessage,
-                    recipientUser: shareBlockArgs.recipientUser.userId,
+                    recipientUser: shareBlockArgs.recipientUserId,
                   },
                 },
               });
