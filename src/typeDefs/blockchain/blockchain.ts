@@ -14,7 +14,6 @@ export default gql`
      
 
     type SharedBlock {
-        encryptedMessage: String!
         recipientUser: User!
         sharedAt: Date!
     }

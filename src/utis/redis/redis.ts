@@ -17,5 +17,4 @@ export function resetDanglingBlocksCache(redisClient: RedisClient) {
 
 export function resetUsersCache(redisClient: RedisClient) {
   redisClient.del(REDIS_KEYS.ALL_USERS);
-  // redisClient.eval(`EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 prefix:[${REDIS_KEYS.SEARCH_USER}]`);
 }
