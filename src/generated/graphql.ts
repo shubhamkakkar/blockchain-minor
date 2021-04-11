@@ -197,9 +197,9 @@ export type DecryptedReceivedBlock = {
 
 export type SharedBlock = {
   __typename?: 'SharedBlock';
-  encryptedMessage: Scalars['String'];
   recipientUser: User;
   sharedAt: Scalars['DateTime'];
+  _id: Scalars['ID'];
 };
 
 export type TPublicLedger = {
@@ -216,8 +216,13 @@ export type TPublicLedger = {
 
 export type MyBlock = {
   __typename?: 'MyBlock';
+  _id: Scalars['ID'];
   data: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  hash: Scalars['String'];
   prevHash: Scalars['String'];
+  ownerProfile?: Maybe<User>;
+  messageType?: Maybe<RequestedBlockMessage>;
 };
 
 export type TSharedBlockResponse = {
@@ -496,9 +501,9 @@ export type DecryptedReceivedBlockResolvers<ContextType = any, ParentType extend
 };
 
 export type SharedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['SharedBlock'] = ResolversParentTypes['SharedBlock']> = {
-  encryptedMessage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   recipientUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -515,8 +520,13 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type MyBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlock'] = ResolversParentTypes['MyBlock']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  messageType?: Resolver<Maybe<ResolversTypes['RequestedBlockMessage']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

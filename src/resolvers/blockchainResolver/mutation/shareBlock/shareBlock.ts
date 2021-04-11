@@ -15,10 +15,10 @@ export default async function shareBlock(
 ) {
   try {
     if (context.user) {
-      if (shareBlockArgs.recipientUserId === context.user._id) {
+      if (shareBlockArgs.recipientUserId.toString() === context.user._id.toString()) {
         return {
-          shareStatus: false,
-          message: 'You can\'t share the block to your self.',
+          isSuccess: false,
+          errorMessage: 'You can\'t share the block to your self.',
         };
       }
       const user = await UserModel.findById(shareBlockArgs.recipientUserId).select('_id, publicKey');

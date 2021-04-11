@@ -6,6 +6,10 @@ import BlockModel from 'src/models/BlockModel';
 import userHash from 'src/utis/userHash/userHash';
 import { Context } from 'src/context';
 
+interface SharedBlockWithEncryptedMessage extends SharedBlock {
+  encryptedMessage: string;
+}
+
 export default async function receivedBlock(
   receivedBlockArgs: ReceivedBlockArgs,
   { req: context }: Context,
@@ -20,7 +24,7 @@ export default async function receivedBlock(
         {
           'shared.sharedAt': 1, 'shared.encryptedMessage': 1, ownerId: 1, _id: 0,
         },
-      ).lean() as { shared: SharedBlock[], ownerId: string };
+      ).lean() as { shared: SharedBlockWithEncryptedMessage[], ownerId: string };
       if (block) {
         const { encryptedMessage, sharedAt } = block.shared[0];
         const { publicKey: issuerPublicKey } = await userHash(block.ownerId);

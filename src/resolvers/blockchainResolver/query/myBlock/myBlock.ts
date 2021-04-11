@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { TPublicLedger, MyBlockArgs } from 'src/generated/graphql';
+import { MyBlockArgs } from 'src/generated/graphql';
 import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
 import BlockModel from 'src/models/BlockModel';
 import { Context } from 'src/context';
@@ -16,7 +16,6 @@ export default async function myBlock(
     }
     const block = await BlockModel
       .findById(args.blockId)
-      .select(['data', 'prevHash', 'ownerId', '-_id'])
       .lean() as any;
     if (block) {
       if (block.ownerId.toString() === context.user._id.toString()) {

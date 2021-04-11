@@ -16,16 +16,15 @@ export default async function sharedBlocks({ req: context, redisClient, customRe
       }
       const blocks = await BlockModel.find(
         { 'shared.0': { $exists: true }, ownerId: context.user?._id },
-        { shared: 1, _id: 0 },
+        { shared: 1 },
       )
         .select('shared')
-        .lean() as unknown as { shared: SharedBlock[] }[];
-
+        .lean() as unknown as { shared: SharedBlock[], _id: string }[];
       const allSharedBlocks: any[] = [];
-      for (const { shared } of blocks) {
+      for (const { shared, _id } of blocks) {
         const sharedBlock = shared[0];
+        sharedBlock._id = _id;
         sharedBlock.recipientUser = await userHash(sharedBlock.recipientUser as any) as User;
-        console.log({ sharedBlock });
         allSharedBlocks.push(sharedBlock);
       }
       redisClient.set(REDIS_KEYS.MY_SHARED_BLOCKS, JSON.stringify(allSharedBlocks));

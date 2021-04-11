@@ -16,6 +16,7 @@ export default gql`
     type SharedBlock {
         recipientUser: User!
         sharedAt: Date!
+        _id: ID!
     }
 
     type TPublicLedger {
@@ -30,8 +31,13 @@ export default gql`
     }
     
     type MyBlock {
+        _id: ID!
         data: String!
+        createdAt: Date!
+        hash: String!
         prevHash: String!
+        ownerProfile: User
+        messageType: RequestedBlockMessage
     }
     
     type TSharedBlockResponse {
