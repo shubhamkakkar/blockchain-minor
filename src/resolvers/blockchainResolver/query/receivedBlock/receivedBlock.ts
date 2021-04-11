@@ -20,6 +20,7 @@ export default async function receivedBlock(
         {
           _id: receivedBlockArgs.blockId,
           'shared.recipientUser': context.user._id,
+          ownerId: { $ne: context.user?._id },
         },
         {
           'shared.sharedAt': 1, 'shared.encryptedMessage': 1, ownerId: 1, _id: 0,
