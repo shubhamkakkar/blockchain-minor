@@ -14,10 +14,10 @@ export default async function requestedBlocks(
   try {
     if (context.user) {
       const redisKey = isUserOnly ? 'MY_REQUESTED_BLOCKS' : 'REQUESTED_BLOCKS';
-      const cachedRequestedBlocks = await customRedisGet(REDIS_KEYS[redisKey]);
-      if (cachedRequestedBlocks) {
-        return cachedRequestedBlocks;
-      }
+      // const cachedRequestedBlocks = await customRedisGet(REDIS_KEYS[redisKey]);
+      // if (cachedRequestedBlocks) {
+      //   return cachedRequestedBlocks;
+      // }
       const searchCondition = isUserOnly ? { userId: { $in: [context.user?._id] } } : {};
       const requestBlocks = await RequestBlockModel
         .find(searchCondition)

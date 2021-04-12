@@ -243,7 +243,6 @@ export type TShareBlockArgs = {
 
 export type ReceivedBlockArgs = {
   blockId: Scalars['ID'];
-  privateKey: Scalars['String'];
 };
 
 export type MyBlockArgs = {

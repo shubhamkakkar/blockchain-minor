@@ -17,10 +17,10 @@ export default async function publicLedger(
     const redisKey = isAdmin ? 'ALL_ENTRIES_ADMIN' : 'ALL_ENTRIES';
     try {
       if (!myEntries) {
-        const cachedPublicLedger = await customRedisGet(REDIS_KEYS[redisKey]);
-        if (cachedPublicLedger) {
-          return cachedPublicLedger;
-        }
+        // const cachedPublicLedger = await customRedisGet(REDIS_KEYS[redisKey]);
+        // if (cachedPublicLedger) {
+        //   return cachedPublicLedger;
+        // }
       } else {
         condition.ownerId = context.user?._id;
       }

@@ -14,10 +14,10 @@ export default async function searchUser(
       return new GraphQLError('AUTHENTICATION NOT PROVIDED');
     }
     const redisKey = `${REDIS_KEYS.SEARCH_USER}-${filter}`;
-    const cachedSearchUser = await customRedisGet(redisKey);
-    if (cachedSearchUser) {
-      return cachedSearchUser;
-    }
+    // const cachedSearchUser = await customRedisGet(redisKey);
+    // if (cachedSearchUser) {
+    //   return cachedSearchUser;
+    // }
     // const indexSearchResult = await UserModel.find(
     //   { $text: { $search: filter } },
     // );

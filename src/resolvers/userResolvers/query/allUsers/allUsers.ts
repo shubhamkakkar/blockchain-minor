@@ -11,10 +11,10 @@ export default async function allUsers({ req: context, redisClient, customRedisG
         _id: { $ne: context.user._id },
       };
     }
-    const cachedUsers = await customRedisGet(REDIS_KEYS.ALL_USERS);
-    if (cachedUsers) {
-      return cachedUsers;
-    }
+    // const cachedUsers = await customRedisGet(REDIS_KEYS.ALL_USERS);
+    // if (cachedUsers) {
+    //   return cachedUsers;
+    // }
     const users = await UserModel.find(conditions).select('-password');
     redisClient.set(REDIS_KEYS.ALL_USERS, JSON.stringify(users));
     return users;

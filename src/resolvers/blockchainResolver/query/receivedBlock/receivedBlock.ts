@@ -28,11 +28,13 @@ export default async function receivedBlock(
       ).lean() as { shared: SharedBlockWithEncryptedMessage[], ownerId: string };
       if (block) {
         const { encryptedMessage, sharedAt } = block.shared[0];
-        const { publicKey: issuerPublicKey } = await userHash(block.ownerId);
+        const {
+          publicKey: issuerPublicKey, privateKey: receiverPrivateKey,
+        } = await userHash(block.ownerId);
         try {
           const message = verification({
             issuerPublicKey,
-            receiverPrivateKey: receivedBlockArgs.privateKey,
+            receiverPrivateKey,
             encryptedMessage,
           });
           if (message) {
@@ -43,7 +45,7 @@ export default async function receivedBlock(
           }
           return new GraphQLError('Validation failed');
         } catch (error) {
-          return new GraphQLError(error);
+        return new GraphQLError(error);
         }
       }
       return new GraphQLError('Either the block does not exists, or it is not shared with you');

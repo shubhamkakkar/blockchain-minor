@@ -17,14 +17,14 @@ export default async function receivedBlocks(
   try {
     if (context.user) {
       try {
-        const cachedMyReceivedBlocks = await customRedisGet(REDIS_KEYS.MY_RECEIVED_BLOCKS);
-        if (cachedMyReceivedBlocks) {
-          return cachedMyReceivedBlocks;
-        }
+        // const cachedMyReceivedBlocks = await customRedisGet(REDIS_KEYS.MY_RECEIVED_BLOCKS);
+        // if (cachedMyReceivedBlocks) {
+        //   return cachedMyReceivedBlocks;
+        // }
         const blocks = await BlockModel.find(
           {
             'shared.recipientUser': context.user?._id,
-            ownerId: { $ne: context.user?._id },
+            // ownerId: { $ne: context.user?._id },
           },
           { 'shared.sharedAt': 1, ownerId: 1 },
         ).lean() as unknown as IReceivedBlock;

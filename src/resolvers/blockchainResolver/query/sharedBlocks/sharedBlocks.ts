@@ -10,10 +10,10 @@ import userHash from 'src/utis/userHash/userHash';
 export default async function sharedBlocks({ req: context, redisClient, customRedisGet }: Context) {
   if (context.user) {
     try {
-      const cachedMySharedBlocks = await customRedisGet(REDIS_KEYS.MY_SHARED_BLOCKS);
-      if (cachedMySharedBlocks) {
-        return cachedMySharedBlocks;
-      }
+      // const cachedMySharedBlocks = await customRedisGet(REDIS_KEYS.MY_SHARED_BLOCKS);
+      // if (cachedMySharedBlocks) {
+      //   return cachedMySharedBlocks;
+      // }
       const blocks = await BlockModel.find(
         { 'shared.0': { $exists: true }, ownerId: context.user?._id },
         { shared: 1 },

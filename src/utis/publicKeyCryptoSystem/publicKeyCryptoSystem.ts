@@ -52,12 +52,10 @@ export const verified = (
 export function stringEncryption(
   { message, issuerPrivateKey, receiverPublicKey }: IStringEncryption,
 ) {
-  console.log({ message, issuerPrivateKey, receiverPublicKey });
   const cryptoSystemSignature = signature({
     message,
     issuerPrivateKey,
   });
-  console.log({ cryptoSystemSignature });
   return encrypted({
     receiverPublicKey,
     message,

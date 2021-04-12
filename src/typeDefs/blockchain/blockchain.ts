@@ -57,7 +57,6 @@ export default gql`
     
     input ReceivedBlockArgs {
         blockId: ID!
-        privateKey: String!
     }
     
     input MyBlockArgs {
