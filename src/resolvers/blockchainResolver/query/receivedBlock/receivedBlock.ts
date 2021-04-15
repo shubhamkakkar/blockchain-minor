@@ -45,7 +45,7 @@ export default async function receivedBlock(
           }
           return new GraphQLError('Validation failed');
         } catch (error) {
-        return new GraphQLError(error);
+          return new GraphQLError(error);
         }
       }
       return new GraphQLError('Either the block does not exists, or it is not shared with you');

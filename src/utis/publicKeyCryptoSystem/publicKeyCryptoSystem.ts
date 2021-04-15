@@ -73,6 +73,9 @@ export function verification(
   const {
     message, signature: cryptoSystemSignature,
   } = crypt.decrypt(receiverPrivateKey, encryptedMessage);
+  console.log({issuerPublicKey,
+    cryptoSystemSignature,
+    message})
   const verificationBool = verified({
     issuerPublicKey,
     cryptoSystemSignature,
