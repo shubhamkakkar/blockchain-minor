@@ -53,8 +53,8 @@ export function stringEncryption(
   { message, issuerPrivateKey, receiverPublicKey }: IStringEncryption,
 ) {
   const cryptoSystemSignature = signature({
-    message,
     issuerPrivateKey,
+    message,
   });
   return encrypted({
     receiverPublicKey,
@@ -73,9 +73,6 @@ export function verification(
   const {
     message, signature: cryptoSystemSignature,
   } = crypt.decrypt(receiverPrivateKey, encryptedMessage);
-  console.log({issuerPublicKey,
-    cryptoSystemSignature,
-    message})
   const verificationBool = verified({
     issuerPublicKey,
     cryptoSystemSignature,

@@ -21,7 +21,7 @@ export default async function shareBlock(
           errorMessage: 'You can\'t share the block to your self.',
         };
       }
-      const user = await UserModel.findById(shareBlockArgs.recipientUserId).select('_id, publicKey');
+      const user = await UserModel.findById(shareBlockArgs.recipientUserId).select(['publicKey', '-_id']);
       if (user) {
         const blockDB = await BlockModel
           .findOne({
@@ -42,9 +42,9 @@ export default async function shareBlock(
           }
 
           try {
-            const message = decryptMessageForRequestedBlock(
-              `${block.data}`, shareBlockArgs.cipherTextOfBlock,
-            ) as string;
+            const message = JSON.stringify(decryptMessageForRequestedBlock(
+              block.data, shareBlockArgs.cipherTextOfBlock,
+            )) as string;
             if (message) {
               const encryptedMessage = stringEncryption(
                 {

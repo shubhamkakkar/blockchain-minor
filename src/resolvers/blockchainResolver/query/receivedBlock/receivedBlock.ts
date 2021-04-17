@@ -29,8 +29,11 @@ export default async function receivedBlock(
       if (block) {
         const { encryptedMessage, sharedAt } = block.shared[0];
         const {
-          publicKey: issuerPublicKey, privateKey: receiverPrivateKey,
+          publicKey: issuerPublicKey,
         } = await userHash(block.ownerId);
+        const {
+          privateKey: receiverPrivateKey,
+        } = await userHash(context.user._id);
         try {
           const message = verification({
             issuerPublicKey,
