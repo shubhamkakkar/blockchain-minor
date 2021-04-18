@@ -42,7 +42,9 @@ export default gql`
             password: String!
         ):  ReturnedUser!  
         
-        allUsers : [User]!
+        allUsers(
+            isAdmin: Boolean
+        ): [User]!
         user: User!
         searchUser(filter: String!): [User]!
     }
@@ -56,6 +58,6 @@ export default gql`
             middleName: String
         ): ReturnedUser!
         
-        makeUserAdmin (id: String!): Boolean!
+        makeUserAdmin (id: ID!): Boolean!
     }
 `;

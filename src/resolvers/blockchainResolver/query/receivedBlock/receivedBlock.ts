@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-import { ReceivedBlockArgs, SharedBlock } from 'src/generated/graphql';
+import { ReceivedBlockArgs, RequestedBlockMessage, SharedBlock } from 'src/generated/graphql';
 import { verification } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
 import BlockModel from 'src/models/BlockModel';
 import userHash from 'src/utis/userHash/userHash';
@@ -22,10 +22,7 @@ export default async function receivedBlock(
           'shared.recipientUser': context.user._id,
           ownerId: { $ne: context.user?._id },
         },
-        {
-          'shared.sharedAt': 1, 'shared.encryptedMessage': 1, ownerId: 1, _id: 0,
-        },
-      ).lean() as { shared: SharedBlockWithEncryptedMessage[], ownerId: string };
+      ).lean() as any;
       if (block) {
         const { encryptedMessage, sharedAt } = block.shared[0];
         const {
@@ -41,10 +38,8 @@ export default async function receivedBlock(
             encryptedMessage,
           });
           if (message) {
-            return {
-              message,
-              sharedAt,
-            };
+            block.data = message;
+            return block;
           }
           return new GraphQLError('Validation failed');
         } catch (error) {

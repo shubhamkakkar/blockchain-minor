@@ -29,7 +29,7 @@ export type Query = {
   publicLedger: Array<Maybe<TPublicLedger>>;
   sharedBlocks: Array<SharedBlock>;
   receivedBlocks: Array<ReceivedBlock>;
-  receivedBlock: DecryptedReceivedBlock;
+  receivedBlock: MyBlock;
   myBlocks: Array<TPublicLedger>;
   myBlock: MyBlock;
 };
@@ -38,6 +38,11 @@ export type Query = {
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type QueryAllUsersArgs = {
+  isAdmin?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -193,6 +198,7 @@ export type DecryptedReceivedBlock = {
   __typename?: 'DecryptedReceivedBlock';
   message: Scalars['String'];
   sharedAt: Scalars['DateTime'];
+  messageType: RequestedBlockMessage;
 };
 
 export type SharedBlock = {
@@ -214,6 +220,12 @@ export type TPublicLedger = {
   messageType?: Maybe<RequestedBlockMessage>;
 };
 
+export type MyBlockShared = {
+  __typename?: 'MyBlockShared';
+  sharedAt: Scalars['DateTime'];
+  _id: Scalars['ID'];
+};
+
 export type MyBlock = {
   __typename?: 'MyBlock';
   _id: Scalars['ID'];
@@ -223,6 +235,7 @@ export type MyBlock = {
   prevHash: Scalars['String'];
   ownerProfile?: Maybe<User>;
   messageType?: Maybe<RequestedBlockMessage>;
+  shared: Array<Maybe<MyBlockShared>>;
 };
 
 export type TSharedBlockResponse = {
@@ -355,6 +368,7 @@ export type ResolversTypes = {
   DecryptedReceivedBlock: ResolverTypeWrapper<DecryptedReceivedBlock>;
   SharedBlock: ResolverTypeWrapper<SharedBlock>;
   TPublicLedger: ResolverTypeWrapper<TPublicLedger>;
+  MyBlockShared: ResolverTypeWrapper<MyBlockShared>;
   MyBlock: ResolverTypeWrapper<MyBlock>;
   TSharedBlockResponse: ResolverTypeWrapper<TSharedBlockResponse>;
   RecipientUser: RecipientUser;
@@ -387,6 +401,7 @@ export type ResolversParentTypes = {
   DecryptedReceivedBlock: DecryptedReceivedBlock;
   SharedBlock: SharedBlock;
   TPublicLedger: TPublicLedger;
+  MyBlockShared: MyBlockShared;
   MyBlock: MyBlock;
   TSharedBlockResponse: TSharedBlockResponse;
   RecipientUser: RecipientUser;
@@ -403,7 +418,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
-  allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
+  allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryAllUsersArgs, never>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   searchUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QuerySearchUserArgs, 'filter'>>;
   requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType, RequireFields<QueryRequestedBlocksArgs, never>>;
@@ -412,7 +427,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
   sharedBlocks?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
   receivedBlocks?: Resolver<Array<ResolversTypes['ReceivedBlock']>, ParentType, ContextType>;
-  receivedBlock?: Resolver<ResolversTypes['DecryptedReceivedBlock'], ParentType, ContextType, RequireFields<QueryReceivedBlockArgs, 'receivedBlockArgs'>>;
+  receivedBlock?: Resolver<ResolversTypes['MyBlock'], ParentType, ContextType, RequireFields<QueryReceivedBlockArgs, 'receivedBlockArgs'>>;
   myBlocks?: Resolver<Array<ResolversTypes['TPublicLedger']>, ParentType, ContextType>;
   myBlock?: Resolver<ResolversTypes['MyBlock'], ParentType, ContextType, RequireFields<QueryMyBlockArgs, never>>;
 };
@@ -496,6 +511,7 @@ export type ReceivedBlockResolvers<ContextType = any, ParentType extends Resolve
 export type DecryptedReceivedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecryptedReceivedBlock'] = ResolversParentTypes['DecryptedReceivedBlock']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  messageType?: Resolver<ResolversTypes['RequestedBlockMessage'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -518,6 +534,12 @@ export type TPublicLedgerResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type MyBlockSharedResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlockShared'] = ResolversParentTypes['MyBlockShared']> = {
+  sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type MyBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlock'] = ResolversParentTypes['MyBlock']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -526,6 +548,7 @@ export type MyBlockResolvers<ContextType = any, ParentType extends ResolversPare
   prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ownerProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   messageType?: Resolver<Maybe<ResolversTypes['RequestedBlockMessage']>, ParentType, ContextType>;
+  shared?: Resolver<Array<Maybe<ResolversTypes['MyBlockShared']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -554,6 +577,7 @@ export type Resolvers<ContextType = any> = {
   DecryptedReceivedBlock?: DecryptedReceivedBlockResolvers<ContextType>;
   SharedBlock?: SharedBlockResolvers<ContextType>;
   TPublicLedger?: TPublicLedgerResolvers<ContextType>;
+  MyBlockShared?: MyBlockSharedResolvers<ContextType>;
   MyBlock?: MyBlockResolvers<ContextType>;
   TSharedBlockResponse?: TSharedBlockResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;

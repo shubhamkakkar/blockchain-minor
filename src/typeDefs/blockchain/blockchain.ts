@@ -10,6 +10,7 @@ export default gql`
     type DecryptedReceivedBlock {
        message: String!
        sharedAt: Date!
+       messageType: RequestedBlockMessage!
     }   
      
 
@@ -29,6 +30,11 @@ export default gql`
         ownerProfile: User
         messageType: RequestedBlockMessage
     }
+
+    type MyBlockShared {
+        sharedAt: Date!
+        _id: ID!
+    }
     
     type MyBlock {
         _id: ID!
@@ -38,6 +44,7 @@ export default gql`
         prevHash: String!
         ownerProfile: User
         messageType: RequestedBlockMessage
+        shared: [MyBlockShared]!
     }
     
     type TSharedBlockResponse {
@@ -70,7 +77,7 @@ export default gql`
         receivedBlocks: [ReceivedBlock!]!
         receivedBlock (
              receivedBlockArgs: ReceivedBlockArgs!
-        ): DecryptedReceivedBlock!
+        ): MyBlock!
         myBlocks: [TPublicLedger!]!
         myBlock (myBlockArgs: MyBlockArgs): MyBlock!
     }

@@ -8,7 +8,7 @@ import { resetUsersCache } from 'src/utis/redis/redis';
 import { USER_ROLE_TYPE } from 'src/constants';
 
 export default async function makeUserAdmin(
-  userId: string, { req: context, redisClient }: Context,
+  { id: userId }: any, { req: context, redisClient }: Context,
 ) {
   try {
     if (!context.user) {
