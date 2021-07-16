@@ -1,24 +1,59 @@
 import { gql } from 'apollo-server';
 
-/**
- * no need to define Date as scalar here as it is done in the other resolver,
- * as these all combines in one file so it will be taken care automatically
- */
-
 export default gql`
+    type ReceivedBlock {
+       sharedAt: Date!
+       sharedBy: User!
+       _id: ID!
+    }
+    
+    type DecryptedReceivedBlock {
+       message: String!
+       sharedAt: Date!
+       messageType: RequestedBlockMessage!
+    }   
+     
+
+    type SharedBlock {
+        recipientUser: User!
+        sharedAt: Date!
+        _id: ID!
+    }
+
     type TPublicLedger {
         _id: ID!
         data: String!
-        prevHash: String!
-        hash: String!
-        timeStamp: Date!
-        nounce: Int!
         ownerId: ID!
+        shared: [SharedBlock!]!
+        createdAt: Date!
+        hash: String!
+        ownerProfile: User
+        messageType: RequestedBlockMessage
+    }
+
+    type MyBlockShared {
+        sharedAt: Date!
+        _id: ID!
+    }
+    
+    type MyBlock {
+        _id: ID!
+        data: String!
+        createdAt: Date!
+        hash: String!
+        prevHash: String!
+        ownerProfile: User
+        messageType: RequestedBlockMessage
+        shared: [MyBlockShared]!
     }
     
     type TSharedBlockResponse {
-        shareStatus: Boolean!
-        message: String!
+        isSuccess: Boolean!
+        errorMessage: String
+    }
+
+    input RecipientUser {
+        userId: ID!
     }
     
     input TShareBlockArgs {
@@ -26,9 +61,25 @@ export default gql`
         recipientUserId: ID!
         cipherTextOfBlock: String!
     }
+    
+    input ReceivedBlockArgs {
+        blockId: ID!
+    }
+    
+    input MyBlockArgs {
+        blockId: ID!
+        cipherTextOfBlock: String!
+    }
 
     extend type Query {
         publicLedger: [TPublicLedger]!
+        sharedBlocks: [SharedBlock!]! 
+        receivedBlocks: [ReceivedBlock!]!
+        receivedBlock (
+             receivedBlockArgs: ReceivedBlockArgs!
+        ): MyBlock!
+        myBlocks: [TPublicLedger!]!
+        myBlock (myBlockArgs: MyBlockArgs): MyBlock!
     }
     
     extend type Mutation {

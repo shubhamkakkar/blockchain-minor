@@ -1,21 +1,21 @@
-import { ApolloServer } from 'apollo-server';
-import typeDefs from './typeDefs';
-import resolvers from './resolvers';
-import context from './context';
+import 'module-alias/register';
 
-export default function app() {
-  const server = new ApolloServer(
-    {
-      cors: true,
-      typeDefs,
-      resolvers,
-      context,
-    },
-  );
+import mongoose from 'mongoose';
 
-  server.listen(
-    { port: process.env.PORT || 4001 },
-  )
-    .then(({ url }: { url: string }) => console.log(`🚀 Server ready at ${url}`))
-    .catch((er) => console.log('ApolloServer Error', er));
-}
+import app from './server';
+
+import { MONGO_DB } from 'src/constants';
+
+mongoose.connect(MONGO_DB.MONGO_URI_DEV,
+  {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('DB connected');
+    return app();
+  })
+  .catch((er:any) => {
+    console.log('failed to connect to mongoose', er);
+  });

@@ -1,11 +1,17 @@
-/* eslint-disable no-underscore-dangle */
 import { GraphQLError } from 'graphql';
-import ValidationContract from '../../../../utis/validator/validator';
-import { TLoginArgs } from '../../../../generated/graphql';
-import UserModel from '../../../../models/UserModel';
-import { generateToken } from '../../../../utis/jwt/jwt';
 
-export default function loginUser(args: TLoginArgs) {
+import { ReturnedUser, TLoginArgs } from 'src/generated/graphql';
+import UserModel from 'src/models/UserModel';
+import { comparePasswordCrypt } from 'src/utis/bcrypt/bcrypt';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { generateToken } from 'src/utis/jwt/jwt';
+import ValidationContract from 'src/utis/validator/validator';
+
+interface GeneratedUser extends ReturnedUser {
+  password: string;
+}
+
+export default async function loginUser(args: TLoginArgs) {
   const contract = new ValidationContract();
   const {
     email,
@@ -18,20 +24,22 @@ export default function loginUser(args: TLoginArgs) {
   if (!contract.isValid()) {
     return new GraphQLError(contract.errors() || 'Review Signup information');
   }
-
-  return UserModel
-    .findOne({ email })
-    .then((user) => {
-      if (user) {
-        // eslint-disable-next-line no-underscore-dangle
-        const token = generateToken({ email, userId: user._id });
+  try {
+    const user = await UserModel.findOne({ email });
+    if (user) {
+      const generatedUser = user.toObject() as GeneratedUser;
+      const isPasswordCorrect = await comparePasswordCrypt(password, generatedUser.password);
+      if (isPasswordCorrect) {
+        const token = generateToken(generatedUser._id);
         return {
-          // @ts-ignore
-          ...user._doc,
+          ...generatedUser,
           token,
         };
       }
-      return new GraphQLError('user does not exists');
-    })
-    .catch((er) => console.log('login e', er));
+      return new GraphQLError('Password is incorrect');
+    }
+    return new GraphQLError('user does not exists');
+  } catch (er) {
+    return errorHandler('loginUser', er);
+  }
 }

@@ -1,42 +1,48 @@
 import { GraphQLError } from 'graphql';
-import { verifyToken } from '../../../../utis/jwt/jwt';
-import RequestBlockModel from '../../../../models/RequestBlockModel';
-import UserModel from '../../../../models/UserModel';
 
-export default async function requestedBlocks(context: any, isUserOnly = false) {
+import RequestBlockModel from 'src/models/RequestBlockModel';
+import userHash from 'src/utis/userHash/userHash';
+import { Context } from 'src/context';
+import { REDIS_KEYS } from 'src/constants';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
+import { QueryRequestedBlocksArgs } from 'src/generated/graphql';
+
+export default async function requestedBlocks(
+  { isUserOnly }: QueryRequestedBlocksArgs,
+  { req: context, redisClient, customRedisGet }: Context,
+) {
   try {
-    const tokenContent = verifyToken(context.authorization);
-    if (tokenContent) {
-      const { userId } = tokenContent;
-      const searchCondition = isUserOnly ? { userId: { $in: [userId] } } : {};
-      const requestBlocks = await RequestBlockModel.find(searchCondition);
-      let modifiedRequestedBlocks = [];
+    if (context.user) {
+      const redisKey = isUserOnly ? 'MY_REQUESTED_BLOCKS' : 'REQUESTED_BLOCKS';
+      // const cachedRequestedBlocks = await customRedisGet(REDIS_KEYS[redisKey]);
+      // if (cachedRequestedBlocks) {
+      //   return cachedRequestedBlocks;
+      // }
+      const searchCondition = isUserOnly ? { userId: { $in: [context.user?._id] } } : {};
+      const requestBlocks = await RequestBlockModel
+        .find(searchCondition)
+        .sort([['requestAt', 'descending']]);
+      const modifiedRequestedBlocks: any[] = [];
       if (isUserOnly) {
-        const user = await UserModel.findById(userId);
-        modifiedRequestedBlocks = requestBlocks.map(
-          (requestedBlock) => ({
-            user: user?.toObject(),
-            ...requestedBlock.toObject(),
-          }),
-        );
-      } else {
-        modifiedRequestedBlocks = requestBlocks.map(
-          async (requestedBlock) => {
+        requestBlocks.forEach(
+          (requestedBlock) => {
             const objectifiedRequestedBlock = requestedBlock.toObject();
-            const { userId: ownerId, ...restBlockFields } = objectifiedRequestedBlock;
-            const user = await UserModel.findById(ownerId);
-            return {
-              user: user?.toObject(),
-              ...restBlockFields,
-            };
+            objectifiedRequestedBlock.user = context.user;
+            modifiedRequestedBlocks.push(objectifiedRequestedBlock);
           },
         );
+      } else {
+        for (const requestedBlock of requestBlocks) {
+          const objectifiedRequestedBlock = requestedBlock.toObject();
+          objectifiedRequestedBlock.user = await userHash(objectifiedRequestedBlock.userId);
+          modifiedRequestedBlocks.push(objectifiedRequestedBlock);
+        }
       }
+      redisClient.set(REDIS_KEYS[redisKey], JSON.stringify(modifiedRequestedBlocks));
       return modifiedRequestedBlocks;
     }
+    return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
-    console.log('requestedBlocks() e', e);
-    throw new GraphQLError('requestedBlocks() e');
+    return errorHandler('requestedBlocks', e);
   }
-  throw new GraphQLError('Authentication token not present');
 }

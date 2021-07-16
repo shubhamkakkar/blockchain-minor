@@ -1,26 +1,30 @@
 import { gql } from 'apollo-server';
 
-// todo: add file/image upload
-
 export default gql`
-    scalar Date
+    enum RequestedBlockMessage {
+        PERSONAL_MEDICAL_INFORMATION
+        INSURANCE_INFORMATION
+        MEDICAL_REPORTS
+    }
     type TRequestedDanglingBlock {
         _id : ID!
-        user: ReturnedUser
+        user: User!
         requestAt: Date!
         message: String!
         acceptCount: Int!
         rejectCount: Int!
+        messageType: RequestedBlockMessage!
     }
     
     type TAcceptDeclineCount {
         acceptCount: Int!
         rejectCount: Int!
     }
-    
+
     input TRequestDanglingBlock {
         cipherKeyForTheMessage: String!
         message: String!
+        messageType: RequestedBlockMessage!
     }
     
     input TAcceptDenyParams {
@@ -29,7 +33,8 @@ export default gql`
     }
     
     extend type Query {
-        requestedBlocks: [TRequestedDanglingBlock]!
+        requestedBlocks(isUserOnly: Boolean): [TRequestedDanglingBlock]!
+        isAlreadyVoted(blockId: ID!): Boolean!
         myRequestedBlocks: [TRequestedDanglingBlock]!
     }
     

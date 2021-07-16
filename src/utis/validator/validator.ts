@@ -22,16 +22,6 @@ export default class ValidationContract {
         if (!reg.test(value)) this.error = message;
       };
 
-      isAccountNumber = (value: any, message: string) => {
-        const reg = new RegExp(/^[0-9]{7,14}$/);
-        if (!reg.test(value)) this.error = message;
-      };
-
-      isTaxInformation = (value: any, message: string) => {
-        const taxArr = ['Tax0', 'Tax1', 'Tax2', 'Tax3'];
-        if (!taxArr.includes(value)) this.error = message;
-      };
-
       errors = () => this.error;
 
       clear = () => {

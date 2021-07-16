@@ -1,70 +1,92 @@
-// @ts-ignore
 import { GraphQLError } from 'graphql';
-import { ReturnedUser, TPublicLedger, TShareBlockArgs } from '../../../../generated/graphql';
-import { decryptMessageForRequestedBlock, verifyToken } from '../../../../utis/jwt/jwt';
-import BlockModel from '../../../../models/BlockModel';
-import UserModel from '../../../../models/UserModel';
+
+import { decryptMessageForRequestedBlock } from 'src/utis/jwt/jwt';
+import BlockModel from 'src/models/BlockModel';
+import { stringEncryption } from 'src/utis/publicKeyCryptoSystem/publicKeyCryptoSystem';
+import { TPublicLedger, TShareBlockArgs } from 'src/generated/graphql';
+import { Context } from 'src/context';
+import { resetPublicLedgerCache } from 'src/utis/redis/redis';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
+import UserModel from 'src/models/UserModel';
 
 export default async function shareBlock(
-  /* TODO: update the typedef respectively to receive the following as well inside sharedBlockArgs
-  * this privateKey is issuerPrivateKey
-  */
   { shareBlockArgs }: { shareBlockArgs: TShareBlockArgs },
-  context: any,
+  { req: context, redisClient }: Context,
 ) {
   try {
-    const tokenContent = verifyToken(context.authorization);
-    if (tokenContent) {
-      if (shareBlockArgs.recipientUserId === tokenContent.userId) {
+    if (context.user) {
+      if (shareBlockArgs.recipientUserId.toString() === context.user._id.toString()) {
         return {
-          shareStatus: false,
-          message: 'You can\'t share the block to your self.',
+          isSuccess: false,
+          errorMessage: 'You can\'t share the block to your self.',
         };
       }
-      const block = await BlockModel.findById(shareBlockArgs.blockId).lean() as TPublicLedger;
-      if (block) {
-        if (block.ownerId !== tokenContent.userId) {
-          const recipientUser = await UserModel.findById(
-            shareBlockArgs.recipientUserId,
-          ).lean() as ReturnedUser;
-          if (recipientUser) {
-            const originalMessage = decryptMessageForRequestedBlock(
-              block.data, shareBlockArgs.cipherTextOfBlock,
-            );
-            /* TODO
-            * userId will be used to get the user's publicKey to be passed in stringEncryption()
-            * use stringEncryption() to generate the encrypted version of the block's message
-            *  which will be returned below
-            * */
+      const user = await UserModel.findById(shareBlockArgs.recipientUserId).select(['publicKey', '-_id']);
+      if (user) {
+        const blockDB = await BlockModel
+          .findOne({
+            _id: shareBlockArgs.blockId,
+            ownerId: context.user._id,
+          });
+
+        if (blockDB) {
+          const block = blockDB.toObject() as TPublicLedger;
+          if (block.shared.find((
+            { recipientUser },
+          ) => recipientUser._id.toString() === shareBlockArgs.recipientUserId.toString())
+          ) {
             return {
-              shareStatus: 'success',
-              message: originalMessage, // TODO: instead of this, return the encrypted message
+              isSuccess: false,
+              errorMessage: 'Already shared with the user',
             };
           }
-          /*
-          * TODO:
-          * make a getUser query which will return all the users [full information] as
-          * frontend will have a dropdown of user's to be selected as a sender,
-          * this drop down will show 'name - email', which under the hood will send the userid
-          * */
 
-          /*
-          * TODO: once the above todos are completed
-          * make a mutation in User mutation's
-          * getMySharedBlocs() ->  this will follow the param's setup of verification()
-          * */
-          return {
-            shareStatus: 'fail',
-            message: 'User not found, please ask the user to join the chain.',
-          };
+          try {
+            const message = JSON.stringify(decryptMessageForRequestedBlock(
+              block.data, shareBlockArgs.cipherTextOfBlock,
+            )) as string;
+            if (message) {
+              const encryptedMessage = stringEncryption(
+                {
+                  message,
+                  issuerPrivateKey: context.user.privateKey,
+                  receiverPublicKey: user.toObject().publicKey,
+                },
+              );
+              await blockDB.update({
+                $push: {
+                  shared: {
+                    encryptedMessage,
+                    recipientUser: shareBlockArgs.recipientUserId,
+                  },
+                },
+              });
+              resetPublicLedgerCache(redisClient);
+              return {
+                isSuccess: true,
+              };
+            }
+            return {
+              isSuccess: false,
+              errorMessage: 'Failed to authenticate the block',
+            };
+          } catch (e) {
+            console.log({ e });
+            return {
+              isSuccess: false,
+              errorMessage: e,
+            };
+          }
         }
-        return new GraphQLError('You are not the owner of the block.');
+      } else {
+        return new GraphQLError(
+          'No block found Or you are not the owner of the block, and hence can not share the block',
+        );
       }
-      return new GraphQLError('No block found.');
+      return new GraphQLError('No user found');
     }
-    return new GraphQLError('Authentication token not present');
+    return new GraphQLError('AUTHENTICATION NOT PROVIDED');
   } catch (e) {
-    console.log('shareBlock e()', e);
-    throw new GraphQLError(`Internal server shareBlock e() : ${e}`);
+    return errorHandler('shareBlock', e);
   }
 }

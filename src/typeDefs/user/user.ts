@@ -22,33 +22,42 @@ export default gql`
         firstName: String!
         lastName: String!
         middleName: String
+        role: String!
+        privateKey: String!
     }
-
-    type ReturnedUserSignup {
+    
+    type User {
         _id: ID!
-        publicKey: String!
-        token: String!
         email: String!
         firstName: String!
         lastName: String!
         middleName: String
-        privateKey: String!
+        publicKey: String!
+        role: String!
     }
-    
+
     extend type Query {
         login (
             email: String!
             password: String!
         ):  ReturnedUser!  
+        
+        allUsers(
+            isAdmin: Boolean
+        ): [User]!
+        user: User!
+        searchUser(filter: String!): [User]!
     }
 
     extend type Mutation {
-        singUp(
+        signUp(
             email: String!
             password: String!
             firstName: String!,
             lastName: String!,
             middleName: String
-        ): ReturnedUserSignup!
+        ): ReturnedUser!
+        
+        makeUserAdmin (id: ID!): Boolean!
     }
 `;

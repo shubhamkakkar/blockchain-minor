@@ -1,12 +1,16 @@
 import { GraphQLError } from 'graphql';
-import { TSignupArgs } from '../../../../generated/graphql';
-import ValidationContract from '../../../../utis/validator/validator';
-import UserModel from '../../../../models/UserModel';
-import { generateToken } from '../../../../utis/jwt/jwt';
-import { generatePasswordCrypt } from '../../../../utis/bcrypt/bcrypt';
-import { userProfileKeys } from '../../../../utis/rsa/rsa';
 
-export default function signUpUser(args: TSignupArgs) {
+import { ReturnedUser, TSignupArgs } from 'src/generated/graphql';
+import ValidationContract from 'src/utis/validator/validator';
+import UserModel from 'src/models/UserModel';
+import { generateToken } from 'src/utis/jwt/jwt';
+import { generatePasswordCrypt } from 'src/utis/bcrypt/bcrypt';
+import { userProfileKeys } from 'src/utis/rsa/rsa';
+import { Context } from 'src/context';
+import { resetUsersCache } from 'src/utis/redis/redis';
+import errorHandler from 'src/utis/errorHandler/errorHandler';
+
+export default function signUpUser(args: TSignupArgs, { redisClient }: Context) {
   const contract = new ValidationContract();
   const {
     firstName,
@@ -32,24 +36,22 @@ export default function signUpUser(args: TSignupArgs) {
 
       const cryptPassword = await generatePasswordCrypt(password);
       const { privateKey, publicKey } = await userProfileKeys();
-
       const newUser = new UserModel({
         firstName,
         lastName,
         middleName,
         password: cryptPassword,
         publicKey,
+        privateKey,
         email,
       });
       await newUser.save();
-      // eslint-disable-next-line no-underscore-dangle
-      const token = generateToken({ email, userId: newUser.toObject()._id });
-
+      const generatedUser = newUser.toObject() as ReturnedUser;
+      resetUsersCache(redisClient);
       return {
-        ...newUser.toObject(),
-        privateKey,
-        token,
+        ...generatedUser,
+        token: generateToken(generatedUser._id),
       };
     })
-    .catch((er) => new GraphQLError('signun failed', er));
+    .catch((e) => errorHandler('signUpUser', e));
 }

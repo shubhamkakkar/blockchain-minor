@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -16,30 +15,73 @@ export type Scalars = {
   Upload: any;
 };
 
+
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
   login: ReturnedUser;
+  allUsers: Array<Maybe<User>>;
+  user: User;
+  searchUser: Array<Maybe<User>>;
   requestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
+  isAlreadyVoted: Scalars['Boolean'];
   myRequestedBlocks: Array<Maybe<TRequestedDanglingBlock>>;
   publicLedger: Array<Maybe<TPublicLedger>>;
+  sharedBlocks: Array<SharedBlock>;
+  receivedBlocks: Array<ReceivedBlock>;
+  receivedBlock: MyBlock;
+  myBlocks: Array<TPublicLedger>;
+  myBlock: MyBlock;
 };
+
 
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
 
+
+export type QueryAllUsersArgs = {
+  isAdmin?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QuerySearchUserArgs = {
+  filter: Scalars['String'];
+};
+
+
+export type QueryRequestedBlocksArgs = {
+  isUserOnly?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QueryIsAlreadyVotedArgs = {
+  blockId: Scalars['ID'];
+};
+
+
+export type QueryReceivedBlockArgs = {
+  receivedBlockArgs: ReceivedBlockArgs;
+};
+
+
+export type QueryMyBlockArgs = {
+  myBlockArgs?: Maybe<MyBlockArgs>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
-  singUp: ReturnedUserSignup;
+  signUp: ReturnedUser;
+  makeUserAdmin: Scalars['Boolean'];
   requestDanglingBlock: TRequestedDanglingBlock;
   acceptDeclineBlock?: Maybe<TAcceptDeclineCount>;
   shareBlock: TSharedBlockResponse;
 };
 
-export type MutationSingUpArgs = {
+
+export type MutationSignUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
   firstName: Scalars['String'];
@@ -47,13 +89,21 @@ export type MutationSingUpArgs = {
   middleName?: Maybe<Scalars['String']>;
 };
 
+
+export type MutationMakeUserAdminArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationRequestDanglingBlockArgs = {
   requestBlockData: TRequestDanglingBlock;
 };
 
+
 export type MutationAcceptDeclineBlockArgs = {
   acceptDenyParams: TAcceptDenyParams;
 };
+
 
 export type MutationShareBlockArgs = {
   shareBlockArgs: TShareBlockArgs;
@@ -88,28 +138,36 @@ export type ReturnedUser = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
+  role: Scalars['String'];
+  privateKey: Scalars['String'];
 };
 
-export type ReturnedUserSignup = {
-  __typename?: 'ReturnedUserSignup';
+export type User = {
+  __typename?: 'User';
   _id: Scalars['ID'];
-  publicKey: Scalars['String'];
-  token: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
-  privateKey: Scalars['String'];
+  publicKey: Scalars['String'];
+  role: Scalars['String'];
 };
+
+export enum RequestedBlockMessage {
+  PersonalMedicalInformation = 'PERSONAL_MEDICAL_INFORMATION',
+  InsuranceInformation = 'INSURANCE_INFORMATION',
+  MedicalReports = 'MEDICAL_REPORTS'
+}
 
 export type TRequestedDanglingBlock = {
   __typename?: 'TRequestedDanglingBlock';
   _id: Scalars['ID'];
-  user?: Maybe<ReturnedUser>;
+  user: User;
   requestAt: Scalars['DateTime'];
   message: Scalars['String'];
   acceptCount: Scalars['Int'];
   rejectCount: Scalars['Int'];
+  messageType: RequestedBlockMessage;
 };
 
 export type TAcceptDeclineCount = {
@@ -121,6 +179,7 @@ export type TAcceptDeclineCount = {
 export type TRequestDanglingBlock = {
   cipherKeyForTheMessage: Scalars['String'];
   message: Scalars['String'];
+  messageType: RequestedBlockMessage;
 };
 
 export type TAcceptDenyParams = {
@@ -128,21 +187,65 @@ export type TAcceptDenyParams = {
   isAccept?: Maybe<Scalars['Boolean']>;
 };
 
+export type ReceivedBlock = {
+  __typename?: 'ReceivedBlock';
+  sharedAt: Scalars['DateTime'];
+  sharedBy: User;
+  _id: Scalars['ID'];
+};
+
+export type DecryptedReceivedBlock = {
+  __typename?: 'DecryptedReceivedBlock';
+  message: Scalars['String'];
+  sharedAt: Scalars['DateTime'];
+  messageType: RequestedBlockMessage;
+};
+
+export type SharedBlock = {
+  __typename?: 'SharedBlock';
+  recipientUser: User;
+  sharedAt: Scalars['DateTime'];
+  _id: Scalars['ID'];
+};
+
 export type TPublicLedger = {
   __typename?: 'TPublicLedger';
   _id: Scalars['ID'];
   data: Scalars['String'];
-  prevHash: Scalars['String'];
-  hash: Scalars['String'];
-  timeStamp: Scalars['DateTime'];
-  nounce: Scalars['Int'];
   ownerId: Scalars['ID'];
+  shared: Array<SharedBlock>;
+  createdAt: Scalars['DateTime'];
+  hash: Scalars['String'];
+  ownerProfile?: Maybe<User>;
+  messageType?: Maybe<RequestedBlockMessage>;
+};
+
+export type MyBlockShared = {
+  __typename?: 'MyBlockShared';
+  sharedAt: Scalars['DateTime'];
+  _id: Scalars['ID'];
+};
+
+export type MyBlock = {
+  __typename?: 'MyBlock';
+  _id: Scalars['ID'];
+  data: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  hash: Scalars['String'];
+  prevHash: Scalars['String'];
+  ownerProfile?: Maybe<User>;
+  messageType?: Maybe<RequestedBlockMessage>;
+  shared: Array<Maybe<MyBlockShared>>;
 };
 
 export type TSharedBlockResponse = {
   __typename?: 'TSharedBlockResponse';
-  shareStatus: Scalars['Boolean'];
-  message: Scalars['String'];
+  isSuccess: Scalars['Boolean'];
+  errorMessage?: Maybe<Scalars['String']>;
+};
+
+export type RecipientUser = {
+  userId: Scalars['ID'];
 };
 
 export type TShareBlockArgs = {
@@ -151,12 +254,25 @@ export type TShareBlockArgs = {
   cipherTextOfBlock: Scalars['String'];
 };
 
+export type ReceivedBlockArgs = {
+  blockId: Scalars['ID'];
+};
+
+export type MyBlockArgs = {
+  blockId: Scalars['ID'];
+  cipherTextOfBlock: Scalars['String'];
+};
+
 export enum CacheControlScope {
   Public = 'PUBLIC',
   Private = 'PRIVATE'
 }
 
+
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
@@ -231,71 +347,102 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   TSignupArgs: ResolverTypeWrapper<TSignupArgs>;
   TLoginArgs: ResolverTypeWrapper<TLoginArgs>;
   ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  ReturnedUserSignup: ResolverTypeWrapper<ReturnedUserSignup>;
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  User: ResolverTypeWrapper<User>;
+  RequestedBlockMessage: RequestedBlockMessage;
   TRequestedDanglingBlock: ResolverTypeWrapper<TRequestedDanglingBlock>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   TAcceptDeclineCount: ResolverTypeWrapper<TAcceptDeclineCount>;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
+  ReceivedBlock: ResolverTypeWrapper<ReceivedBlock>;
+  DecryptedReceivedBlock: ResolverTypeWrapper<DecryptedReceivedBlock>;
+  SharedBlock: ResolverTypeWrapper<SharedBlock>;
   TPublicLedger: ResolverTypeWrapper<TPublicLedger>;
+  MyBlockShared: ResolverTypeWrapper<MyBlockShared>;
+  MyBlock: ResolverTypeWrapper<MyBlock>;
   TSharedBlockResponse: ResolverTypeWrapper<TSharedBlockResponse>;
+  RecipientUser: RecipientUser;
   TShareBlockArgs: TShareBlockArgs;
+  ReceivedBlockArgs: ReceivedBlockArgs;
+  MyBlockArgs: MyBlockArgs;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  DateTime: Scalars['DateTime'];
   Query: {};
   Boolean: Scalars['Boolean'];
   String: Scalars['String'];
+  ID: Scalars['ID'];
   Mutation: {};
   Subscription: {};
   TSignupArgs: TSignupArgs;
   TLoginArgs: TLoginArgs;
   ReturnedUser: ReturnedUser;
-  ID: Scalars['ID'];
-  ReturnedUserSignup: ReturnedUserSignup;
-  DateTime: Scalars['DateTime'];
+  User: User;
   TRequestedDanglingBlock: TRequestedDanglingBlock;
   Int: Scalars['Int'];
   TAcceptDeclineCount: TAcceptDeclineCount;
   TRequestDanglingBlock: TRequestDanglingBlock;
   TAcceptDenyParams: TAcceptDenyParams;
+  ReceivedBlock: ReceivedBlock;
+  DecryptedReceivedBlock: DecryptedReceivedBlock;
+  SharedBlock: SharedBlock;
   TPublicLedger: TPublicLedger;
+  MyBlockShared: MyBlockShared;
+  MyBlock: MyBlock;
   TSharedBlockResponse: TSharedBlockResponse;
+  RecipientUser: RecipientUser;
   TShareBlockArgs: TShareBlockArgs;
+  ReceivedBlockArgs: ReceivedBlockArgs;
+  MyBlockArgs: MyBlockArgs;
   Upload: Scalars['Upload'];
 };
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   login?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
-  requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
+  allUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryAllUsersArgs, never>>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  searchUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QuerySearchUserArgs, 'filter'>>;
+  requestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType, RequireFields<QueryRequestedBlocksArgs, never>>;
+  isAlreadyVoted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsAlreadyVotedArgs, 'blockId'>>;
   myRequestedBlocks?: Resolver<Array<Maybe<ResolversTypes['TRequestedDanglingBlock']>>, ParentType, ContextType>;
   publicLedger?: Resolver<Array<Maybe<ResolversTypes['TPublicLedger']>>, ParentType, ContextType>;
+  sharedBlocks?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
+  receivedBlocks?: Resolver<Array<ResolversTypes['ReceivedBlock']>, ParentType, ContextType>;
+  receivedBlock?: Resolver<ResolversTypes['MyBlock'], ParentType, ContextType, RequireFields<QueryReceivedBlockArgs, 'receivedBlockArgs'>>;
+  myBlocks?: Resolver<Array<ResolversTypes['TPublicLedger']>, ParentType, ContextType>;
+  myBlock?: Resolver<ResolversTypes['MyBlock'], ParentType, ContextType, RequireFields<QueryMyBlockArgs, never>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  singUp?: Resolver<ResolversTypes['ReturnedUserSignup'], ParentType, ContextType, RequireFields<MutationSingUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
+  signUp?: Resolver<ResolversTypes['ReturnedUser'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
+  makeUserAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMakeUserAdminArgs, 'id'>>;
   requestDanglingBlock?: Resolver<ResolversTypes['TRequestedDanglingBlock'], ParentType, ContextType, RequireFields<MutationRequestDanglingBlockArgs, 'requestBlockData'>>;
   acceptDeclineBlock?: Resolver<Maybe<ResolversTypes['TAcceptDeclineCount']>, ParentType, ContextType, RequireFields<MutationAcceptDeclineBlockArgs, 'acceptDenyParams'>>;
   shareBlock?: Resolver<ResolversTypes['TSharedBlockResponse'], ParentType, ContextType, RequireFields<MutationShareBlockArgs, 'shareBlockArgs'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, '_', ParentType, ContextType>;
+  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
 };
 
 export type TSignupArgsResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSignupArgs'] = ResolversParentTypes['TSignupArgs']> = {
@@ -321,32 +468,30 @@ export type ReturnedUserResolvers<ContextType = any, ParentType extends Resolver
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type ReturnedUserSignupResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReturnedUserSignup'] = ResolversParentTypes['ReturnedUserSignup']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
-  name: 'DateTime';
-}
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
 
 export type TRequestedDanglingBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['TRequestedDanglingBlock'] = ResolversParentTypes['TRequestedDanglingBlock']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['ReturnedUser']>, ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   requestAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   acceptCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rejectCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  messageType?: Resolver<ResolversTypes['RequestedBlockMessage'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -356,20 +501,60 @@ export type TAcceptDeclineCountResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type ReceivedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReceivedBlock'] = ResolversParentTypes['ReceivedBlock']> = {
+  sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  sharedBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type DecryptedReceivedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecryptedReceivedBlock'] = ResolversParentTypes['DecryptedReceivedBlock']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  messageType?: Resolver<ResolversTypes['RequestedBlockMessage'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type SharedBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['SharedBlock'] = ResolversParentTypes['SharedBlock']> = {
+  recipientUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type TPublicLedgerResolvers<ContextType = any, ParentType extends ResolversParentTypes['TPublicLedger'] = ResolversParentTypes['TPublicLedger']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  timeStamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  nounce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   ownerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  shared?: Resolver<Array<ResolversTypes['SharedBlock']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  messageType?: Resolver<Maybe<ResolversTypes['RequestedBlockMessage']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type MyBlockSharedResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlockShared'] = ResolversParentTypes['MyBlockShared']> = {
+  sharedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type MyBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['MyBlock'] = ResolversParentTypes['MyBlock']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  data?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  prevHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  messageType?: Resolver<Maybe<ResolversTypes['RequestedBlockMessage']>, ParentType, ContextType>;
+  shared?: Resolver<Array<Maybe<ResolversTypes['MyBlockShared']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type TSharedBlockResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['TSharedBlockResponse'] = ResolversParentTypes['TSharedBlockResponse']> = {
-  shareStatus?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isSuccess?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -378,20 +563,26 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = any> = {
+  DateTime?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   TSignupArgs?: TSignupArgsResolvers<ContextType>;
   TLoginArgs?: TLoginArgsResolvers<ContextType>;
   ReturnedUser?: ReturnedUserResolvers<ContextType>;
-  ReturnedUserSignup?: ReturnedUserSignupResolvers<ContextType>;
-  DateTime?: GraphQLScalarType;
+  User?: UserResolvers<ContextType>;
   TRequestedDanglingBlock?: TRequestedDanglingBlockResolvers<ContextType>;
   TAcceptDeclineCount?: TAcceptDeclineCountResolvers<ContextType>;
+  ReceivedBlock?: ReceivedBlockResolvers<ContextType>;
+  DecryptedReceivedBlock?: DecryptedReceivedBlockResolvers<ContextType>;
+  SharedBlock?: SharedBlockResolvers<ContextType>;
   TPublicLedger?: TPublicLedgerResolvers<ContextType>;
+  MyBlockShared?: MyBlockSharedResolvers<ContextType>;
+  MyBlock?: MyBlockResolvers<ContextType>;
   TSharedBlockResponse?: TSharedBlockResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
+
 
 /**
  * @deprecated
